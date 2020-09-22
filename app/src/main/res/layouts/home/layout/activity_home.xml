@@ -104,7 +104,7 @@
             app:layout_constraintBottom_toTopOf="@id/tab_layout"
 
 
-            android:background="@android:color/white"
+            android:background="@color/header"
 
             android:id="@+id/body">
 

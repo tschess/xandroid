@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.chauthai.swipereveallayout.SwipeRevealLayout
@@ -66,7 +67,7 @@ class ViewHolderHome(
             avatar!!.visibility = View.VISIBLE
             avatar.setImageDrawable(drawable)
         }
-        glide.load(playerOther.avatar).into(object : CustomTarget<Drawable>() {
+        glide.load(playerOther.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                 avatar!!.visibility = View.VISIBLE
                 avatar.setImageDrawable(resource)
@@ -210,7 +211,7 @@ class ViewHolderHome(
     }
 
     private fun setRematch() {
-        this.rematch_title!!.text = "rematch"
+        this.rematch_title!!.text = "SNAPSHOT"
         this.layout_rematch!!.setOnClickListener {
             //val intent = Intent(context, ActivityQuick::class.java)
             //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK

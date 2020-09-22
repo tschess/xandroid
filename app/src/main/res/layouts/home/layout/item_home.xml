@@ -93,7 +93,7 @@
                 android:id="@+id/layout_rematch"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:background="@color/header">
+                android:background="@color/colorBlack">
             <LinearLayout
                     android:id="@+id/rematch_stack"
                     android:orientation="vertical"
@@ -108,6 +108,8 @@
                         android:layout_width="wrap_content"
                         android:gravity="center"
 
+                        android:background="@color/colorBlack"
+
                         app:tint="@android:color/white"
 
                         android:contentDescription="todo"
@@ -121,10 +123,10 @@
 
 
                         android:textSize="12dp"
-                        tools:text="REMATCH"
+                        tools:text="SNAPSHOT"
                         android:textAllCaps="true"
 
-                        android:background="@color/header"
+                        android:background="@color/colorBlack"
                         android:textColor="@android:color/white"/>
             </LinearLayout>
         </FrameLayout>
