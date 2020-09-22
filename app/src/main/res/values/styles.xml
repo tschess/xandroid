@@ -43,4 +43,9 @@
         <item name="colorAccent">@android:color/white</item>
     </style>
 
+
+    <style name="DialogRematch" parent="Theme.AppCompat.Dialog.Alert">
+
+    </style>
+
 </resources>

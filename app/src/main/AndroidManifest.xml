@@ -35,6 +35,11 @@
                   android:screenOrientation="portrait"/>
         <activity android:name="io.tschess.tschess.start.ActivityCreate"
                   android:screenOrientation="portrait"/>
+        <activity android:name="io.tschess.tschess.snapshot.ActivitySnapshot"
+                  android:screenOrientation="portrait"/>
+
+
+
     </application>
 
 </manifest>

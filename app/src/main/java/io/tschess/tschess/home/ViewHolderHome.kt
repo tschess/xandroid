@@ -1,6 +1,9 @@
 package io.tschess.tschess.home
 
+//import io.tschess.tschess.quick.ActivityQuick
+//import io.tschess.tschess.snapshot.ActivitySnapshot
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -24,13 +27,11 @@ import io.tschess.tschess.R
 import io.tschess.tschess.home.component.DialogRematch
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.EntityPlayer
-//import io.tschess.tschess.quick.ActivityQuick
-//import io.tschess.tschess.snapshot.ActivitySnapshot
-import io.tschess.tschess.tschess.ActivityTschess
 import io.tschess.tschess.model.ExtendedDataHolder
 import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
 import io.tschess.tschess.snapshot.ActivitySnapshot
+import io.tschess.tschess.tschess.ActivityTschess
 import org.json.JSONObject
 import java.util.*
 
@@ -57,7 +58,8 @@ class ViewHolderHome(
     val playerOther: EntityPlayer,
     val context: Context,
     var refresher: Refresher,
-    val position: Int
+    val position: Int,
+    val activityHome: ActivityHome
 ) {
 
     private val glide = Glide.with(context)
@@ -69,12 +71,14 @@ class ViewHolderHome(
             avatar!!.visibility = View.VISIBLE
             avatar.setImageDrawable(drawable)
         }
-        glide.load(playerOther.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
+        glide.load(playerOther.avatar).apply(RequestOptions.circleCropTransform()).into(object :
+            CustomTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                 avatar!!.visibility = View.VISIBLE
                 avatar.setImageDrawable(resource)
                 playerOther.drawable = resource
             }
+
             override fun onLoadCleared(placeholder: Drawable?) {}
         })
         if (game.status.contains("RESOLVED")) {
@@ -221,11 +225,9 @@ class ViewHolderHome(
 
 
 
-            val dialogRematch: DialogRematch = DialogRematch(context)
-           // dialogRematch = builder.create()
-            dialogRematch.show()
 
 
+            activityHome.dialogRematch()
             //val intent = Intent(context, ActivityQuick::class.java)
             //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)

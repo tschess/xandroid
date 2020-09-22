@@ -3,12 +3,14 @@ package io.tschess.tschess.home
 
 import android.app.NotificationManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AbsListView
 import android.widget.ListView
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.Request
@@ -65,7 +67,7 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         extras.clear()
 
         this.listMenu = arrayListOf()
-        this.adapterMenu = AdapterHome(this.playerSelf, applicationContext, this.listMenu)
+        this.adapterMenu = AdapterHome(this.playerSelf, applicationContext, this.listMenu, this)
         this.adapterMenu.refresher = this
         val listView: ListView = findViewById(R.id.list_view)
         listView.adapter = adapterMenu
@@ -185,6 +187,17 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.adapterMenu.clear()
         this.index = 0
         this.fetchGames()
+    }
+
+    fun dialogRematch() {
+        val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
+        dialogBuilder.setTitle("⚡ tschess ⚡")
+        dialogBuilder.setMessage("\uD83E\uDD16 invalid input.\nplease re-evaluate and try again. \uD83D\uDCF2")
+        dialogBuilder.setPositiveButton("ok", DialogInterface.OnClickListener { dialog, id ->
+            dialog.cancel()
+        })
+        val alert: AlertDialog = dialogBuilder.create()
+        alert.show()
     }
 }
 

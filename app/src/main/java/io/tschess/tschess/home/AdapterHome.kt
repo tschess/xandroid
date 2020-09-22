@@ -13,7 +13,8 @@ import io.tschess.tschess.R
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.EntityPlayer
 
-class AdapterHome(val playerSelf: EntityPlayer, context: Context, objects: List<EntityGame>) :
+class AdapterHome(val playerSelf: EntityPlayer, context: Context, objects: List<EntityGame>,
+                  val activityHome: ActivityHome) :
     ArrayAdapter<EntityGame>(context, R.layout.item_home, objects) {
 
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
@@ -51,7 +52,8 @@ class AdapterHome(val playerSelf: EntityPlayer, context: Context, objects: List<
             playerOther,
             context,
             refresher,
-            position
+            position,
+            activityHome
         )
         row.tag = holder
         binderHelper.bind(holder.layout_swipe, game.id)
