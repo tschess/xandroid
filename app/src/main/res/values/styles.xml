@@ -45,7 +45,6 @@
 
 
     <style name="DialogRematch" parent="Theme.AppCompat.Dialog.Alert">
-
     </style>
 
 </resources>

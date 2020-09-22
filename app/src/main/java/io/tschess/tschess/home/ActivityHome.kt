@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.header.HeaderSelf
+import io.tschess.tschess.home.component.DialogRematch
 import io.tschess.tschess.model.*
 import io.tschess.tschess.server.CustomJsonArrayRequest
 import io.tschess.tschess.server.ServerAddress
@@ -190,14 +191,21 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     }
 
     fun dialogRematch() {
-        val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
-        dialogBuilder.setTitle("⚡ tschess ⚡")
-        dialogBuilder.setMessage("\uD83E\uDD16 invalid input.\nplease re-evaluate and try again. \uD83D\uDCF2")
-        dialogBuilder.setPositiveButton("ok", DialogInterface.OnClickListener { dialog, id ->
-            dialog.cancel()
-        })
-        val alert: AlertDialog = dialogBuilder.create()
-        alert.show()
+        //val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
+        //dialogBuilder.setTitle("⚡ tschess ⚡")
+        //dialogBuilder.setMessage("\uD83E\uDD16 invalid input.\nplease re-evaluate and try again. \uD83D\uDCF2")
+        //dialogBuilder.setPositiveButton("ok", DialogInterface.OnClickListener { dialog, id ->
+            //dialog.cancel()
+        //})
+        //val alert: AlertDialog = dialogBuilder.create()
+        //alert.show()
+
+
+        val dialogRematch: DialogRematch = DialogRematch(this)
+
+
+        //this.alertDialog = builder.create()
+        dialogRematch.show()
     }
 }
 
