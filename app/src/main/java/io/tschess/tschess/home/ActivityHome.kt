@@ -7,13 +7,20 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import io.tschess.tschess.R
 import io.tschess.tschess.header.HeaderSelf
-import io.tschess.tschess.model.EntityPlayer
-import io.tschess.tschess.model.ExtendedDataHolder
+import io.tschess.tschess.model.*
 
 class ActivityHome : AppCompatActivity() {
 
+    private var size: Int = 9
+    private var index: Int = 0
+    private var fetched: Boolean = false
+    private val parseGame: ParseGame = ParseGame()
+    private val parsePlayer: ParsePlayer = ParsePlayer()
+
     lateinit var progressBar: ProgressBar
     private lateinit var playerSelf: EntityPlayer
+    private lateinit var adapterMenu: AdapterHome
+    private lateinit var listMenu: ArrayList<EntityGame>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,4 +39,9 @@ class ActivityHome : AppCompatActivity() {
     }
 
 
+}
+
+@FunctionalInterface
+interface Refresher {
+    fun refresh(position: Int)
 }

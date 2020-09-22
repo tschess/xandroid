@@ -4,6 +4,8 @@
         xmlns:tools="http://schemas.android.com/tools"
 
 
+        android:background="@color/header"
+
         android:fitsSystemWindows="true"
 
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -20,6 +22,76 @@
             app:layout_constraintTop_toTopOf="parent"
     />
 
+
+    <TextView
+            android:id="@+id/text_rival"
+
+            app:layout_constraintTop_toBottomOf="@id/header"
+            app:layout_constraintBottom_toTopOf="@id/list_rival"
+
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+
+
+
+            android:text="rivals"
+            android:textColor="@android:color/darker_gray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+    <LinearLayout
+            android:id="@+id/list_rival"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@color/header"
+
+            app:layout_constraintTop_toBottomOf="@id/text_rival"
+            app:layout_constraintBottom_toTopOf="@id/body"
+
+            android:orientation="horizontal">
+
+        <io.tschess.tschess.home.CardHome
+                android:id="@+id/queen"
+                app:image="@drawable/default_avatar"
+                app:name="queen"
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+        />
+
+        <io.tschess.tschess.home.CardHome
+                android:id="@+id/poison"
+                app:image="@drawable/default_avatar"
+                app:name="poison"
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+        />
+
+        <io.tschess.tschess.home.CardHome
+                android:id="@+id/hunter"
+                app:image="@drawable/default_avatar"
+                app:name="hunter"
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+        />
+
+
+
+    </LinearLayout>
+
+
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -27,8 +99,10 @@
             android:orientation="vertical"
 
             android:layout_below="@+id/header"
+
+            app:layout_constraintTop_toBottomOf="@id/list_rival"
             app:layout_constraintBottom_toTopOf="@id/tab_layout"
-            app:layout_constraintTop_toBottomOf="@id/header"
+
 
             android:background="@android:color/white"
 

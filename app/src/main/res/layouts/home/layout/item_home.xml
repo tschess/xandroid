@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.chauthai.swipereveallayout.SwipeRevealLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:dragEdge="right"
+        app:mode="same_level"
+        android:id="@+id/layout_swipe">
+
+    <LinearLayout
+            android:id="@+id/layout_option_swipe"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+        <FrameLayout
+                android:id="@+id/layout_accept"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="@color/header">
+            <LinearLayout
+                    android:id="@+id/accept_stack"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+            >
+                <ImageView
+                        android:id="@+id/accept_image"
+                        android:layout_height="30dp"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+
+                        app:tint="@android:color/white"
+
+                        android:contentDescription="todo"
+                        android:src="@drawable/img_accept"
+                />
+                <TextView
+                        android:id="@+id/accept_title"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:textSize="12dp"
+                        tools:text="ACCEPT"
+                        android:textAllCaps="true"
+
+                        android:background="@color/header"
+                        android:textColor="@android:color/white"/>
+            </LinearLayout>
+        </FrameLayout>
+        <FrameLayout
+                android:id="@+id/layout_reject"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="@color/header">
+            <LinearLayout
+                    android:id="@+id/reject_stack"
+                    android:orientation="vertical"
+
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+            >
+                <ImageView
+                        android:id="@+id/reject_image"
+                        android:layout_height="30dp"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+
+                        app:tint="@android:color/white"
+
+                        android:contentDescription="todo"
+                        android:src="@drawable/img_rescind"
+                />
+                <TextView
+                        android:id="@+id/reject_title"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:textSize="12dp"
+                        tools:text="RESCIND"
+                        android:textAllCaps="true"
+
+                        android:background="@color/header"
+                        android:textColor="@android:color/white"/>
+            </LinearLayout>
+        </FrameLayout>
+        <FrameLayout
+                android:id="@+id/layout_rematch"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="@color/header">
+            <LinearLayout
+                    android:id="@+id/rematch_stack"
+                    android:orientation="vertical"
+
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+            >
+                <ImageView
+                        android:id="@+id/rematch_image"
+                        android:layout_height="30dp"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+
+                        app:tint="@android:color/white"
+
+                        android:contentDescription="todo"
+                        android:src="@drawable/img_rematch"
+                />
+                <TextView
+                        android:id="@+id/rematch_title"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+
+                        android:textSize="12dp"
+                        tools:text="REMATCH"
+                        android:textAllCaps="true"
+
+                        android:background="@color/header"
+                        android:textColor="@android:color/white"/>
+            </LinearLayout>
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:id="@+id/layout_row">
+
+        <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="avatar"
+                android:scaleType="fitXY"
+                tools:src="@drawable/default_avatar"
+
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+        />
+
+
+        <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                tools:text="username"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/avatar"
+
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+
+                android:textColor="@android:color/darker_gray"/>
+
+
+
+        <LinearLayout
+                android:id="@+id/action_stack"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+        >
+            <ImageView
+                    android:id="@+id/action_image"
+
+                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+
+                    android:gravity="center"
+
+                    android:contentDescription="todo"
+                    android:src="@drawable/img_action"
+            />
+            <TextView
+                    android:id="@+id/action_title"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    tools:text="action"
+                    android:textColor="@android:color/black"/>
+        </LinearLayout>
+
+
+
+
+
+        <ImageView
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+
+
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_width="30dp"
+                android:layout_height="60dp"
+
+                android:id="@+id/more_vert"
+                android:scaleType="fitCenter"
+
+                app:tint="@android:color/black"
+
+                android:contentDescription="lolol"
+                android:src="@drawable/img_more_g"
+
+        />
+
+
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
