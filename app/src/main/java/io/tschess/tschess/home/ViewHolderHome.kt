@@ -224,7 +224,7 @@ class ViewHolderHome(
         this.layout_rematch!!.setOnClickListener {
 
 
-
+            this.layout_swipe!!.close(true)
 
 
             activityHome.dialogRematch()
