@@ -32,9 +32,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
 
+            android:textSize="16dp"
 
-
-            android:text="rivals"
+            android:text="rivals:"
             android:textColor="@android:color/darker_gray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -124,8 +124,8 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
 
-                    android:divider="@color/header"
-                    android:dividerHeight="1dp"
+                    android:divider="@color/colorBlack"
+                    android:dividerHeight="0.5dp"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

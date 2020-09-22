@@ -301,7 +301,7 @@ class ViewHolderHome(
     private fun setResolved() {
         this.setSnapshot()
         this.setRematch()
-        this.layout_row!!.setBackgroundColor(Color.BLACK)
+        this.layout_row!!.setBackgroundColor(Color.parseColor("#1F2123"))
         this.username!!.visibility = View.VISIBLE
         this.more_vert!!.visibility = View.VISIBLE
         val draw: Boolean = game.condition == "DRAW"

@@ -17,7 +17,7 @@
             app:layout_constraintRight_toRightOf="parent"
 
             android:layout_marginTop="4dp"
-
+            android:textSize="16dp"
             android:textColor="@android:color/darker_gray"
 
             app:layout_constraintStart_toStartOf="parent"

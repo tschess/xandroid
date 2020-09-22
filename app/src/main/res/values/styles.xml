@@ -40,7 +40,7 @@
     </style>
 
     <style name="ProgressBarStyle">
-        <item name="colorAccent">@color/colorBlue</item>
+        <item name="colorAccent">@android:color/white</item>
     </style>
 
 </resources>
