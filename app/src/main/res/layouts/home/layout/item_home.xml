@@ -18,7 +18,7 @@
                 android:id="@+id/layout_accept"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:background="@color/header">
+                android:background="@color/colorBlack">
             <LinearLayout
                     android:id="@+id/accept_stack"
                     android:orientation="vertical"
@@ -32,7 +32,7 @@
                         android:layout_width="wrap_content"
                         android:gravity="center"
 
-                        app:tint="@android:color/white"
+                        app:tint="@android:color/darker_gray"
 
                         android:contentDescription="todo"
                         android:src="@drawable/img_accept"
@@ -43,19 +43,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
+
+
                         android:textSize="12dp"
                         tools:text="ACCEPT"
                         android:textAllCaps="true"
 
-                        android:background="@color/header"
-                        android:textColor="@android:color/white"/>
+                        android:background="@color/colorBlack"
+                        android:textColor="@android:color/darker_gray"/>
             </LinearLayout>
         </FrameLayout>
         <FrameLayout
                 android:id="@+id/layout_reject"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:background="@color/header">
+                android:background="@color/colorBlack">
             <LinearLayout
                     android:id="@+id/reject_stack"
                     android:orientation="vertical"
@@ -70,7 +72,7 @@
                         android:layout_width="wrap_content"
                         android:gravity="center"
 
-                        app:tint="@android:color/white"
+                        app:tint="@android:color/darker_gray"
 
                         android:contentDescription="todo"
                         android:src="@drawable/img_rescind"
@@ -85,8 +87,8 @@
                         tools:text="RESCIND"
                         android:textAllCaps="true"
 
-                        android:background="@color/header"
-                        android:textColor="@android:color/white"/>
+                        android:background="@color/colorBlack"
+                        android:textColor="@android:color/darker_gray"/>
             </LinearLayout>
         </FrameLayout>
         <FrameLayout

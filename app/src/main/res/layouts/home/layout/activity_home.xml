@@ -34,7 +34,7 @@
 
             android:textSize="16dp"
 
-            android:text="rivals:"
+            android:text="suggested opponents:"
             android:textColor="@android:color/darker_gray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

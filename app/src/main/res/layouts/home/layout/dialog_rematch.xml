@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="io.tschess.tschess.home.ActivityHome"
+
+        android:gravity="center"
+        android:fitsSystemWindows="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_toast">
+
+    <TextView
+            android:layout_marginTop="4dp"
+            android:id="@+id/text_title"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:textColor="@android:color/darker_gray"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="rematch"/>
+
+    <LinearLayout
+            android:id="@+id/reject_stack"
+            android:orientation="horizontal"
+
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+
+            android:background="@color/header"
+
+            app:layout_constraintTop_toBottomOf="@+id/text_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+                android:id="@+id/reject_title"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:textSize="12dp"
+                tools:text="config:"
+                android:textAllCaps="false"
+
+                android:background="@color/header"
+                android:textColor="@android:color/darker_gray"/>
+
+        <NumberPicker
+                android:background="@color/header"
+                android:id="@+id/number_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

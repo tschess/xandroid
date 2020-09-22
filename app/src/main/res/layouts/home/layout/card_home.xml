@@ -14,8 +14,8 @@
 
             android:background="@color/header"
 
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:scaleType="fitXY"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"

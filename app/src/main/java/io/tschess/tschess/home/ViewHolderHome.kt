@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.android.volley.Request
@@ -20,6 +21,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import io.tschess.tschess.R
+import io.tschess.tschess.home.component.DialogRematch
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.EntityPlayer
 //import io.tschess.tschess.quick.ActivityQuick
@@ -147,6 +149,7 @@ class ViewHolderHome(
     }
 
     private fun setInviteAccept() {
+        this.accept_image!!.setColorFilter(Color.parseColor("#aaaaaa"))
         this.accept_title!!.text = "accept"
         this.layout_accept!!.setOnClickListener {
             //val intent = Intent(context, ActivityQuick::class.java)
@@ -167,6 +170,7 @@ class ViewHolderHome(
     private fun setInviteReject() {
         if (game.getOutbound(playerSelf.username)) {
             this.reject_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_rescind)!!)
+            this.reject_image!!.setColorFilter(Color.parseColor("#aaaaaa"))
             this.reject_title!!.text = "rescind"
             this.layout_reject!!.setOnClickListener {
                 val url = "${ServerAddress().IP}:8080/game/rescind"
@@ -189,6 +193,7 @@ class ViewHolderHome(
             return
         }
         this.reject_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_reject)!!)
+        this.reject_image!!.setColorFilter(Color.parseColor("#aaaaaa"))
         this.reject_title!!.text = "decline"
         this.layout_reject!!.setOnClickListener {
             val url = "${ServerAddress().IP}:8080/game/nack"
@@ -213,6 +218,14 @@ class ViewHolderHome(
     private fun setRematch() {
         this.rematch_title!!.text = "SNAPSHOT"
         this.layout_rematch!!.setOnClickListener {
+
+
+
+            val dialogRematch: DialogRematch = DialogRematch(context)
+           // dialogRematch = builder.create()
+            dialogRematch.show()
+
+
             //val intent = Intent(context, ActivityQuick::class.java)
             //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
