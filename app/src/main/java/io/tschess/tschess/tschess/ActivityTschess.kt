@@ -1,0 +1,638 @@
+package io.tschess.tschess.tschess
+
+import android.app.NotificationManager
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.graphics.Color
+import android.os.Bundle
+import android.os.SystemClock
+import android.util.Log
+import android.view.Gravity
+import android.view.HapticFeedbackConstants
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Chronometer
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.tabs.TabLayout
+import com.google.firebase.iid.FirebaseInstanceId
+import io.tschess.tschess.R
+import io.tschess.tschess.header.HeaderOther
+import io.tschess.tschess.model.EntityGame
+import io.tschess.tschess.model.ParseGame
+import io.tschess.tschess.model.EntityPlayer
+import io.tschess.tschess.home.ActivityHome
+import io.tschess.tschess.piece.Piece
+import io.tschess.tschess.tschess.component.Castle
+import io.tschess.tschess.tschess.component.Explode
+import io.tschess.tschess.tschess.component.Passant
+import io.tschess.tschess.tschess.component.PromoDialog
+import io.tschess.tschess.tschess.component.PromoLogic
+import io.tschess.tschess.tschess.Czecher
+import io.tschess.tschess.tschess.Validator
+import io.tschess.tschess.model.ExtendedDataHolder
+import io.tschess.tschess.server.ServerAddress
+import io.tschess.tschess.server.VolleySingleton
+import org.json.JSONObject
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.concurrent.schedule
+
+class ActivityTschess : AppCompatActivity(), Listener, Flasher {
+
+    override fun onPause() {
+        super.onPause()
+        /* * */
+        (getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
+        /* * */
+    }
+
+    override fun onResume() {
+        super.onResume()
+        /* * */
+        (getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
+        /* * */
+    }
+
+    private val parseGame: ParseGame = ParseGame()
+
+    lateinit var progressBar: ProgressBar
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+    private val brooklyn = ZoneId.of("America/New_York")
+
+    private lateinit var chronometer: Chronometer
+    private lateinit var textViewTitle: TextView
+    private lateinit var textViewTurnary: TextView
+    lateinit var textViewNotification: TextView
+
+    private lateinit var castle: Castle
+    private lateinit var explode: Explode
+    private lateinit var promoLogic: PromoLogic
+    private val passant: Passant = Passant(this)
+
+    private val polling: Timer = Timer()
+
+    lateinit var validator: Validator
+    lateinit var game: EntityGame
+    lateinit var matrix: Array<Array<Piece?>>
+    var white: Boolean = true //TODO: <-- for highlight
+
+    private lateinit var boardView: BoardView
+    private lateinit var playerSelf: EntityPlayer
+
+    private var highlight: List<Array<Int>> = listOf(arrayOf(9, 9), arrayOf(9, 9))
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_tschess)
+
+        this.progressBar = findViewById<ProgressBar>(R.id.progress_bar)
+        this.progressBar.visibility = View.INVISIBLE
+
+        val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+        this.playerSelf = extras.getExtra("player_self") as EntityPlayer
+        this.game = extras.getExtra("game") as EntityGame
+        extras.clear()
+        val playerOther: EntityPlayer = this.game.getPlayerOther(this.playerSelf.username)
+
+        this.castle = Castle()
+        this.castle.activityTschess = this@ActivityTschess
+        this.explode = Explode(this@ActivityTschess)
+        this.promoLogic = PromoLogic(this@ActivityTschess)
+
+        val tabLayout: TabLayout = findViewById<View>(R.id.tab_layout) as TabLayout
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabUnselected(p0: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {
+                this.onTabSelected(tab)
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                if (game.status == "RESOLVED") {
+                    flash()
+                    return
+                }
+                renderOptionMenu()
+            }
+        })
+        this.chronometer = findViewById(R.id.chronometer)
+        this.setCountdown(game.updated)
+
+        this.matrix = game.getMatrix(playerSelf.username!!)
+        this.white = game.getWhite(playerSelf.username!!)
+
+        val headerOther: HeaderOther = findViewById(R.id.header)
+        headerOther.initialize(playerOther)
+
+        this.textViewTitle = findViewById(R.id.title)
+        this.textViewTurnary = findViewById(R.id.turnary)
+        this.textViewNotification = findViewById(R.id.notification)
+        this.textViewNotification.text = ""
+
+        this.boardView = findViewById(R.id.board_view)
+        this.validator = Validator(white, this)
+        this.boardView.setListener(this)
+
+        this.setHighlightCoords()
+        this.boardView.populateBoard(this.matrix, this.highlight, game.turn)
+        this.setTurn()
+        this.setCheckLabel()
+
+        this.polling.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                getUpdate()
+            }
+        }, 2000, TimeUnit.SECONDS.toMillis(1))
+    }
+
+    fun showSpecialAlert(text: String) {
+        val context: Context = applicationContext
+        val inflater: LayoutInflater = layoutInflater
+        val toastView: View = inflater.inflate(R.layout.toast, null)
+        val message: TextView = toastView.findViewById(R.id.message)
+        message.text = text
+        val toast = Toast(context)
+        toast.view = toastView
+        toast.setGravity(
+            Gravity.CENTER_HORIZONTAL or Gravity.CENTER_VERTICAL,
+            0, 0
+        )
+        toast.duration = Toast.LENGTH_LONG
+        toast.show()
+    }
+
+    override fun onBackPressed() {
+        this.polling.cancel()
+        //val intent = Intent(applicationContext, ActivityMenu::class.java)
+        //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        //intent.putExtra("player_self", playerSelf)
+        val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+        extras.putExtra("player_self", playerSelf)
+        //extras.putExtra("game", game)
+
+        //applicationContext.startActivity(intent)
+        finish()
+    }
+
+    private fun setLabelNotification() {
+        if (this.game.status == "RESOLVED") {
+            return
+        }
+        if (this.game.condition == "TBD") {
+            this.textViewNotification.visibility = View.INVISIBLE
+            return
+        }
+        if (this.game.condition == "PENDING") {
+            this.drawProposal()
+        }
+    }
+
+    private fun drawProposal() {
+        if (this.game.status == "RESOLVED") {
+            this.textViewNotification.visibility = View.INVISIBLE
+            return
+        }
+        this.textViewNotification.visibility = View.VISIBLE
+        this.textViewNotification.text = "proposal pending"
+        val username: String = this.game.getTurnUsername()
+        this.textViewTurnary.text = "${username} to respond"
+
+        val turn: Boolean = this.game.getTurn(this.playerSelf.username!!)
+        if (turn) {
+            val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
+            dialogBuilder.setTitle("tschess")
+            dialogBuilder.setMessage("$username has proposed a draw")
+            dialogBuilder.setPositiveButton("accept", DialogInterface.OnClickListener { dialog, _ ->
+                val url = "${ServerAddress().IP}:8080/game/eval"
+                val params = HashMap<String, Any>()
+                params["id_game"] = this.game.id
+                params["id_self"] = this.playerSelf.id
+                params["id_other"] = this.game.getPlayerOther(this.playerSelf.username).id
+                params["accept"] = true
+                val jsonObject = JSONObject(params as Map<*, *>)
+                val request =
+                    JsonObjectRequest(
+                        Request.Method.POST, url, jsonObject,
+                        Response.Listener { _ ->
+                            this.progressBar.visibility = View.VISIBLE
+                        },
+                        Response.ErrorListener { _ -> }
+                    )
+                VolleySingleton.getInstance(applicationContext).addToRequestQueue(request)
+                dialog.cancel()
+            })
+            dialogBuilder.setNegativeButton("reject", DialogInterface.OnClickListener { dialog, _ ->
+                val url = "${ServerAddress().IP}:8080/game/eval"
+                val params = HashMap<String, Any>()
+                params["id_game"] = this.game.id
+                params["id_self"] = this.playerSelf.id
+                params["id_other"] = this.game.getPlayerOther(this.playerSelf.username).id
+                params["accept"] = false
+                val jsonObject = JSONObject(params as Map<*, *>)
+                val request =
+                    JsonObjectRequest(
+                        Request.Method.POST, url, jsonObject,
+                        Response.Listener { _ ->
+                            this.progressBar.visibility = View.VISIBLE
+                        },
+                        Response.ErrorListener { _ -> }
+                    )
+                VolleySingleton.getInstance(applicationContext).addToRequestQueue(request)
+                dialog.cancel()
+            })
+            val alert: AlertDialog = dialogBuilder.create()
+            alert.show()
+            alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.WHITE)
+            alert.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.WHITE)
+        }
+    }
+
+    private fun setCountdown(updated: String) {
+        if (this.game.status == "RESOLVED") {
+            return
+        }
+        val u01: ZonedDateTime = LocalDateTime.now().atZone(this.brooklyn)
+        val u02: ZonedDateTime = LocalDateTime.parse(updated, this.formatter).atZone(this.brooklyn)
+        val durationE1: Duration = Duration.between(u02, u01)
+        val period24: Long = 60 * 60 * 24 * 1000.toLong()
+        val periodXX: Long = period24 - durationE1.toMillis()
+        this.chronometer.base = SystemClock.elapsedRealtime() + periodXX
+        this.chronometer.isCountDown = true
+        this.chronometer.start()
+        this.chronometer.onChronometerTickListener = Chronometer.OnChronometerTickListener {
+            val remainder: Long = it.base - SystemClock.elapsedRealtime()
+            if (remainder <= 0) {
+                val playerTurn: EntityPlayer = this.game.getTurnPlayer()
+                val username: String = playerTurn.username!!
+                val params = HashMap<String, Any>()
+                params["id_game"] = this.game.id
+                params["id_self"] = playerTurn.id!!
+                params["id_oppo"] = this.game.getPlayerOther(username).id!!
+                params["white"] = this.game.getWhite(username)
+                val jsonObject = JSONObject(params as Map<*, *>)
+                this.deliver(jsonObject, "resign")
+            }
+        }
+    }
+
+    private fun setEndgame() {
+        if (this.game.status != "RESOLVED") {
+            return
+        }
+        this.polling.cancel()
+        this.textViewTitle.text = "game over"
+        this.textViewTurnary.visibility = View.INVISIBLE
+        this.chronometer.stop()
+        this.chronometer.visibility = View.INVISIBLE
+        this.textViewNotification.visibility = View.VISIBLE
+        if (this.game.condition == "DRAW") {
+            this.textViewNotification.text = "draw"
+            return
+        }
+        val username: String = this.playerSelf.username
+        if (this.game.getWinnerUsername() == username) {
+            this.textViewNotification.text = "winner"
+            return
+        }
+        this.textViewNotification.text = "you lose"
+    }
+
+    private fun setTurn() {
+        if (this.game.status == "RESOLVED") {
+            return
+        }
+        if (this.game.turn.toLowerCase() == "white") {
+            this.textViewTurnary.text = "${this.game.white.username} to move"
+            return
+        }
+        this.textViewTurnary.text = "${this.game.black.username} to move"
+    }
+
+    private fun setHighlightCoords() {
+        if (this.game.highlight == "TBD") {
+            this.highlight = listOf(arrayOf(9, 9), arrayOf(9, 9))
+            return
+        }
+        val highlight00: MutableList<Int> = mutableListOf()
+        this.game.highlight.forEach { char ->
+            highlight00.add(char.toString().toInt())
+        }
+        if (this.game.getWhite(this.playerSelf.username!!)) {
+            this.highlight =
+                listOf(arrayOf(highlight00[0], highlight00[1]), arrayOf(highlight00[2], highlight00[3]))
+        } else {
+            this.highlight = listOf(
+                arrayOf(7 - highlight00[0], 7 - highlight00[1]),
+                arrayOf(7 - highlight00[2], 7 - highlight00[3])
+            )
+        }
+    }
+
+    override fun flash() {
+        this.boardView.visibility = View.INVISIBLE
+        window.decorView.rootView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        Timer().schedule(11) {
+            runOnUiThread {
+                boardView.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    fun deliver(jsonObject: JSONObject, route: String = "update") {
+        this.progressBar.visibility = View.VISIBLE
+        val url = "${ServerAddress().IP}:8080/game/${route}"
+        val request = JsonObjectRequest(
+            Request.Method.POST, url, jsonObject,
+            { response ->
+                Log.e("RESPONSE", "${response}")
+                this.validator.clear()
+            },
+            { Log.e("error in volley request", "${it.message}") })
+        request.retryPolicy = DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 2, 1f)
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
+    }
+
+    lateinit var alertDialog: AlertDialog
+
+    fun showDialogPromo(coord: Array<Int>) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        //val dialogPromo = PromoDialog(coord, this, this) //this@ActivityTschess
+        val dialogPromo =
+            PromoDialog(
+                coord,
+                this@ActivityTschess,
+                this
+            )
+        dialogPromo.coord = coord
+        builder.setView(dialogPromo)
+        builder.setCancelable(false)
+        this.alertDialog = builder.create()
+        this.alertDialog.show()
+    }
+
+    fun killDialogPromo() {
+        this.alertDialog.dismiss()
+    }
+
+    fun renderOptionMenu() {
+        val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
+        dialogBuilder.setTitle("⚡ tschess ⚡")
+        dialogBuilder.setMessage("select game menu option below:")
+        dialogBuilder.setPositiveButton("resign position \uD83E\uDD26", DialogInterface.OnClickListener { dialog, id ->
+            this.progressBar.visibility = View.VISIBLE
+            val url = "${ServerAddress().IP}:8080/game/resign"
+            val params = HashMap<String, Any>()
+            params["id_game"] = this.game.id
+            params["id_self"] = this.playerSelf.id
+            params["id_oppo"] = this.game.getPlayerOther(this.playerSelf.username!!).id!!
+            params["white"] = this.game.getWhite(this.playerSelf.username!!)
+            val jsonObject = JSONObject(params as Map<*, *>)
+            val jsonObjectRequest = JsonObjectRequest(
+                Request.Method.POST, url, jsonObject,
+                { },
+                { }
+            )
+            VolleySingleton.getInstance(applicationContext).addToRequestQueue(jsonObjectRequest)
+            dialog.cancel()
+        })
+        if (this.game.getTurn(this.playerSelf.username)) {
+            dialogBuilder.setNegativeButton("\uD83E\uDD1D propose draw", DialogInterface.OnClickListener { dialog, id ->
+                this.progressBar.visibility = View.VISIBLE
+                val url = "${ServerAddress().IP}:8080/game/prop/${this.game.id}"
+                val jsonObjectRequest = JsonObjectRequest(
+                    Request.Method.GET, url, null,
+                    { },
+                    { }
+                )
+                VolleySingleton.getInstance(applicationContext).addToRequestQueue(jsonObjectRequest)
+                dialog.cancel()
+            })
+        }
+        val alert: AlertDialog = dialogBuilder.create()
+        alert.show()
+        alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.WHITE)
+        if (this.game.getTurn(this.playerSelf.username!!)) {
+            alert.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.WHITE)
+        }
+    }
+
+    private fun updateable(updated: String): Boolean {
+        val updated01: ZonedDateTime = LocalDateTime.parse(updated, this.formatter).atZone(this.brooklyn)
+        val updatedXX: String = this.game.updated
+        val updatedXY: ZonedDateTime = LocalDateTime.parse(updatedXX, this.formatter).atZone(this.brooklyn)
+        return updated01.isAfter(updatedXY)
+    }
+
+    override fun touch(tile: View) {
+        if (!this.game.getTurn(this.playerSelf.username!!)) {
+            this.flash()
+            return
+        }
+        val index: Int = boardView.indexOfChild(tile)
+        val row: Int = index / 8
+        val col: Int = index % 8
+        //Log.d("---", "---")
+        //Log.e("row", row.toString())
+        //Log.e("column", col.toString())
+        //Log.d("---", "---")
+        val coord01: Array<Int> = arrayOf(row, col)
+        val coord00: Array<Int>? = this.validator.getCoord()
+        if (coord00 != null) {
+            if (explode.evaluate(coord00, coord01, this.matrix)) {
+                return
+            }
+            if (castle.execute(coord00, coord01, this.matrix)) {
+                return
+            }
+            if (promoLogic.evaluate(coord01)) {
+                this.showDialogPromo(coord01)
+                return
+            }
+            if (passant.evaluate(coord00, coord01, this.matrix)) {
+                return
+            }
+            if (this.validator.valid(coord01, this.matrix)) {
+                val matrix00: Array<Array<Piece?>> = this.validator.deselect(this.matrix)
+                this.matrix = matrix00
+                val matrixXX: Array<Array<Piece?>> = this.validator.execute(propose = coord01, matrix = this.matrix)
+                val state: List<List<String>> = this.validator.render(matrix = matrixXX, white = this.white)
+                val highlight: String = if (this.white) {
+                    "${coord00[0]}${coord00[1]}${coord01[0]}${coord01[1]}"
+                } else {
+                    "${7 - coord00[0]}${7 - coord00[1]}${7 - coord01[0]}${7 - coord01[1]}"
+                }
+                val params = HashMap<String, Any>()
+                params["id_game"] = this.game.id
+                params["state"] = state
+                params["highlight"] = highlight
+                params["condition"] = "TBD"
+                val jsonObject = JSONObject(params as Map<*, *>)
+                this.deliver(jsonObject)
+
+                /* * */
+                if(this.playerSelf.isPopup()){
+                    this.notifications()
+                }
+                /* * */
+
+                return
+            }
+            val matrix00: Array<Array<Piece?>> = this.validator.deselect(this.matrix)
+            this.matrix = matrix00
+            this.boardView.populateBoard(this.matrix, this.highlight, game.turn)
+            this.validator.clear()
+            return
+        }
+        val matrix00: Array<Array<Piece?>> = this.validator.highlight(coord01, this.matrix)
+        this.matrix = matrix00
+        this.boardView.populateBoard(this.matrix, this.highlight, game.turn)
+    }
+
+    private fun getUpdate() {
+        val url = "${ServerAddress().IP}:8080/game/request/${game.id}"
+        val request = JsonObjectRequest(
+            Request.Method.GET, url, null,
+            Response.Listener { response: JSONObject ->
+                val game: EntityGame = parseGame.execute(response)
+                val updatable: Boolean = this.updateable(game.updated)
+                if (!updatable) {
+                    return@Listener
+                }
+                this.progressBar.visibility = View.INVISIBLE
+                this.game = game
+                this.setHighlightCoords()
+
+                this.matrix = this.game.getMatrix(this.playerSelf.username)
+                this.setCheckMate()
+
+                this.boardView.populateBoard(this.matrix, this.highlight, game.turn) //old turn??
+                this.setEndgame()
+                this.setTurn()
+                this.setCountdown(game.updated)
+                this.setLabelNotification()
+                this.setCheckLabel()
+
+            }, Response.ErrorListener {
+                Log.e("error in volley request", "${it.message}")
+            })
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
+    }
+
+    private fun setCheckLabel() {
+        val czech: Boolean = this.game.on_check
+        if(!czech){
+            return
+        }
+        val textTurn: String = this.textViewTurnary.text.toString()
+        this.textViewTurnary.text = "$textTurn (check)"
+    }
+
+    private fun setCheckMate() {
+        val czecher: Czecher = Czecher()
+        val affiliation: String = this.game.getAffiliationOther(this.playerSelf.username)
+        val king: Array<Int> = czecher.kingCoordinate(affiliation, this.matrix)
+        val mate: Boolean = czecher.mate(king, this.matrix)
+        if (mate) {
+            val url = "${ServerAddress().IP}:8080/game/mate/${this.game.id}"
+            val jsonObjectRequest = JsonObjectRequest(
+                Request.Method.GET, url, null,
+                { this.progressBar.visibility = View.INVISIBLE },
+                { this.progressBar.visibility = View.INVISIBLE }
+            )
+            VolleySingleton.getInstance(applicationContext).addToRequestQueue(jsonObjectRequest)
+            return
+        }
+        val czech: Boolean = czecher.other(king, this.matrix)
+        if (!czech) {
+            return
+        }
+        this.progressBar.visibility = View.VISIBLE
+        val url = "${ServerAddress().IP}:8080/game/check/${this.game.id}"
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.GET, url, null,
+            { this.progressBar.visibility = View.INVISIBLE },
+            { this.progressBar.visibility = View.INVISIBLE }
+        )
+        VolleySingleton.getInstance(applicationContext).addToRequestQueue(jsonObjectRequest)
+
+    }
+
+
+    private fun notifications() {
+
+        val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
+        dialogBuilder.setTitle("\uD83D\uDC42 ¿now what? ☎")
+        dialogBuilder.setMessage("\uD83E\uDDE0️ once opponent has moved\nwould you like to know?")
+            .setPositiveButton("yes \uD83D\uDC4C", DialogInterface.OnClickListener { dialog, id ->
+                val url = "${ServerAddress().IP}:8080/player/push"
+                this.progressBar.visibility = View.VISIBLE
+
+                FirebaseInstanceId.getInstance().instanceId
+                    .addOnCompleteListener(OnCompleteListener { task ->
+                        // Get new Instance ID token
+                        val token: String? = task.result?.token
+                        // Log and toast
+                        //val msg = getString(R.string.msg_token_fmt, token)
+                        var note_key: String = "NULL"
+                        if (!token.isNullOrBlank()) {
+                            note_key = token
+                        }
+                        //Log.d("TAG", "ANDROID_${note_key}")
+                        //Toast.makeText(baseContext, note_key, Toast.LENGTH_LONG).show()
+
+                        val params = HashMap<String, String>()
+                        params["id"] = playerSelf.id
+                        params["note_key"] = "ANDROID_${note_key}"
+
+                        val jsonObject = JSONObject(params as Map<*, *>)
+                        Log.d("jsonObject", "${jsonObject}")
+
+                        val request = JsonObjectRequest(Request.Method.POST, url, jsonObject,
+                            { response: JSONObject ->
+
+                                Log.d("response", "${response}")
+                                //response
+
+                                this.progressBar.visibility = View.INVISIBLE
+
+                                //TODO: ???
+                            },
+                            {
+                                this.progressBar.visibility = View.INVISIBLE
+                                //TODO: remove...
+                            }
+                        )
+                        request.retryPolicy = DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 1F)
+                        VolleySingleton.getInstance(this).addToRequestQueue(request)
+                    })
+            })
+            .setNegativeButton("no", DialogInterface.OnClickListener { dialog, _ ->
+                //TODO: FUCK
+            })
+        val alert: AlertDialog = dialogBuilder.create()
+        alert.show()
+        alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.WHITE)
+        alert.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.WHITE)
+    }
+
+}
+
+
+

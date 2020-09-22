@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:gravity="center"
+        android:background="@drawable/shape_toast">
+
+    <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/text_view"
+
+            android:textColor="@color/colorWhite"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="select promotion:"/>
+
+
+    <TableRow
+
+
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+
+            android:id="@+id/TableRow00"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        <ImageButton
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+
+
+                android:id="@+id/bishop"
+                android:src="@drawable/white_bishop"
+                android:background="@color/header"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="fitXY" />
+
+        <ImageButton
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+
+                android:id="@+id/knight"
+                android:src="@drawable/white_knight"
+                android:background="@color/header"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="fitXY" />
+
+    </TableRow>
+
+    <TableRow
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+
+
+            android:id="@+id/tableRow01"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        <ImageButton
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+
+                android:id="@+id/queen"
+                android:src="@drawable/white_queen"
+                android:background="@color/header"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="fitXY"/>
+
+        <ImageButton
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+
+                android:id="@+id/rook"
+                android:src="@drawable/white_rook"
+                android:background="@color/header"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="fitXY"/>
+
+
+    </TableRow>
+
+</TableLayout>

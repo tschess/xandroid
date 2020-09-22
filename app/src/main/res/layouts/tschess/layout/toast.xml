@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_margin="5dp"
+              android:background="@drawable/shape_toast"
+>
+
+    <TextView
+            android:layout_margin="20dp"
+
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This is a custom toast."
+            android:textColor="@android:color/white"
+            android:layout_gravity="center_vertical" />
+
+</LinearLayout>

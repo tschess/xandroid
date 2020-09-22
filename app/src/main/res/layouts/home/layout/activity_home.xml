@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+
+
+        android:fitsSystemWindows="true"
+
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="io.tschess.tschess.home.ActivityHome">
+
+
+    <io.tschess.tschess.header.HeaderSelf
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+    />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            android:orientation="vertical"
+
+            android:layout_below="@+id/header"
+            app:layout_constraintBottom_toTopOf="@id/tab_layout"
+            app:layout_constraintTop_toBottomOf="@id/header"
+
+            android:background="@android:color/white"
+
+            android:id="@+id/body">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh_layout"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+            <ListView
+                    android:id="@+id/list_view"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+
+                    android:divider="@color/header"
+                    android:dividerHeight="1dp"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.tabs.TabLayout
+
+            android:id="@+id/tab_layout"
+
+            android:background="@drawable/border_tab_layout"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+
+            app:tabTextAppearance="@style/CustomTextStyle"
+
+            app:tabTextColor="@android:color/darker_gray"
+            app:tabSelectedTextColor="@android:color/darker_gray"
+
+            app:tabIndicator="@null"
+            app:tabIndicatorHeight="0dp"
+            app:tabIndicatorColor="@android:color/transparent"
+    >
+
+        <com.google.android.material.tabs.TabItem
+                android:text="single player"
+                android:icon="@drawable/robot"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+        />
+
+        <com.google.android.material.tabs.TabItem
+                android:text="my config(s)"
+                android:icon="@drawable/tab_setup"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+        <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_item"
+                android:text="leaderboard"
+                android:icon="@drawable/trophy"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+
+
+    </com.google.android.material.tabs.TabLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

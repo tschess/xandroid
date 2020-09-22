@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        android:background="@drawable/border_header"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+            android:id="@+id/title"
+            android:text="tschess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/avatar"/>
+
+
+    <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:adjustViewBounds="true"
+
+            android:src="@drawable/default_avatar"
+
+            android:scaleType="fitXY"
+
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+
+            android:background="@color/header"
+            android:gravity="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintBottom_toTopOf="@id/username"
+    />
+
+    <TextView
+            android:id="@+id/username"
+            android:text="username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:gravity="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+
+            app:layout_constraintTop_toBottomOf="@id/avatar"
+
+    />
+
+    <LinearLayout
+            android:id="@+id/layout_score"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title">
+        <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textColor="@android:color/darker_gray"
+                android:text="score: "/>
+        <TextView
+                android:id="@+id/score"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:text="1313"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/layout_rank"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/layout_score"
+    >
+        <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textColor="@android:color/darker_gray"
+                android:text="rating: "/>
+        <TextView
+                android:id="@+id/rank"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:text="1"/>
+    </LinearLayout>
+    <TextView
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+
+            app:layout_constraintTop_toBottomOf="@id/layout_rank"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:id="@+id/date"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textColor="@android:color/darker_gray"
+            android:text="03.28.1989"/>
+
+    <ProgressBar
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
