@@ -44,11 +44,11 @@ class HeaderSelf(context: Context, attrs: AttributeSet) : LinearLayout(context, 
 
         val imageView: ImageView = findViewById(R.id.avatar)
         imageView.visibility = View.INVISIBLE
-        val drawable: Drawable? = player.drawable
-        if (drawable != null) {
-            imageView.visibility = View.VISIBLE
-            imageView.setImageDrawable(drawable)
-        }
+        //val drawable: Drawable? = player.drawable
+        //if (drawable != null) {
+            //imageView.visibility = View.VISIBLE
+            //imageView.setImageDrawable(drawable)
+        //}
 
         glide.load(player.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {

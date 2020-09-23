@@ -31,7 +31,6 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     private var index: Int = 0
     private var fetched: Boolean = false
     private val parseGame: ParseGame = ParseGame()
-    private val parsePlayer: ParsePlayer = ParsePlayer()
 
     lateinit var progressBar: ProgressBar
     private lateinit var playerSelf: EntityPlayer
@@ -92,8 +91,6 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         })
         this.swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         swipeRefreshLayout.setOnRefreshListener(this)
-        //swipeRefreshLayout.setDistanceToTriggerSync(100)
-        //swipeRefreshLayout.progressViewStartOffset
         this.fetchGames()
 
         val headerSelf: HeaderSelf = findViewById(R.id.header)

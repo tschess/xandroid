@@ -1,9 +1,6 @@
 package io.tschess.tschess.home
 
-//import io.tschess.tschess.quick.ActivityQuick
-//import io.tschess.tschess.snapshot.ActivitySnapshot
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -13,7 +10,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.android.volley.Request
@@ -24,7 +20,6 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import io.tschess.tschess.R
-import io.tschess.tschess.home.component.DialogRematch
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.model.ExtendedDataHolder
@@ -66,11 +61,11 @@ class ViewHolderHome(
 
     init {
         this.username!!.text = game.getUsernameOther(playerSelf.username)
-        val drawable: Drawable? = playerOther.drawable
-        if (drawable != null) {
-            avatar!!.visibility = View.VISIBLE
-            avatar.setImageDrawable(drawable)
-        }
+        //val drawable: Drawable? = playerOther.drawable
+        //if (drawable != null) {
+            //avatar!!.visibility = View.VISIBLE
+            //avatar.setImageDrawable(drawable)
+        //}
         glide.load(playerOther.avatar).apply(RequestOptions.circleCropTransform()).into(object :
             CustomTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
@@ -226,15 +221,15 @@ class ViewHolderHome(
             //if (this.layout_swipe!!.isOpened) {
 
             //} else {
-                val intent = Intent(context, ActivitySnapshot::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
-                extras.putExtra("player_self", playerSelf)
-                extras.putExtra("game", game)
-                context.startActivity(intent)
+            val intent = Intent(context, ActivitySnapshot::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+            extras.putExtra("player_self", playerSelf)
+            extras.putExtra("game", game)
+            context.startActivity(intent)
             this.layout_swipe!!.close(false)
-                //this.layout_swipe!!.close(false)
+            //this.layout_swipe!!.close(false)
             //}
 
             //this.layout_swipe!!.close(true)
