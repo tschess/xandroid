@@ -7,25 +7,16 @@ import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import io.tschess.tschess.R
-import io.tschess.tschess.model.EntityGame
-import io.tschess.tschess.model.ParseGame
 import io.tschess.tschess.model.EntityPlayer
-//import io.tschess.tschess.other.ActivityOther
-//import io.tschess.tschess.quick.ActivityQuick
-import io.tschess.tschess.snapshot.ActivitySnapshot
 import io.tschess.tschess.model.ExtendedDataHolder
+import io.tschess.tschess.model.ParseGame
 import io.tschess.tschess.other.ActivityOther
-import io.tschess.tschess.server.ServerAddress
-import io.tschess.tschess.server.VolleySingleton
 
 class ViewHolderLeaderboard(
     var layout_swipe: SwipeRevealLayout? = null,
@@ -51,7 +42,7 @@ class ViewHolderLeaderboard(
     var dialogger: Dialogger,
     val activityLeaderboard: ActivityLeaderboard
 
-){
+) {
 
     private val glide = Glide.with(context)
     private val parseGame: ParseGame = ParseGame()
@@ -61,17 +52,19 @@ class ViewHolderLeaderboard(
 
         val drawable: Drawable? = playerOther.drawable
         //if (drawable != null) {
-            //avatar!!.visibility = View.VISIBLE
-            //avatar!!.setImageDrawable(drawable)
+        //avatar!!.visibility = View.VISIBLE
+        //avatar!!.setImageDrawable(drawable)
         //}
-        glide.load(playerOther.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
-            override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                avatar!!.visibility = View.VISIBLE
-                avatar!!.setImageDrawable(resource)
-                playerOther.drawable = resource
-            }
-            override fun onLoadCleared(placeholder: Drawable?) {}
-        })
+        glide.load(playerOther.avatar).apply(RequestOptions.circleCropTransform())
+            .into(object : CustomTarget<Drawable>() {
+                override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                    avatar!!.visibility = View.VISIBLE
+                    avatar!!.setImageDrawable(resource)
+                    playerOther.drawable = resource
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {}
+            })
 
         this.date!!.text = playerOther.getDateText()
 
@@ -112,7 +105,6 @@ class ViewHolderLeaderboard(
             context.startActivity(intent)
 
 
-
             //this.progressBar.visibility = View.VISIBLE
             //val url = "${ServerAddress().IP}:8080/game/recent/${playerOther.id}"
             //val jsonObjectRequest = JsonObjectRequest(
@@ -144,7 +136,6 @@ class ViewHolderLeaderboard(
         }
 
     }
-
 
 
 }

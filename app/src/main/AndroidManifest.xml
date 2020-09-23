@@ -41,7 +41,8 @@
                   android:screenOrientation="portrait"/>
         <activity android:name="io.tschess.tschess.leaderboard.ActivityLeaderboard"
                   android:screenOrientation="portrait"/>
-
+        <activity android:name="io.tschess.tschess.other.ActivityOther"
+                  android:screenOrientation="portrait"/>
 
 
     </application>
