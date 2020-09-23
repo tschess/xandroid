@@ -46,7 +46,8 @@ class ViewHolderLeaderboard(
     val playerSelf: EntityPlayer,
 
     var progressBar: ProgressBar,
-    var dialogger: Dialogger
+    var dialogger: Dialogger,
+    val activityLeaderboard: ActivityLeaderboard
 
 ){
 
@@ -81,6 +82,10 @@ class ViewHolderLeaderboard(
                 layout_swipe!!.close(true)
                 return@setOnClickListener
             }
+
+
+            activityLeaderboard.dialogChallenge(playerSelf, playerOther)
+
             //val intent = Intent(context, ActivityOther::class.java)
             //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
@@ -142,5 +147,7 @@ class ViewHolderLeaderboard(
         //}
 
     }
+
+
 
 }

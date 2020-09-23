@@ -36,6 +36,7 @@ android {
         main.res.srcDirs += 'src/main/res/layouts/init'
         main.res.srcDirs += 'src/main/res/layouts/snapshot'
         main.res.srcDirs += 'src/main/res/layouts/leaderboard'
+        main.res.srcDirs += 'src/main/res/layouts/dialog'
     }
 
     compileOptions {

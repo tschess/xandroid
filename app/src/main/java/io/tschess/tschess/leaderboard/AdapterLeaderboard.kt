@@ -17,7 +17,8 @@ class AdapterLeaderboard(
     context: Context,
     objects: List<EntityPlayer>,
     var progressBar: ProgressBar,
-    var dialogger: Dialogger
+    var dialogger: Dialogger,
+    val activityLeaderboard: ActivityLeaderboard
 ) : ArrayAdapter<EntityPlayer>(context, R.layout.item_leaderboard, objects) {
 
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
@@ -48,7 +49,8 @@ class AdapterLeaderboard(
             playerOther,
             this.playerSelf,
             progressBar,
-            dialogger
+            dialogger,
+            activityLeaderboard
         )
         row.tag = holder
         binderHelper.bind(holder.layout_swipe, playerOther.id)

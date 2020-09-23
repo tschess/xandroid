@@ -3,22 +3,19 @@ package io.tschess.tschess.home
 
 import android.app.NotificationManager
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AbsListView
 import android.widget.ListView
 import android.widget.ProgressBar
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
+import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.header.HeaderSelf
-import io.tschess.tschess.home.component.DialogRematch
 import io.tschess.tschess.leaderboard.ActivityLeaderboard
 import io.tschess.tschess.model.*
 import io.tschess.tschess.server.CustomJsonArrayRequest
@@ -196,8 +193,8 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.fetchGames()
     }
 
-    fun dialogRematch(player: EntityPlayer) {
-        val dialogRematch: DialogRematch = DialogRematch(this, player)
+    fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer) {
+        val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther)
         dialogRematch.show()
     }
 }

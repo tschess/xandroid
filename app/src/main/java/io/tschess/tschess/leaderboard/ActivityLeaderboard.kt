@@ -14,6 +14,7 @@ import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
+import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.model.ExtendedDataHolder
@@ -76,7 +77,7 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, SwipeRefreshLayout.O
         extras.clear()
 
         this.listHome = arrayListOf()
-        this.adapterHome = AdapterLeaderboard(this.playerSelf, this, this.listHome, this.progressBar, this)
+        this.adapterHome = AdapterLeaderboard(this.playerSelf, this, this.listHome, this.progressBar, this, this)
         this.adapterHome.progressBar = this.progressBar
         this.adapterHome.dialogger = this
         this.listView = findViewById(R.id.list_view)
@@ -212,6 +213,11 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, SwipeRefreshLayout.O
         //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         //applicationContext.startActivity(intent)
         finish()
+    }
+
+    fun dialogChallenge(playerSelf: EntityPlayer, playerOther: EntityPlayer) {
+        val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther)
+        dialogRematch.show()
     }
 }
 

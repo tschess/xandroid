@@ -253,22 +253,8 @@ class ViewHolderHome(
 
     private fun setSnapshot() {
         this.layout_row!!.setOnClickListener {
-
             this.layout_swipe!!.close(true)
-            activityHome.dialogRematch(playerOther)
-
-            //if (this.layout_swipe!!.isOpened) {
-            //    this.layout_swipe!!.close(true)
-            //} else {
-            //    val intent = Intent(context, ActivitySnapshot::class.java)
-            //    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            //    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            //    val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
-            //    extras.putExtra("player_self", playerSelf)
-            //    extras.putExtra("game", game)
-            //    context.startActivity(intent)
-            //    this.layout_swipe!!.close(false)
-            //}
+            activityHome.dialogRematch(playerSelf, playerOther)
         }
     }
 
