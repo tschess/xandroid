@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         tools:context="io.tschess.tschess.snapshot.ActivitySnapshot">
 
-    <io.tschess.tschess.common.HeaderSnap
+    <io.tschess.tschess.header.HeaderSnapshot
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,6 +18,8 @@
     />
 
     <LinearLayout
+
+
             android:layout_width="match_parent"
             android:layout_height="0dp"
 
@@ -38,6 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
+                android:layout_marginBottom="4dp"
+
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
 
@@ -47,13 +51,15 @@
 
                 app:layout_constraintBottom_toTopOf="@id/board_view"/>
 
-        <io.tschess.tschess.snapshot.SnapshotView
+        <io.tschess.tschess.snapshot.ViewSnapshot
                 android:id="@+id/board_view"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
                 android:background="@color/colorWhite"
+
+                android:layout_gravity="center_vertical"
 
                 app:layout_constraintTop_toBottomOf="@id/header"
                 app:layout_constraintBottom_toTopOf="@id/turnary"
@@ -63,6 +69,9 @@
 
 
         <LinearLayout
+
+
+
                 android:id="@+id/linear_layoutZZ"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -75,17 +84,24 @@
                 app:layout_constraintTop_toBottomOf="@id/board_view"
                 app:layout_constraintBottom_toTopOf="@id/linear_layoutXX"
 
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
         >
-            <TextView
-                    android:layout_width="50dp"
+            <ImageView
+                    android:id="@+id/indicator_white"
+                    android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:textColor="@android:color/darker_gray"
-                    android:text="white: "/>
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/white_king"
+                    android:background="@color/colorWhite"
+                    android:layout_marginTop="2dp"
+            />
             <TextView
+                    android:layout_marginTop="2dp"
+                    android:layout_marginStart="2dp"
+                    android:textSize="16sp"
                     android:id="@+id/username_white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -107,17 +123,30 @@
                 app:layout_constraintTop_toBottomOf="@id/linear_layoutZZ"
                 app:layout_constraintBottom_toTopOf="@id/tab_layout"
 
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
         >
-            <TextView
-                    android:layout_width="50dp"
+
+
+
+            <ImageView
+                    android:id="@+id/indicator_black"
+                    android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:textColor="@android:color/darker_gray"
-                    android:text="black: "/>
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/black_king"
+                    android:background="@color/colorWhite"
+                    android:layout_marginTop="2dp"
+            />
+
+
+
             <TextView
+                    android:layout_marginTop="2dp"
+                    android:layout_marginStart="2dp"
+                    android:textSize="16sp"
                     android:id="@+id/username_black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
