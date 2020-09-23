@@ -18,13 +18,13 @@ class AdapterLeaderboard(
     objects: List<EntityPlayer>,
     var progressBar: ProgressBar,
     var dialogger: Dialogger
-) : ArrayAdapter<EntityPlayer>(context, R.layout.row_home, objects) {
+) : ArrayAdapter<EntityPlayer>(context, R.layout.item_leaderboard, objects) {
 
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
     private val binderHelper: ViewBinderHelper = ViewBinderHelper()
 
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
-        val row: View? = mInflater.inflate(R.layout.row_home, parent, false) //TODO: consolidate...
+        val row: View? = mInflater.inflate(R.layout.item_leaderboard, parent, false) //TODO: consolidate...
 
         val playerOther: EntityPlayer = getItem(position) as EntityPlayer
 
@@ -35,13 +35,13 @@ class AdapterLeaderboard(
             row.findViewById(R.id.username) as TextView,
             row.findViewById(R.id.date) as TextView,
             row.findViewById(R.id.disp_image) as ImageView,
-            row.findViewById(R.id.challenge_image) as ImageView,
-            row.findViewById(R.id.challenge_title) as TextView,
+            //row.findViewById(R.id.challenge_image) as ImageView,
+            //row.findViewById(R.id.challenge_title) as TextView,
             row.findViewById(R.id.recent_image) as ImageView,
             row.findViewById(R.id.recent_title) as TextView,
             row.findViewById(R.id.layout_option_swipe) as LinearLayout,
             row.findViewById(R.id.layout_recent) as FrameLayout,
-            row.findViewById(R.id.layout_challenge) as FrameLayout,
+            //row.findViewById(R.id.layout_challenge) as FrameLayout,
             row.findViewById(R.id.rank_value) as TextView,
             row.findViewById(R.id.rank_indicator) as TextView, //TODO: maybe don't need this...
             context,

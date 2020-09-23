@@ -2,10 +2,8 @@ package io.tschess.tschess.leaderboard
 
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AbsListView
 import android.widget.ListView
@@ -16,12 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.header.HeaderSelf
-import io.tschess.tschess.home.AdapterHome
 import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.model.ExtendedDataHolder
 import io.tschess.tschess.model.ParsePlayer
@@ -30,10 +25,9 @@ import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
 import org.json.JSONObject
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.collections.HashMap
 
-class ActivityLeaderboard: AppCompatActivity(), Dialogger, SwipeRefreshLayout.OnRefreshListener {
+class ActivityLeaderboard : AppCompatActivity(), Dialogger, SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
@@ -45,14 +39,9 @@ class ActivityLeaderboard: AppCompatActivity(), Dialogger, SwipeRefreshLayout.On
         this.fetchPlayers()
     }
 
-    override fun onRestart() {
-        super.onRestart()
-        this.setTimerNote()
-    }
-
     private lateinit var tabLayout: TabLayout
 
-    private val pollingNote: Timer = Timer()
+    //private val pollingNote: Timer = Timer()
     private val parsePlayer: ParsePlayer = ParsePlayer()
 
     lateinit var playerSelf: EntityPlayer
@@ -75,7 +64,7 @@ class ActivityLeaderboard: AppCompatActivity(), Dialogger, SwipeRefreshLayout.On
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_leaderboard)
 
         /* * */
         (getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
@@ -118,7 +107,7 @@ class ActivityLeaderboard: AppCompatActivity(), Dialogger, SwipeRefreshLayout.On
 
         this.tabLayout = findViewById<View>(R.id.tab_layout) as TabLayout
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            @RequiresApi(Build.VERSION_CODES.KITKAT)
+
             override fun onTabSelected(tab: TabLayout.Tab) {
                 extras.putExtra("player_self", playerSelf)
                 when (tab.position) {
@@ -155,32 +144,32 @@ class ActivityLeaderboard: AppCompatActivity(), Dialogger, SwipeRefreshLayout.On
         val headerSelf: HeaderSelf = findViewById(R.id.header)
         headerSelf.initialize(this.playerSelf)
 
-        this.setTimerNote()
+        //this.setTimerNote()
     }
 
-    private fun setTimerNote() {
-        this.pollingNote.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-                getNote()
-            }
-        }, 3000, TimeUnit.SECONDS.toMillis(1))
-    }
+    //private fun setTimerNote() {
+    //this.pollingNote.scheduleAtFixedRate(object : TimerTask() {
+    //override fun run() {
+    //getNote()
+    //}
+    //}, 3000, TimeUnit.SECONDS.toMillis(1))
+    //}
 
-    private fun getNote() {
-        val url = "${ServerAddress().IP}:8080/player/notify/${playerSelf.id}"
-        val request = JsonObjectRequest(
-            Request.Method.GET, url, null,
-            Response.Listener { response: JSONObject ->
-                if (response.has("fail")) {
-                    return@Listener
-                }
-                val tabAt: TabLayout.Tab = this.tabLayout.getTabAt(1)!!
-                tabAt.icon = applicationContext.getDrawable(R.drawable.note)
-            }, Response.ErrorListener {
-                Log.e("error in volley request", "${it.message}")
-            })
-        VolleySingleton.getInstance(this).addToRequestQueue(request)
-    }
+    //private fun getNote() {
+    //val url = "${ServerAddress().IP}:8080/player/notify/${playerSelf.id}"
+    //val request = JsonObjectRequest(
+    //Request.Method.GET, url, null,
+    //Response.Listener { response: JSONObject ->
+    //if (response.has("fail")) {
+    //return@Listener
+    //}
+    //val tabAt: TabLayout.Tab = this.tabLayout.getTabAt(1)!!
+    //tabAt.icon = applicationContext.getDrawable(R.drawable.note)
+    //}, Response.ErrorListener {
+    //Log.e("error in volley request", "${it.message}")
+    //})
+    //VolleySingleton.getInstance(this).addToRequestQueue(request)
+    //}
 
     override fun render(username: String) {
         val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)

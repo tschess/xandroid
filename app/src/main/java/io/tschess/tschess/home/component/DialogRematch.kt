@@ -19,7 +19,7 @@ class DialogRematch(context: Context, val player: EntityPlayer) : Dialog(context
 
 
         val tViewTitle: TextView = findViewById(R.id.text_title)
-        tViewTitle.text = "rematch vs. ${player.username}"
+        tViewTitle.text = "\uD83E\uDD1C rematch vs. ${player.username} \uD83E\uDD1B"
 
 
         val textViewTitle: TextView = findViewById(R.id.config_text)

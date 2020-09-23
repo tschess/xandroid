@@ -19,6 +19,7 @@ import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.home.component.DialogRematch
+import io.tschess.tschess.leaderboard.ActivityLeaderboard
 import io.tschess.tschess.model.*
 import io.tschess.tschess.server.CustomJsonArrayRequest
 import io.tschess.tschess.server.ServerAddress
@@ -98,30 +99,38 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
 
         val tabLayout: TabLayout = findViewById<View>(R.id.tab_layout) as TabLayout
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabUnselected(p0: TabLayout.Tab?) {}
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                extras.putExtra("player_self", playerSelf)
+                when (tab.position) {
+                    0 -> {
+                        //val tabAt: TabLayout.Tab = tabLayout.getTabAt(1)!!
+                        //tabAt.icon = applicationContext.getDrawable(R.drawable.tab_menu)
+                        //val intent = Intent(applicationContext, ActivityMenu::class.java)
+                        //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        //applicationContext.startActivity(intent)
+                    }
+                    1 -> {
+                        //val intent = Intent(applicationContext, ActivityConfig::class.java)
+                        //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        //applicationContext.startActivity(intent)
+                    }
+                    2 -> {
+                        extras.putExtra("player_self", playerSelf)
+                        val intent = Intent(applicationContext, ActivityLeaderboard::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        applicationContext.startActivity(intent)
+                    }
+                }
+            }
+
             override fun onTabReselected(tab: TabLayout.Tab) {
                 this.onTabSelected(tab)
             }
 
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                progressBar.visibility = View.VISIBLE
-                extras.putExtra("config", (0..3).random())
-                extras.putExtra("action", "QUICK")
-                val url = "${ServerAddress().IP}:8080/player/quick/${playerSelf.id}"
-                val jsonObjectRequest = JsonObjectRequest(
-                    Request.Method.GET, url, null,
-                    { response: JSONObject ->
-                        //extras.putExtra("player_self", playerSelf)
-                        //extras.putExtra("player_other", parsePlayer.execute(response))
-                        //val intent = Intent(applicationContext, ActivityQuick::class.java)
-                        //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                        //applicationContext.startActivity(intent)
-                    },
-                    { }
-                )
-                VolleySingleton.getInstance(applicationContext).addToRequestQueue(jsonObjectRequest)
-            }
+            override fun onTabUnselected(p0: TabLayout.Tab?) {}
         })
 
 

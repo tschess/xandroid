@@ -32,13 +32,13 @@ class ViewHolderLeaderboard(
     var username: TextView? = null,
     var date: TextView? = null,
     var disp_ind: ImageView? = null,
-    var challenge_image: ImageView? = null,
-    var challenge_title: TextView? = null,
+    //var challenge_image: ImageView? = null,
+    //var challenge_title: TextView? = null,
     var recent_image: ImageView? = null,
     var recent_title: TextView? = null,
     var layout_option_swipe: LinearLayout? = null,
     var layout_recent: FrameLayout? = null,
-    var layout_challenge: FrameLayout? = null,
+    //var layout_challenge: FrameLayout? = null,
     val rank_value: TextView? = null,
     val rank_ind: TextView? = null, //TODO: maybe don't need this...
     val context: Context,
@@ -91,7 +91,7 @@ class ViewHolderLeaderboard(
         }
 
         this.recent_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_recent)!!)
-        this.recent_title!!.text = "recent"
+        this.recent_title!!.text = "GAMES"
         this.layout_recent!!.setOnClickListener {
             this.progressBar.visibility = View.VISIBLE
             val url = "${ServerAddress().IP}:8080/game/recent/${playerOther.id}"
@@ -123,23 +123,23 @@ class ViewHolderLeaderboard(
             layout_swipe!!.close(false)
         }
 
-        this.challenge_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_rematch)!!)
-        this.challenge_title!!.text = "challenge"
-        this.layout_challenge!!.setOnClickListener {
-            val intent = Intent(context, ActivityQuick::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            val config: Int = (0..3).random()
-
-            val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
-            extras.putExtra("player_self", playerSelf)
-            extras.putExtra("player_other", playerOther)
-            extras.putExtra("config", config)
-            extras.putExtra("action", "OTHER")
-
-            context.startActivity(intent)
-            layout_swipe!!.close(false)
-        }
+        //this.challenge_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_rematch)!!)
+        //this.challenge_title!!.text = "challenge"
+        //this.layout_challenge!!.setOnClickListener {
+            //val intent = Intent(context, ActivityQuick::class.java)
+            //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            //val config: Int = (0..3).random()
+            //
+            //val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+            //extras.putExtra("player_self", playerSelf)
+            //extras.putExtra("player_other", playerOther)
+            //extras.putExtra("config", config)
+            //extras.putExtra("action", "OTHER")
+            //
+            //context.startActivity(intent)
+            //layout_swipe!!.close(false)
+        //}
 
     }
 

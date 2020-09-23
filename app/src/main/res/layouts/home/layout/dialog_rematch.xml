@@ -12,7 +12,7 @@
         android:background="@drawable/shape_toast">
 
     <TextView
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:id="@+id/text_title"
 
             android:background="@color/header"
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="rematch vs. XXX"/>
+            android:text="🤜 rematch vs. XXX 🤛"/>
 
     <LinearLayout
             android:id="@+id/picker_stack"
@@ -87,7 +87,7 @@
     </LinearLayout>
 
     <TextView
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="16dp"
             android:id="@+id/text_send"
 
             android:background="@color/header"
@@ -99,13 +99,13 @@
 
             android:textColor="@android:color/white"
 
-            android:paddingBottom="8dp"
+            android:paddingBottom="16dp"
 
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="send challenge"/>
+            android:text="send challenge 📤"/>
 
 
 

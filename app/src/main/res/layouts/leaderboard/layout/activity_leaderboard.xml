@@ -13,7 +13,7 @@
         tools:context="io.tschess.tschess.home.ActivityHome">
 
 
-    <io.tschess.tschess.common.HeaderSelf
+    <io.tschess.tschess.header.HeaderSelf
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
