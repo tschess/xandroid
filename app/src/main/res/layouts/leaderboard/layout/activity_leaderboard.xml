@@ -30,7 +30,7 @@
             app:layout_constraintBottom_toTopOf="@id/tab_layout"
             app:layout_constraintTop_toBottomOf="@id/header"
 
-            android:background="@color/colorWhite"
+            android:background="@color/header"
 
             android:id="@+id/body">
 
@@ -81,24 +81,11 @@
     >
 
         <com.google.android.material.tabs.TabItem
-                android:text="profile"
+                android:text="search"
                 android:icon="@drawable/profile"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
         />
-
-        <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_item"
-                android:text="games"
-                android:icon="@drawable/tab_menu"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
-
-        <com.google.android.material.tabs.TabItem
-                android:text="config"
-                android:icon="@drawable/tab_setup"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
 
     </com.google.android.material.tabs.TabLayout>
 

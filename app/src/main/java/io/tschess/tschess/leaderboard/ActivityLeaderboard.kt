@@ -2,13 +2,11 @@ package io.tschess.tschess.leaderboard
 
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AbsListView
 import android.widget.ListView
 import android.widget.ProgressBar
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -46,7 +44,7 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, SwipeRefreshLayout.O
 
     lateinit var playerSelf: EntityPlayer
 
-    private var size: Int = 9
+    private var size: Int = 13
     private var index: Int = 0
     private lateinit var adapterHome: AdapterLeaderboard
     private lateinit var listHome: ArrayList<EntityPlayer>
@@ -111,20 +109,8 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, SwipeRefreshLayout.O
             override fun onTabSelected(tab: TabLayout.Tab) {
                 extras.putExtra("player_self", playerSelf)
                 when (tab.position) {
-                    1 -> {
-                        //val tabAt: TabLayout.Tab = tabLayout.getTabAt(1)!!
-                        //tabAt.icon = applicationContext.getDrawable(R.drawable.tab_menu)
-                        //val intent = Intent(applicationContext, ActivityMenu::class.java)
-                        //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                        //applicationContext.startActivity(intent)
-                    }
-                    2 -> {
-                        //val intent = Intent(applicationContext, ActivityConfig::class.java)
-                        //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        //applicationContext.startActivity(intent)
-                    }
-                    0 -> {
+
+                    0 -> { //search...
                         //extras.putExtra("player_self", playerSelf)
                         //val intent = Intent(applicationContext, ActivityProfile::class.java)
                         //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -219,12 +205,13 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, SwipeRefreshLayout.O
     }
 
     override fun onBackPressed() {
-        //val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
-        //extras.putExtra("player_self", playerSelf)
+        val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+        extras.putExtra("player_self", playerSelf)
         //val intent = Intent(applicationContext, ActivityProfile::class.java)
         //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         //applicationContext.startActivity(intent)
+        finish()
     }
 }
 
