@@ -32,7 +32,7 @@ class AdapterOther(
     val playerSelf: EntityPlayer,
     context: Context,
     objects: List<EntityGame>
-) : ArrayAdapter<EntityGame>(context, R.layout.item_other, objects) {
+) : ArrayAdapter<EntityGame>(context, R.layout.item_home, objects) {
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
     private val binderHelper: ViewBinderHelper = ViewBinderHelper()
 
@@ -50,7 +50,7 @@ class AdapterOther(
         var disp_ind: ImageView? = null
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         var row: View? = view
         val holder: ViewHolder
@@ -59,7 +59,7 @@ class AdapterOther(
 
         //if (row == null) {
         holder = ViewHolder()
-        row = mInflater.inflate(R.layout.item_other, parent, false)
+        row = mInflater.inflate(R.layout.item_home, parent, false)
 
         val layout_row: ConstraintLayout = row.findViewById(R.id.layout_row) as ConstraintLayout
         layout_row.setOnClickListener {
@@ -122,17 +122,17 @@ class AdapterOther(
         holder.username = username
 
 
-        val date: TextView = row.findViewById(R.id.date) as TextView
-        date.text = game.getDate()
-        holder.date = date
+//        val date: TextView = row.findViewById(R.id.date) as TextView
+//        date.text = game.getDate()
+//        holder.date = date
 
-        val rank_ind: TextView = row.findViewById(R.id.rank_ind) as TextView
-        rank_ind.text = "odds: "
-        holder.rank_ind = rank_ind
-
-        val rank_cnt: TextView = row.findViewById(R.id.rank_cnt) as TextView
-        rank_cnt.text = game.getOdds(playerSelf.username)
-        holder.rank_cnt = rank_cnt
+//        val rank_ind: TextView = row.findViewById(R.id.rank_ind) as TextView
+//        rank_ind.text = "odds: "
+//        holder.rank_ind = rank_ind
+//
+//        val rank_cnt: TextView = row.findViewById(R.id.rank_cnt) as TextView
+//        rank_cnt.text = game.getOdds(playerSelf.username)
+//        holder.rank_cnt = rank_cnt
 
         //val disp_cnt: TextView = row.findViewById(R.id.disp_cnt) as TextView
         //disp_cnt.text = game.getDispCnt(playerSelf.username!!)
