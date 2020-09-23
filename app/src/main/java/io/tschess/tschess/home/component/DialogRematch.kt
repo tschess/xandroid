@@ -31,6 +31,7 @@ class DialogRematch(context: Context) : Dialog(context) {
 //Set min, max, wheel and populate.
 
 //Set min, max, wheel and populate.
+        //myNumberPicker.setTextSize(25)
         myNumberPicker.minValue = 0
         myNumberPicker.maxValue = values.size - 1
         myNumberPicker.wrapSelectorWheel = true

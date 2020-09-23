@@ -72,7 +72,7 @@
 
                 android:layout_weight="1"
 
-
+                android:theme="@style/NumberPickerText"
 
                 android:id="@+id/number_picker"
                 android:layout_width="wrap_content"
