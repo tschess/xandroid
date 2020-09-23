@@ -49,7 +49,7 @@ class HeaderSelf(context: Context, attrs: AttributeSet) : LinearLayout(context, 
             imageView.visibility = View.VISIBLE
             imageView.setImageDrawable(drawable)
         }
-        //with(context).load(url).apply(RequestOptions.circleCropTransform()).into(imageView);
+
         glide.load(player.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                 imageView.visibility = View.VISIBLE

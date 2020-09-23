@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import io.tschess.tschess.R
@@ -48,7 +49,7 @@ class HeaderSnapshot(context: Context, attrs: AttributeSet) : LinearLayout(conte
         }
         imageView.visibility = View.INVISIBLE
         val byteArray: ByteArray = game.getWinnerAvatar()!!
-        glide.load(byteArray).into(object : CustomTarget<Drawable>() {
+        glide.load(byteArray).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                 imageView.visibility = View.VISIBLE
                 imageView.setImageDrawable(resource)
