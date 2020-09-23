@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import io.tschess.tschess.R
@@ -38,8 +39,8 @@ class HeaderOther(context: Context, attrs: AttributeSet) : LinearLayout(context,
         val textViewRank: TextView = findViewById(R.id.rank)
         textViewRank.text = player.rank.toString()
 
-        val textViewDate: TextView = findViewById(R.id.date)
-        textViewDate.text = player.getDateText()
+        //val textViewDate: TextView = findViewById(R.id.date)
+        //textViewDate.text = player.getDateText()
 
 
         val imageView: ImageView = findViewById(R.id.avatar)
@@ -49,7 +50,7 @@ class HeaderOther(context: Context, attrs: AttributeSet) : LinearLayout(context,
             imageView.visibility = View.VISIBLE
             imageView.setImageDrawable(drawable)
         }
-        glide.load(player.avatar).into(object : CustomTarget<Drawable>() {
+        glide.load(player.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                 imageView.visibility = View.VISIBLE
                 imageView.setImageDrawable(resource)

@@ -69,7 +69,7 @@
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 tools:text="username"
 
                 android:layout_marginStart="8dp"
@@ -90,22 +90,23 @@
                 app:layout_constraintLeft_toRightOf="@+id/avatar"
         >
             <TextView
-                    android:textSize="16dp"
+                    android:textSize="16sp"
+                    android:layout_width="50dp"
                     android:textColor="@android:color/darker_gray"
                     android:id="@+id/rank_indicator"
-                    android:layout_width="wrap_content"
+
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="rank:"/>
             <TextView
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textColor="@android:color/white"
                     android:id="@+id/rank_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:text="1"/>
             <ImageView
                     app:layout_constraintTop_toTopOf="parent"
@@ -135,22 +136,22 @@
                 app:layout_constraintLeft_toRightOf="@+id/avatar"
         >
             <TextView
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textColor="@android:color/darker_gray"
                     android:id="@+id/rate_indicator"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="rating:"/>
             <TextView
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textColor="@android:color/white"
                     android:id="@+id/rate_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:text="6669"/>
         </LinearLayout>
 
