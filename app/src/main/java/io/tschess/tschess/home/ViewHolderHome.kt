@@ -224,7 +224,7 @@ class ViewHolderHome(
         this.layout_rematch!!.setOnClickListener {
 
             //if (this.layout_swipe!!.isOpened) {
-                this.layout_swipe!!.close(true)
+
             //} else {
                 val intent = Intent(context, ActivitySnapshot::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -233,7 +233,8 @@ class ViewHolderHome(
                 extras.putExtra("player_self", playerSelf)
                 extras.putExtra("game", game)
                 context.startActivity(intent)
-                this.layout_swipe!!.close(false)
+            this.layout_swipe!!.close(false)
+                //this.layout_swipe!!.close(false)
             //}
 
             //this.layout_swipe!!.close(true)
