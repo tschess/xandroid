@@ -3,7 +3,6 @@ package io.tschess.tschess.tschess
 import android.app.NotificationManager
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
@@ -26,19 +25,16 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.iid.FirebaseInstanceId
 import io.tschess.tschess.R
-import io.tschess.tschess.header.HeaderOther
+import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.ParseGame
 import io.tschess.tschess.model.EntityPlayer
-import io.tschess.tschess.home.ActivityHome
 import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.tschess.component.Castle
 import io.tschess.tschess.tschess.component.Explode
 import io.tschess.tschess.tschess.component.Passant
 import io.tschess.tschess.tschess.component.PromoDialog
 import io.tschess.tschess.tschess.component.PromoLogic
-import io.tschess.tschess.tschess.Czecher
-import io.tschess.tschess.tschess.Validator
 import io.tschess.tschess.model.ExtendedDataHolder
 import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
@@ -135,7 +131,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.matrix = game.getMatrix(playerSelf.username!!)
         this.white = game.getWhite(playerSelf.username!!)
 
-        val headerOther: HeaderOther = findViewById(R.id.header)
+        val headerOther: HeaderSelf = findViewById(R.id.header)
         headerOther.initialize(playerOther)
 
         this.textViewTitle = findViewById(R.id.title)
