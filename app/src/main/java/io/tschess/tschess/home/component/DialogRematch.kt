@@ -7,15 +7,19 @@ import android.view.View
 import android.widget.NumberPicker
 import android.widget.TextView
 import io.tschess.tschess.R
+import io.tschess.tschess.model.EntityPlayer
 
 
-class DialogRematch(context: Context) : Dialog(context) {
+class DialogRematch(context: Context, val player: EntityPlayer) : Dialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.dialog_rematch)
 
+
+        val tViewTitle: TextView = findViewById(R.id.text_title)
+        tViewTitle.text = "rematch vs. ${player.username}"
 
 
         val textViewTitle: TextView = findViewById(R.id.config_text)

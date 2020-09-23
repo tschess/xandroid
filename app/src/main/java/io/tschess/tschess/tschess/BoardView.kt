@@ -10,7 +10,7 @@ import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import io.tschess.tschess.R
-import io.tschess.tschess.board.CommonBoard
+import io.tschess.tschess.gameboard.CommonBoard
 import io.tschess.tschess.piece.Piece
 
 class BoardView @JvmOverloads constructor(

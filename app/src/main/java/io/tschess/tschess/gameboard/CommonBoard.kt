@@ -1,4 +1,4 @@
-package io.tschess.tschess.board
+package io.tschess.tschess.gameboard
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable

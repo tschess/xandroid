@@ -255,7 +255,7 @@ class ViewHolderHome(
         this.layout_row!!.setOnClickListener {
 
             this.layout_swipe!!.close(true)
-            activityHome.dialogRematch()
+            activityHome.dialogRematch(playerOther)
 
             //if (this.layout_swipe!!.isOpened) {
             //    this.layout_swipe!!.close(true)
