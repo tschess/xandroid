@@ -114,7 +114,7 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
                         //applicationContext.startActivity(intent)
                     }
                     2 -> {
-                        extras.putExtra("player_self", playerSelf)
+
                         val intent = Intent(applicationContext, ActivityLeaderboard::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)

@@ -11,6 +11,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.chauthai.swipereveallayout.SwipeRevealLayout
@@ -22,6 +23,7 @@ import io.tschess.tschess.model.EntityPlayer
 //import io.tschess.tschess.quick.ActivityQuick
 import io.tschess.tschess.snapshot.ActivitySnapshot
 import io.tschess.tschess.model.ExtendedDataHolder
+import io.tschess.tschess.other.ActivityOther
 import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
 
@@ -58,11 +60,11 @@ class ViewHolderLeaderboard(
         this.username!!.text = playerOther.username
 
         val drawable: Drawable? = playerOther.drawable
-        if (drawable != null) {
-            avatar!!.visibility = View.VISIBLE
-            avatar!!.setImageDrawable(drawable)
-        }
-        glide.load(playerOther.avatar).into(object : CustomTarget<Drawable>() {
+        //if (drawable != null) {
+            //avatar!!.visibility = View.VISIBLE
+            //avatar!!.setImageDrawable(drawable)
+        //}
+        glide.load(playerOther.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                 avatar!!.visibility = View.VISIBLE
                 avatar!!.setImageDrawable(resource)
@@ -98,53 +100,48 @@ class ViewHolderLeaderboard(
         this.recent_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_recent)!!)
         this.recent_title!!.text = "GAMES"
         this.layout_recent!!.setOnClickListener {
-            this.progressBar.visibility = View.VISIBLE
-            val url = "${ServerAddress().IP}:8080/game/recent/${playerOther.id}"
-            val jsonObjectRequest = JsonObjectRequest(
-                Request.Method.GET, url, null,
-                Response.Listener { response ->
-                    this.progressBar.visibility = View.INVISIBLE
-                    if (response.has("fail")) {
-                        this.dialogger.render(playerOther.username)
-                        return@Listener
-                    }
-                    val game: EntityGame = parseGame.execute(response)
-                    val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
-                    extras.putExtra("player_self", playerSelf)
-                    extras.putExtra("game", game)
 
-                    val intent = Intent(context, ActivitySnapshot::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-
-                    context.startActivity(intent)
-                },
-                Response.ErrorListener {
-                    this.progressBar.visibility = View.INVISIBLE
-                    this.dialogger.render(playerOther.username)
-                }
-            )
-            VolleySingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
             layout_swipe!!.close(false)
-        }
 
-        //this.challenge_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_rematch)!!)
-        //this.challenge_title!!.text = "challenge"
-        //this.layout_challenge!!.setOnClickListener {
-            //val intent = Intent(context, ActivityQuick::class.java)
-            //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            //val config: Int = (0..3).random()
+            val intent = Intent(context, ActivityOther::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+            extras.putExtra("player_self", playerSelf)
+            extras.putExtra("player_other", playerOther)
+            context.startActivity(intent)
+
+
+
+            //this.progressBar.visibility = View.VISIBLE
+            //val url = "${ServerAddress().IP}:8080/game/recent/${playerOther.id}"
+            //val jsonObjectRequest = JsonObjectRequest(
+            //    Request.Method.GET, url, null,
+            //    Response.Listener { response ->
+            //        this.progressBar.visibility = View.INVISIBLE
+            //        if (response.has("fail")) {
+            //            this.dialogger.render(playerOther.username)
+            //            return@Listener
+            //        }
+            //        val game: EntityGame = parseGame.execute(response)
+            //        val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+            //        extras.putExtra("player_self", playerSelf)
+            //        extras.putExtra("game", game)
             //
-            //val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
-            //extras.putExtra("player_self", playerSelf)
-            //extras.putExtra("player_other", playerOther)
-            //extras.putExtra("config", config)
-            //extras.putExtra("action", "OTHER")
+            //        val intent = Intent(context, ActivitySnapshot::class.java)
+            //        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            //        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             //
-            //context.startActivity(intent)
+            //        context.startActivity(intent)
+            //    },
+            //    Response.ErrorListener {
+            //        this.progressBar.visibility = View.INVISIBLE
+            //        this.dialogger.render(playerOther.username)
+            //    }
+            //)
+            //VolleySingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
             //layout_swipe!!.close(false)
-        //}
+        }
 
     }
 
