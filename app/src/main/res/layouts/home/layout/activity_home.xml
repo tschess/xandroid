@@ -49,7 +49,7 @@
             android:background="@color/header"
 
             app:layout_constraintTop_toBottomOf="@id/text_rival"
-            app:layout_constraintBottom_toTopOf="@id/body"
+            app:layout_constraintBottom_toTopOf="@id/boarder"
 
             android:orientation="horizontal">
 
@@ -91,6 +91,14 @@
     </LinearLayout>
 
 
+    <View
+            app:layout_constraintTop_toBottomOf="@id/list_rival"
+
+            android:id="@+id/boarder"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#c0c0c0"/>
+
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -100,7 +108,7 @@
 
             android:layout_below="@+id/header"
 
-            app:layout_constraintTop_toBottomOf="@id/list_rival"
+            app:layout_constraintTop_toBottomOf="@id/boarder"
             app:layout_constraintBottom_toTopOf="@id/tab_layout"
 
 

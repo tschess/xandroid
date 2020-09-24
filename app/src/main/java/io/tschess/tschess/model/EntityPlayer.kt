@@ -86,9 +86,9 @@ class EntityPlayer(
     }
 
     fun getDispInd(context: Context): Drawable? {
-        //if (this.disp == 0) {
-        //return null
-        //}
+        if (this.disp == 0) {
+            return null
+        }
         if (this.disp >= 0) {
             return ContextCompat.getDrawable(context, R.drawable.up)!!
         }
