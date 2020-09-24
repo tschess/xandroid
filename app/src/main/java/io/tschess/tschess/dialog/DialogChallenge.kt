@@ -27,7 +27,7 @@ class DialogChallenge(context: Context, val playerSelf: EntityPlayer, val player
         val myNumberPicker = findViewById<View>(R.id.number_picker) as NumberPicker
 
 
-        val values = arrayOf("random", "config. x", "config. y", "config. z", "  traditional (chess)  ")
+        val values = arrayOf("random", "config. x", "config. y", "config. z", "   traditional (chess)   ")
 
         myNumberPicker.minValue = 0
         myNumberPicker.maxValue = values.size - 1

@@ -61,17 +61,13 @@ class ViewHolderHome(
 
     init {
         this.username!!.text = game.getUsernameOther(playerSelf.username)
-        //val drawable: Drawable? = playerOther.drawable
-        //if (drawable != null) {
-            //avatar!!.visibility = View.VISIBLE
-            //avatar.setImageDrawable(drawable)
-        //}
+
         glide.load(playerOther.avatar).apply(RequestOptions.circleCropTransform()).into(object :
             CustomTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                 avatar!!.visibility = View.VISIBLE
                 avatar.setImageDrawable(resource)
-                playerOther.drawable = resource
+                //playerOther.drawable = resource
             }
 
             override fun onLoadCleared(placeholder: Drawable?) {}
