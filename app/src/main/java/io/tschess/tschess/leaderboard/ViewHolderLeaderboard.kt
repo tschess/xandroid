@@ -72,7 +72,7 @@ class ViewHolderLeaderboard(
                 layout_swipe!!.close(true)
                 return@setOnClickListener
             }
-            activityLeaderboard.dialogChallenge(playerSelf, playerOther)
+            activityLeaderboard.dialogChallenge(playerSelf = playerSelf, playerOther = playerOther, action = "INVITATION")
         }
 
         val drawableDisp: Drawable? = playerOther.getDispInd(context)

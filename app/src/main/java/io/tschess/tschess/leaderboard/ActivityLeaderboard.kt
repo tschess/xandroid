@@ -16,6 +16,7 @@ import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.header.HeaderSelf
+import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.model.ExtendedDataHolder
 import io.tschess.tschess.model.ParsePlayer
@@ -215,8 +216,8 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, SwipeRefreshLayout.O
         finish()
     }
 
-    fun dialogChallenge(playerSelf: EntityPlayer, playerOther: EntityPlayer) {
-        val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther)
+    fun dialogChallenge(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame? = null, action: String) {
+        val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action)
         dialogRematch.show()
     }
 }

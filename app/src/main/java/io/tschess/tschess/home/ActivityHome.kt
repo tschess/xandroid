@@ -193,8 +193,9 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.fetchGames()
     }
 
-    fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, accept: Boolean = false) {
-        val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, accept)
+    fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame, action: String = "INVITATION") {
+        //val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, accept)
+        val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action)
         dialogRematch.show()
     }
 }
