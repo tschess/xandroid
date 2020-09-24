@@ -28,9 +28,6 @@
                     android:layout_width="match_parent"
             >
                 <ImageView
-
-                        android:layout_marginTop="10dp"
-
                         android:id="@+id/recent_image"
                         android:layout_height="wrap_content"
                         android:layout_width="30dp"
@@ -45,9 +42,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
-                        android:layout_marginTop="8dp"
-
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         tools:text="GAMES"
                         android:textAllCaps="true"
 
@@ -74,7 +69,6 @@
                 android:contentDescription="avatar"
                 android:scaleType="fitXY"
                 tools:src="@drawable/default_avatar"
-
 
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -105,7 +99,7 @@
                     android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     tools:text="username"
 
                     android:layout_marginStart="8dp"
@@ -129,12 +123,11 @@
 
             >
                 <TextView
-
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:textColor="@android:color/darker_gray"
 
                         android:id="@+id/rank_indicator"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:gravity="start"
 
@@ -144,13 +137,13 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
 
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:textColor="@android:color/darker_gray"
 
                         android:id="@+id/rank_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+
 
                         android:text="1"/>
 
@@ -159,10 +152,10 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
 
-                        android:layout_marginStart="6dp"
-                        android:layout_marginLeft="6dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginLeft="4dp"
 
-                        android:gravity="start"
+                        
 
                         android:id="@+id/disp_image"
                         android:scaleType="fitStart"
@@ -180,18 +173,49 @@
 
 
 
-            <TextView
-                    android:id="@+id/date"
+            <LinearLayout
+                    android:id="@+id/layout_rating"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start|center_vertical"
 
-                    android:textSize="16dp"
+
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/avatar"
+                    app:layout_constraintLeft_toRightOf="@+id/avatar"
 
-                    tools:text="03/28/1989"
-                    android:textColor="@android:color/darker_gray"/>
+            >
+                <TextView
+                        android:textSize="16sp"
+                        android:textColor="@android:color/darker_gray"
+
+                        android:id="@+id/rating_indicator"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+
+                        android:text="rating:"/>
+                <TextView
+
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+
+                        android:textSize="16sp"
+                        android:textColor="@android:color/darker_gray"
+
+                        android:id="@+id/rating_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+
+                        android:text="6669"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
 

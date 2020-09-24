@@ -23,7 +23,7 @@ class ViewHolderLeaderboard(
     var layout_row: ConstraintLayout? = null,
     var avatar: ImageView? = null,
     var username: TextView? = null,
-    var date: TextView? = null,
+    //var date: TextView? = null,
     var disp_ind: ImageView? = null,
     //var challenge_image: ImageView? = null,
     //var challenge_title: TextView? = null,
@@ -66,7 +66,7 @@ class ViewHolderLeaderboard(
                 override fun onLoadCleared(placeholder: Drawable?) {}
             })
 
-        this.date!!.text = playerOther.getDateText()
+        //this.date!!.text = playerOther.getDateText()
 
         this.rank_ind!!.text = "rank:"
         this.rank_value!!.text = playerOther.rank.toString()

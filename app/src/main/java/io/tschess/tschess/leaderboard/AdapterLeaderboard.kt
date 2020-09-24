@@ -34,7 +34,7 @@ class AdapterLeaderboard(
             row.findViewById(R.id.layout_row) as ConstraintLayout,
             row.findViewById(R.id.avatar) as ImageView,
             row.findViewById(R.id.username) as TextView,
-            row.findViewById(R.id.date) as TextView,
+            //row.findViewById(R.id.date) as TextView,
             row.findViewById(R.id.disp_image) as ImageView,
             //row.findViewById(R.id.challenge_image) as ImageView,
             //row.findViewById(R.id.challenge_title) as TextView,
