@@ -147,6 +147,13 @@ class ViewHolderHome(
         this.accept_image!!.setColorFilter(Color.parseColor("#aaaaaa"))
         this.accept_title!!.text = "accept"
         this.layout_accept!!.setOnClickListener {
+
+
+            this.layout_swipe!!.close(true)
+            activityHome.dialogRematch(playerSelf, playerOther, true)
+
+            //dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, accept: Boolean = false)
+
             //val intent = Intent(context, ActivityQuick::class.java)
             //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
@@ -249,6 +256,12 @@ class ViewHolderHome(
 
     private fun setSnapshot() {
         this.layout_row!!.setOnClickListener {
+
+            if (this.layout_swipe!!.isOpened) {
+                this.layout_swipe!!.close(true)
+                return@setOnClickListener
+            }
+
             this.layout_swipe!!.close(true)
             activityHome.dialogRematch(playerSelf, playerOther)
         }

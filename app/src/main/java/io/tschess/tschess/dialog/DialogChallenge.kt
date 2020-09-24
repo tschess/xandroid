@@ -10,7 +10,7 @@ import io.tschess.tschess.R
 import io.tschess.tschess.model.EntityPlayer
 
 
-class DialogChallenge(context: Context, val playerSelf: EntityPlayer, val playerOther: EntityPlayer) : Dialog(context) {
+class DialogChallenge(context: Context, val playerSelf: EntityPlayer, val playerOther: EntityPlayer, val accept: Boolean = false) : Dialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,15 +24,19 @@ class DialogChallenge(context: Context, val playerSelf: EntityPlayer, val player
         val textViewTitle: TextView = findViewById(R.id.config_text)
         textViewTitle.text = "config:"
 
-        val myNumberPicker = findViewById<View>(R.id.number_picker) as NumberPicker
+        val optionPicker: NumberPicker = findViewById<View>(R.id.number_picker) as NumberPicker
 
+        val values: MutableList<String> = mutableListOf("random", "config. x", "config. y", "config. z", "   traditional (chess)   ")
+        if(accept){
+            values.add("mirror opponent")
+            val text_send: TextView = findViewById(R.id.text_send)
+            text_send.text = "let's play! \uD83C\uDF89"
+        }
 
-        val values = arrayOf("random", "config. x", "config. y", "config. z", "   traditional (chess)   ")
-
-        myNumberPicker.minValue = 0
-        myNumberPicker.maxValue = values.size - 1
-        myNumberPicker.wrapSelectorWheel = true
-        myNumberPicker.displayedValues = values
+        optionPicker.minValue = 0
+        optionPicker.maxValue = values.size - 1
+        optionPicker.wrapSelectorWheel = true
+        optionPicker.displayedValues = values.toTypedArray()
 
     }
 }
