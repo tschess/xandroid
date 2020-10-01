@@ -2,6 +2,7 @@ package io.tschess.tschess.start
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +37,11 @@ class UtilityStart(private val activity: AppCompatActivity, val progressBar: Pro
         val request = JsonObjectRequest(
             Request.Method.POST, url, jsonObject,
             Response.Listener { response: JSONObject ->
+
+
+                Log.e("RESPINSE!!!", response.toString())
+
+
                 this.progressBar.visibility = View.INVISIBLE
                 if (dialog.fail(response)) {
                     return@Listener

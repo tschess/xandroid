@@ -35,7 +35,7 @@ class DialogOk(val context: Context) {
             this.render(title, message)
             return true
         }
-        if (response.has("password")) {
+        if (response.has("invalid")) {
             val title: String = "⚡ invalid password ⚡"
             val message: String = "\uD83E\uDD16 input password is incorrect.\nplease re-evaluate and try again. \uD83D\uDCF2"
             this.render(title, message)
