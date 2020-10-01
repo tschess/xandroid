@@ -18,6 +18,7 @@ import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.leaderboard.ActivityLeaderboard
 import io.tschess.tschess.model.*
+import io.tschess.tschess.profile.ActivityProfile
 import io.tschess.tschess.server.CustomJsonArrayRequest
 import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
@@ -48,6 +49,8 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         (getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
         /* * */
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +96,7 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
 
         val headerSelf: HeaderSelf = findViewById(R.id.header)
         headerSelf.initialize(this.playerSelf)
+        headerSelf.setListenerProfile(this.playerSelf)
 
         val tabLayout: TabLayout = findViewById<View>(R.id.tab_layout) as TabLayout
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

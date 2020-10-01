@@ -131,7 +131,7 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, SwipeRefreshLayout.O
 
         val headerSelf: HeaderSelf = findViewById(R.id.header)
         headerSelf.initialize(this.playerSelf)
-
+        headerSelf.setListenerProfile(this.playerSelf)
         //this.setTimerNote()
     }
 
