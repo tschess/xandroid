@@ -15,6 +15,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.firebase.FirebaseApp
 import io.tschess.tschess.R
+import io.tschess.tschess.dialog.DialogOk
 import io.tschess.tschess.home.ActivityHome
 import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.model.ExtendedDataHolder
@@ -26,7 +27,6 @@ import org.json.JSONObject
 class ActivityStart : AppCompatActivity() {
 
 
-
     lateinit var progressBar: ProgressBar
 
     private lateinit var inputUsername: EditText
@@ -35,7 +35,6 @@ class ActivityStart : AppCompatActivity() {
     private lateinit var buttonLogin: Button
     private lateinit var buttonCreate: Button
     private lateinit var buttonRecover: Button
-
 
 
     @SuppressLint("NewApi")
@@ -57,7 +56,7 @@ class ActivityStart : AppCompatActivity() {
         this.buttonRecover.setOnClickListener {
             val title: String = "tschess \uD83D\uDD10"
             val message: String = "\u2709\uFE0F to recover account please email:\n\nhello@tschess.io"
-            this.dialogOk(title, message)
+            DialogOk(applicationContext).render(title, message) //TODO: Refac...
         }
 
         this.buttonCreate.setOnClickListener {
@@ -101,14 +100,16 @@ class ActivityStart : AppCompatActivity() {
                     this.progressBar.visibility = View.INVISIBLE
                     //Log.e("-->", "${response}")
                     //if (response.has("fail")) {
-                    if (this.fail(response)) {
+                    if (DialogOk(applicationContext).fail(response)) {
                         //this.dialogInvalid()
                         return@JsonObjectRequest
                     }
-                    val playerSelf: EntityPlayer = parsePlayer.execute(response)
+                    val playerSelf: EntityPlayer = ParsePlayer().execute(response)
 
 
                     Log.e("playerSelf", "${playerSelf.username}")
+
+
                     val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
                     extras.putExtra("player_self", playerSelf)
                     val intent = Intent(applicationContext, ActivityHome::class.java)
@@ -129,8 +130,6 @@ class ActivityStart : AppCompatActivity() {
         }
 
     }
-
-
 
 
 }

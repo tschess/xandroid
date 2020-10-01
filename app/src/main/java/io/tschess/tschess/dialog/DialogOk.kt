@@ -2,6 +2,8 @@ package io.tschess.tschess.dialog
 
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Build
+import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import io.tschess.tschess.R
 import org.json.JSONObject
@@ -16,6 +18,13 @@ class DialogOk(val context: Context) {
             dialog.cancel()
         })
         val alert: AlertDialog = dialogBuilder.create()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
+        }
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
+        //alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
+        }
         alert.show()
     }
 
