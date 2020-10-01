@@ -20,7 +20,6 @@ import io.tschess.tschess.server.VolleySingleton
 import io.tschess.tschess.tschess.ActivityTschess
 import org.json.JSONObject
 
-
 class DialogChallenge(
     context: Context,
     val playerSelf: EntityPlayer,
