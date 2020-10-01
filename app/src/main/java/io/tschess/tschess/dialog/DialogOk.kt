@@ -14,16 +14,15 @@ class DialogOk(val context: Context) {
         val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
         dialogBuilder.setTitle(title)
         dialogBuilder.setMessage(message)
-        dialogBuilder.setPositiveButton("ok", DialogInterface.OnClickListener { dialog, id ->
+        dialogBuilder.setPositiveButton("ok") { dialog, _ ->
             dialog.cancel()
-        })
+        }
         val alert: AlertDialog = dialogBuilder.create()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
         }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-        //alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
         }
         alert.show()
     }

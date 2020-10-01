@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.iid.FirebaseInstanceId
 import io.tschess.tschess.R
+import io.tschess.tschess.dialog.DialogPush
 import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.ParseGame
@@ -484,7 +485,11 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
                 /* * */
                 if(this.playerSelf.isPopup()){
-                    this.notifications()
+                    DialogPush(applicationContext, progressBar).notifications(playerSelf)
+
+                    //class DialogPush(private val context: Context, val progressBar: ProgressBar) {
+                    //
+                    //    fun notifications(player: EntityPlayer) {
                 }
                 /* * */
 
@@ -571,62 +576,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     }
 
 
-    private fun notifications() {
 
-        val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
-        dialogBuilder.setTitle("\uD83D\uDC42 ¿now what? ☎")
-        dialogBuilder.setMessage("\uD83E\uDDE0️ once opponent has moved\nwould you like to know?")
-            .setPositiveButton("yes \uD83D\uDC4C", DialogInterface.OnClickListener { dialog, id ->
-                val url = "${ServerAddress().IP}:8080/player/push"
-                this.progressBar.visibility = View.VISIBLE
-
-                FirebaseInstanceId.getInstance().instanceId
-                    .addOnCompleteListener(OnCompleteListener { task ->
-                        // Get new Instance ID token
-                        val token: String? = task.result?.token
-                        // Log and toast
-                        //val msg = getString(R.string.msg_token_fmt, token)
-                        var note_key: String = "NULL"
-                        if (!token.isNullOrBlank()) {
-                            note_key = token
-                        }
-                        //Log.d("TAG", "ANDROID_${note_key}")
-                        //Toast.makeText(baseContext, note_key, Toast.LENGTH_LONG).show()
-
-                        val params = HashMap<String, String>()
-                        params["id"] = playerSelf.id
-                        params["note_key"] = "ANDROID_${note_key}"
-
-                        val jsonObject = JSONObject(params as Map<*, *>)
-                        Log.d("jsonObject", "${jsonObject}")
-
-                        val request = JsonObjectRequest(Request.Method.POST, url, jsonObject,
-                            { response: JSONObject ->
-
-                                Log.d("response", "${response}")
-                                //response
-
-                                this.progressBar.visibility = View.INVISIBLE
-
-                                //TODO: ???
-                            },
-                            {
-                                this.progressBar.visibility = View.INVISIBLE
-                                //TODO: remove...
-                            }
-                        )
-                        request.retryPolicy = DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 1F)
-                        VolleySingleton.getInstance(this).addToRequestQueue(request)
-                    })
-            })
-            .setNegativeButton("no", DialogInterface.OnClickListener { dialog, _ ->
-                //TODO: FUCK
-            })
-        val alert: AlertDialog = dialogBuilder.create()
-        alert.show()
-        alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.WHITE)
-        alert.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.WHITE)
-    }
 
 }
 
