@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import io.tschess.tschess.R
-import io.tschess.tschess.model.ParseGame
 
 class DialogFairy(context: Context) : Dialog(context) {
 
@@ -12,15 +11,12 @@ class DialogFairy(context: Context) : Dialog(context) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_fairy)
     }
-
-
-
+    
     companion object {
         fun candidate(name: String): Boolean {
-            val poison: Boolean = name == "poison"
-            val hunter: Boolean = name == "hunter"
-            val amazon: Boolean = name == "amazon"
-
+            val poison: Boolean = name.toLowerCase() == "poison"
+            val hunter: Boolean = name.toLowerCase() == "hunter"
+            val amazon: Boolean = name.toLowerCase() == "amazon"
             return poison || hunter || amazon
         }
     }

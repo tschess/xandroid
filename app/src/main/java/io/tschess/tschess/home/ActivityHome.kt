@@ -181,8 +181,10 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     override fun onBackPressed() {
         val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
         extras.putExtra("player_self", playerSelf)
-
-        finish()
+        val intent = Intent(applicationContext, ActivityProfile::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        applicationContext.startActivity(intent)
     }
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -202,7 +204,6 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     }
 
     fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame, action: String = "INVITATION") {
-        //val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, accept)
         val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action)
         dialogRematch.show()
     }
