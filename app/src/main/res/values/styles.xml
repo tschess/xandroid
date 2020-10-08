@@ -43,6 +43,9 @@
         <item name="colorAccent">@android:color/white</item>
     </style>
 
+    <style name="ProgressBarStart">
+        <item name="colorAccent">@color/hotpink</item>
+    </style>
 
     <style name="NumberPickerText">
         <item name="android:textSize">16sp</item>

@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
 
-                    android:theme="@style/ProgressBarStyle"
+                    android:theme="@style/ProgressBarStart"
 
                     android:visibility="visible" />
 
