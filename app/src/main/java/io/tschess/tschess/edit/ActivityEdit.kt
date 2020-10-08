@@ -228,23 +228,6 @@ class ActivityEdit : AppCompatActivity(), View.OnLongClickListener, View.OnDragL
         return this.update(listOf(row, col))
     }
 
-    fun isTouchInsideOfView(view: View, touchPosition: Point): Boolean {
-        val rScroll = Rect()
-        view.getGlobalVisibleRect(rScroll)
-        return isTouchInsideOfRect(touchPosition, rScroll)
-    }
-
-    fun isTouchInsideOfRect(touchPosition: Point, rScroll: Rect): Boolean {
-        return touchPosition.x > rScroll.left && touchPosition.x < rScroll.right //within x axis / width
-                && touchPosition.y > rScroll.top && touchPosition.y < rScroll.bottom //withing y axis / height
-    }
-
-    fun getTouchPositionFromDragEvent(item: View, event: DragEvent): Point? {
-        val rItem = Rect()
-        item.getGlobalVisibleRect(rItem)
-        return Point(rItem.left + Math.round(event.x), rItem.top + Math.round(event.y))
-    }
-
     override fun onDrag(view: View?, event: DragEvent?): Boolean {
         if (event!!.action != DragEvent.ACTION_DROP) {
             return true
@@ -253,15 +236,14 @@ class ActivityEdit : AppCompatActivity(), View.OnLongClickListener, View.OnDragL
         this.labelInfo.visibility = View.INVISIBLE
         /* * */
 
-        val touchPosition: Point = getTouchPositionFromDragEvent(view!!, event)!!
-        val xxx = isTouchInsideOfView(this.labelInfo, touchPosition)
-        //if (findView(view!!.x, view.y)) {
-
-        if (xxx) {
+        val pointDrop: Point = DragUtility().getTouchPositionFromDragEvent(view!!, event)!!
+        val infoDrop: Boolean = DragUtility().isTouchInsideOfView(this.labelInfo, pointDrop)
+        if (infoDrop) {
             Toast.makeText(applicationContext, "FUCK YOU!!!$", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(applicationContext, "ugh...", Toast.LENGTH_SHORT).show()
         }
+        //else {
+            //Toast.makeText(applicationContext, "ugh...", Toast.LENGTH_SHORT).show()
+        //}
 
         val clipData: ClipData = event.clipData
         val name: String = clipData.getItemAt(0).text.toString()
