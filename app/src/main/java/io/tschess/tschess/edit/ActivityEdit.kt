@@ -24,6 +24,8 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.config.ActivityConfig
+import io.tschess.tschess.dialog.DialogChallenge
+import io.tschess.tschess.dialog.DialogFairy
 import io.tschess.tschess.gameboard.BoardEdit
 import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.model.EntityPlayer
@@ -236,23 +238,25 @@ class ActivityEdit : AppCompatActivity(), View.OnLongClickListener, View.OnDragL
         this.labelInfo.visibility = View.INVISIBLE
         /* * */
 
-        val pointDrop: Point = DragUtility().getTouchPositionFromDragEvent(view!!, event)!!
-        val infoDrop: Boolean = DragUtility().isTouchInsideOfView(this.labelInfo, pointDrop)
-        if (infoDrop) {
-            Toast.makeText(applicationContext, "FUCK YOU!!!$", Toast.LENGTH_SHORT).show()
-        }
-        //else {
-            //Toast.makeText(applicationContext, "ugh...", Toast.LENGTH_SHORT).show()
-        //}
-
         val clipData: ClipData = event.clipData
         val name: String = clipData.getItemAt(0).text.toString()
         val string: String = clipData.getItemAt(1).text.toString()
+
+        val pointDrop: Point = DragUtility().getTouchPositionFromDragEvent(view!!, event)!!
+        val infoDrop: Boolean = DragUtility().isTouchInsideOfView(this.labelInfo, pointDrop)
+        if (infoDrop) {
+            if(DialogFairy.candidate(name)) {
+                val dialogFairy: DialogFairy = DialogFairy(this)
+                dialogFairy.show()
+            }
+        }
+
+
         val coord: MutableList<Int> = mutableListOf()
         string.forEach { char ->
             coord.add(char.toString().toInt())
         }
-        if (view!!.parent != this.editView) {
+        if (view.parent != this.editView) {
             if (name == "King") {
                 val king: Piece = Render(true).getDefault(name)!!
                 return this.update(coord, king)

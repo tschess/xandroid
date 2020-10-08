@@ -24,12 +24,7 @@ import java.util.*
 
 class DialogPush(private val context: Context, val progressBar: ProgressBar) {
 
-
-
     fun notifications(player: EntityPlayer) {
-
-
-
         val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
         dialogBuilder.setTitle("\uD83D\uDC42 ¿now what? ☎")
         dialogBuilder.setMessage("\uD83E\uDDE0️ once opponent has moved\nwould you like to know?")

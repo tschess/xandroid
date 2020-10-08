@@ -5,6 +5,7 @@ import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
+import io.tschess.tschess.dialog.DialogFairy
 
 class CardTouchActive : View.OnTouchListener {
     lateinit var name: String
@@ -22,11 +23,7 @@ class CardTouchActive : View.OnTouchListener {
             data.addItem(item)
 
 
-            val poison: Boolean = name == "poison"
-            val hunter: Boolean = name == "hunter"
-            val amazon: Boolean = name == "amazon"
-
-            if(poison || hunter || amazon){
+            if(DialogFairy.candidate(name)){
                 labelInfo.visibility = View.VISIBLE
             } else {
                 labelInfo.visibility = View.INVISIBLE
@@ -36,4 +33,6 @@ class CardTouchActive : View.OnTouchListener {
             true
         }
     }
+
+
 }

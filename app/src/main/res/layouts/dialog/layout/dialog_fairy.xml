@@ -14,7 +14,7 @@
             android:id="@+id/picker_stack"
             android:orientation="vertical"
 
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
 
@@ -22,14 +22,14 @@
 
             android:background="@color/header"
 
-            app:layout_constraintTop_toBottomOf="@+id/text_title"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/text_send">
+           >
 
         <TextView
                 android:id="@+id/name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:text="Poison Pawn"
@@ -48,7 +48,7 @@
                 android:scaleType="fitXY"
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
-                android:gravity="center_horizontal"
+
                 android:src="@drawable/red_landmine"/>
 
         <TextView
@@ -62,11 +62,11 @@
                 android:textColor="@android:color/white"/>
         <TextView
                 android:id="@+id/text_strength"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:gravity=""
-                android:text="• behaviour identical to a standard pawn with one caveat...\n• when captured, the opponent piece is also destroyed, i.e. eliminated from the game.${System.lineSeparator()}\n• if king attempts to capture poison pawn the result is instant checkmate."
+                android:text="• behaviour identical to a standard pawn with one caveat...\n• when captured, the opponent piece is also destroyed, i.e. eliminated from the game.\n• if king attempts to capture poison pawn the result is instant checkmate."
                 android:textColor="@android:color/darker_gray"/>
 
         <TextView
@@ -80,7 +80,7 @@
                 android:textColor="@android:color/white"/>
         <TextView
                 android:id="@+id/text_weakness"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:gravity=""
