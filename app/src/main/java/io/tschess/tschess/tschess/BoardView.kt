@@ -10,7 +10,7 @@ import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import io.tschess.tschess.R
-import io.tschess.tschess.gameboard.CommonBoard
+import io.tschess.tschess.gameboard.BoardCommon
 import io.tschess.tschess.piece.Piece
 
 class BoardView @JvmOverloads constructor(
@@ -48,7 +48,7 @@ class BoardView @JvmOverloads constructor(
                 val params = FrameLayout.LayoutParams(size, size)
                 val tile = ImageView(context)
                 tile.layoutParams = params
-                tile.background = CommonBoard().getTileColorX(row, column)
+                tile.background = BoardCommon().getTileColorX(row, column)
 
                 tile.scaleType = ImageView.ScaleType.CENTER_INSIDE
                 if (highlightList != null) {

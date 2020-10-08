@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.Request
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
+import io.tschess.tschess.config.ActivityConfig
 import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.leaderboard.ActivityLeaderboard
@@ -64,6 +65,9 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.progressBar.visibility = View.INVISIBLE
 
         val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+        if(!extras.hasExtra("player_self")){
+            return
+        }
         this.playerSelf = extras.getExtra("player_self") as EntityPlayer
         extras.clear()
 
@@ -113,12 +117,12 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
                         //applicationContext.startActivity(intent)
                     }
                     1 -> {
-                        //val intent = Intent(applicationContext, ActivityConfig::class.java)
-                        //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        //applicationContext.startActivity(intent)
+                        val intent = Intent(applicationContext, ActivityConfig::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        applicationContext.startActivity(intent)
                     }
                     2 -> {
-
                         val intent = Intent(applicationContext, ActivityLeaderboard::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)

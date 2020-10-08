@@ -2,8 +2,14 @@
 <resources>
 
     <declare-styleable name="CardHome">
-        <attr name="image" format="reference"/>
-        <attr name="name" format="string"/>
+        <attr name="home_image" format="reference"/>
+        <attr name="home_name" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="CardEdit">
+        <attr name="edit_image" format="reference"/>
+        <attr name="edit_name" format="string"/>
+        <attr name="edit_strength" format="string"/>
     </declare-styleable>
 
 </resources>

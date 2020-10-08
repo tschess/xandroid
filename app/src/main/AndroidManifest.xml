@@ -46,6 +46,10 @@
                   android:screenOrientation="portrait"/>
         <activity android:name="io.tschess.tschess.profile.ActivityProfile"
                   android:screenOrientation="portrait"/>
+        <activity android:name="io.tschess.tschess.config.ActivityConfig"
+                  android:screenOrientation="portrait"/>
+        <activity android:name="io.tschess.tschess.edit.ActivityEdit"
+                  android:screenOrientation="portrait"/>
 
 
     </application>

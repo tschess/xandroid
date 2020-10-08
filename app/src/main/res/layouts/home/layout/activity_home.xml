@@ -56,8 +56,8 @@
 
         <io.tschess.tschess.home.CardHome
                 android:id="@+id/queen"
-                app:image="@drawable/default_avatar"
-                app:name="queen"
+                app:home_image="@drawable/default_avatar"
+                app:home_name="queen"
 
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -67,8 +67,8 @@
 
         <io.tschess.tschess.home.CardHome
                 android:id="@+id/poison"
-                app:image="@drawable/default_avatar"
-                app:name="poison"
+                app:home_image="@drawable/default_avatar"
+                app:home_name="poison"
 
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -78,8 +78,8 @@
 
         <io.tschess.tschess.home.CardHome
                 android:id="@+id/hunter"
-                app:image="@drawable/default_avatar"
-                app:name="hunter"
+                app:home_image="@drawable/default_avatar"
+                app:home_name="hunter"
 
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

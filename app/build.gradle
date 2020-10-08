@@ -40,6 +40,8 @@ android {
         main.res.srcDirs += 'src/main/res/layouts/dialog'
         main.res.srcDirs += 'src/main/res/layouts/other'
         main.res.srcDirs += 'src/main/res/layouts/profile'
+        main.res.srcDirs += 'src/main/res/layouts/config'
+        main.res.srcDirs += 'src/main/res/layouts/edit'
     }
 
     compileOptions {

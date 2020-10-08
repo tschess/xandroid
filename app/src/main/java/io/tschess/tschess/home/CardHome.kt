@@ -31,7 +31,7 @@ class CardHome(context: Context, attrs: AttributeSet) : LinearLayout(context, at
         this.imageView = findViewById(R.id.image)
         //this.imageView.setImageDrawable(attributes.getDrawable(R.styleable.CardRival_image))
 
-        glide.load(attributes.getDrawable(R.styleable.CardHome_image)).apply(RequestOptions.circleCropTransform())
+        glide.load(attributes.getDrawable(R.styleable.CardHome_home_image)).apply(RequestOptions.circleCropTransform())
             .into(imageView)
 
 

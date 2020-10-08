@@ -46,7 +46,6 @@ class HeaderSelf(context: Context, attrs: AttributeSet) : LinearLayout(context, 
         val drawableDisp: Drawable? = player.getDispInd(context)
         imageDisp.setImageDrawable(drawableDisp)
 
-
         this.imageView = findViewById(R.id.avatar)
         imageView.visibility = View.INVISIBLE
         glide.load(player.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {

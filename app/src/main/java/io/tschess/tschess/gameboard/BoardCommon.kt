@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.toDrawable
 import io.tschess.tschess.R
 
-class CommonBoard {
+class BoardCommon {
     fun getTileColor(row: Int, column: Int): Int {
         if (row % 2 == 0) {
             return if (column % 2 == 0) {
