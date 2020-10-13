@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        android:background="@color/colorWhite"
+
+        tools:context="io.tschess.tschess.fairy.ActivityFairy">
+
+    <ImageView
+            android:id="@+id/avatar_fairy"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+
+            android:layout_marginTop="10dp"
+
+            android:contentDescription="lolol"
+            android:scaleType="fitXY"
+            tools:src="@drawable/default_avatar"
+
+
+            android:layout_marginBottom="5dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+            android:id="@+id/text_fairy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:gravity="center"
+
+            android:textColor="@color/colorBlack"
+
+            android:layout_marginBottom="10dp"
+
+            android:text="fairy_name"
+
+            app:layout_constraintTop_toBottomOf="@id/avatar_fairy"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

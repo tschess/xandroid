@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.edit.ActivityEdit
+import io.tschess.tschess.fairy.ActivityFairy
 import io.tschess.tschess.gameboard.BoardConfig
 import io.tschess.tschess.header.HeaderSelf
 //import io.tschess.tschess.edit.ActivityEditSelf
@@ -97,12 +98,13 @@ class ActivityConfig : AppCompatActivity() {
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
             override fun onTabSelected(tab: TabLayout.Tab) {
-                //extras.putExtra("player_self", playerSelf)
-                //val intent = Intent(applicationContext, ActivityFairy::class.java)
-                //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                //startActivity(intent)
-                //finish()
+                val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+                extras.putExtra("player_self", playerSelf)
+                val intent = Intent(applicationContext, ActivityFairy::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                startActivity(intent)
+                finish()
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {

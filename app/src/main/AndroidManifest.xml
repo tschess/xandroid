@@ -50,6 +50,11 @@
                   android:screenOrientation="portrait"/>
         <activity android:name="io.tschess.tschess.edit.ActivityEdit"
                   android:screenOrientation="portrait"/>
+        <activity android:name="io.tschess.tschess.fairy.ActivityFairy"
+                  android:screenOrientation="portrait"/>
+
+
+
 
 
     </application>
