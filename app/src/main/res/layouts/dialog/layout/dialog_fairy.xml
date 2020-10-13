@@ -28,7 +28,7 @@
            >
 
         <TextView
-                android:id="@+id/name"
+                android:id="@+id/text_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -42,7 +42,7 @@
 
         <ImageView
                 android:layout_marginTop="8dp"
-                android:id="@+id/image"
+                android:id="@+id/image_fairy"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:scaleType="fitXY"
@@ -61,7 +61,7 @@
                 android:text="strength:"
                 android:textColor="@android:color/white"/>
         <TextView
-                android:id="@+id/text_strength"
+                android:id="@+id/content_strength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -79,7 +79,7 @@
                 android:text="weakness:"
                 android:textColor="@android:color/white"/>
         <TextView
-                android:id="@+id/text_weakness"
+                android:id="@+id/content_weakness"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"

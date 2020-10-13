@@ -58,8 +58,6 @@ class ActivityEdit : AppCompatActivity(), View.OnLongClickListener, View.OnDragL
         this.labelInfo = findViewById(R.id.info)
         this.labelInfo.visibility = View.INVISIBLE
 
-
-
         this.progressBar = findViewById<ProgressBar>(R.id.progress_bar)
         this.progressBar.visibility = View.INVISIBLE
 
@@ -81,8 +79,6 @@ class ActivityEdit : AppCompatActivity(), View.OnLongClickListener, View.OnDragL
         this.editView.populateBoard(this.matrix)
         val unallocated: Int = this.unallocated(this.matrix)
         this.setFeedbackCard(unallocated)
-
-
 
         val tabLayout: TabLayout = findViewById<View>(R.id.tab_layout) as TabLayout
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -119,7 +115,7 @@ class ActivityEdit : AppCompatActivity(), View.OnLongClickListener, View.OnDragL
 
     fun persistToServer() {
         progressBar.visibility = View.VISIBLE
-        val id: String = this.playerSelf.id!!
+        val id: String = this.playerSelf.id
         val index: String = this.config.toString()
         val matrix: List<List<String>> = this.playerSelf.setConfig(this.matrix)
 
@@ -175,7 +171,6 @@ class ActivityEdit : AppCompatActivity(), View.OnLongClickListener, View.OnDragL
                     "\uD83D\uDC49 drag to destination\n" +
                     "or off board to remove \uD83D\uDCA8"
         )
-
             .setNeutralButton("ok", DialogInterface.OnClickListener { dialog, id ->
                 dialog.cancel()
             })
@@ -186,17 +181,11 @@ class ActivityEdit : AppCompatActivity(), View.OnLongClickListener, View.OnDragL
 
     private fun setFeedbackCard(unallocated: Int) {
         val linearLayout: LinearLayout = findViewById(R.id.container_card)
-        //if (unallocated == 0) {
-            //linearLayout.visibility = View.INVISIBLE
-            //return
-        //}
         linearLayout.visibility = View.VISIBLE
         val count: Int = linearLayout.childCount
         for (index: Int in 0 until count) {
             val cardView: CardEdit = linearLayout.getChildAt(index) as CardEdit
-            //cardView.labelInfo = labelInfo
             cardView.setLabelInfo(labelInfo)
-            //
             if (unallocated - cardView.strength >= 0) {
                 cardView.imageView.alpha = 1.0F
                 cardView.textViewName.alpha = 1.0F
@@ -246,11 +235,10 @@ class ActivityEdit : AppCompatActivity(), View.OnLongClickListener, View.OnDragL
         val infoDrop: Boolean = DragUtility().isTouchInsideOfView(this.labelInfo, pointDrop)
         if (infoDrop) {
             if(DialogFairy.candidate(name)) {
-                val dialogFairy: DialogFairy = DialogFairy(this)
+                val dialogFairy: DialogFairy = DialogFairy(this, name)
                 dialogFairy.show()
             }
         }
-
 
         val coord: MutableList<Int> = mutableListOf()
         string.forEach { char ->
