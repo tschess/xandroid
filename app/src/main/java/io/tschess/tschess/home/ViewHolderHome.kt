@@ -183,7 +183,7 @@ class ViewHolderHome(
                     JsonObjectRequest(
                         Request.Method.POST, url, jsonObject,
                         {
-                            refresher.refresh(position)
+                            refresher.refresh()
                         },
                         {
                             Log.e("error in volley request", "${it.message}")
@@ -206,7 +206,7 @@ class ViewHolderHome(
                 JsonObjectRequest(
                     Request.Method.POST, url, jsonObject,
                     {
-                        refresher.refresh(position)
+                        refresher.refresh()
                     },
                     {
                         Log.e("error in volley request", "${it.message}")
@@ -360,7 +360,7 @@ class ViewHolderHome(
                 JsonObjectRequest(
                     Request.Method.POST, url, jsonObject,
                     {
-                        refresher.refresh(position)
+                        refresher.refresh()
                     },
                     {
                         Log.e("error in volley request", "${it.message}")
