@@ -169,7 +169,7 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
                 when (tab.position) {
                     0 -> {
                         val title: String = "⚡ hang tight ⚡"
-                        val message: String = "\uD83E\uDD16 single player mode coming soon! \uD83D\uDCF2"
+                        val message: String = "single player mode coming soon! \uD83E\uDD16"
                         DialogOk(applicationContext).render(title, message)
                     }
                     1 -> {
