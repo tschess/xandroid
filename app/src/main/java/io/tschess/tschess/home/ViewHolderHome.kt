@@ -67,7 +67,6 @@ class ViewHolderHome(
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                 avatar!!.visibility = View.VISIBLE
                 avatar.setImageDrawable(resource)
-                //playerOther.drawable = resource
             }
 
             override fun onLoadCleared(placeholder: Drawable?) {}
@@ -125,8 +124,6 @@ class ViewHolderHome(
             val intent = Intent(context, ActivityTschess::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
             extras.putExtra("player_self", playerSelf)
             extras.putExtra("game", game)

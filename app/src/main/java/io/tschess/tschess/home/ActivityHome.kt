@@ -39,19 +39,14 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
 
     override fun onRestart() {
         super.onRestart()
-
         this.progressBar = findViewById<ProgressBar>(R.id.progress_bar)
         this.progressBar.visibility = View.INVISIBLE
     }
 
     override fun onResume() {
         super.onResume()
-        /* * */
-        (getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
-        /* * */
+        this.onRefresh()
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,9 +60,6 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.progressBar.visibility = View.INVISIBLE
 
         val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
-        if(!extras.hasExtra("player_self")){
-            return
-        }
         this.playerSelf = extras.getExtra("player_self") as EntityPlayer
         extras.clear()
 
@@ -190,6 +182,9 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun onRefresh() {
+        /* * */
+        (getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
+        /* * */
         this.progressBar.visibility = View.INVISIBLE
         this.adapterMenu.clear()
         this.index = 0
