@@ -37,8 +37,8 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     private var fetched: Boolean
     private val parseGame: ParseGame
     private var listMenu: ArrayList<EntityGame>
-    private var playerSelf: EntityPlayer
-    private val extendedDataHolder: ExtendedDataHolder
+    private lateinit var playerSelf: EntityPlayer
+    private lateinit var extendedDataHolder: ExtendedDataHolder
 
     init {
         this.size = 9
@@ -46,10 +46,6 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.fetched = false
         this.parseGame = ParseGame()
         this.listMenu = arrayListOf()
-
-        this.extendedDataHolder = ExtendedDataHolder().getInstance()
-        this.playerSelf = extendedDataHolder.getExtra("player_self") as EntityPlayer
-        this.extendedDataHolder.clear()
     }
 
     lateinit var progressBar: ProgressBar
@@ -66,22 +62,35 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
 
         this.progressBar = findViewById<ProgressBar>(R.id.progress_bar)
 
-        this.arrayAdapter = AdapterHome(this.playerSelf, applicationContext, this.listMenu, this)
-        this.arrayAdapter.refresher = this
-
-        val listView: ListView = findViewById(R.id.list_view)
-        listView.adapter = arrayAdapter
-        this.setScrollListener(listView)
-
         val tabLayout: TabLayout = findViewById<View>(R.id.tab_layout) as TabLayout
         this.setTabListener(tabLayout)
 
         this.swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         swipeRefreshLayout.setOnRefreshListener(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        this.notificationManager.cancelAll()
+
+        this.extendedDataHolder = ExtendedDataHolder().getInstance()
+        this.playerSelf = extendedDataHolder.getExtra("player_self") as EntityPlayer
+        this.extendedDataHolder.clear()
 
         val headerSelf: HeaderSelf = findViewById(R.id.header)
         headerSelf.initialize(this.playerSelf)
         headerSelf.setListenerProfile(this.playerSelf)
+
+        val listView: ListView = findViewById(R.id.list_view)
+        this.arrayAdapter = AdapterHome(this.playerSelf, applicationContext, this.listMenu, this)
+        this.arrayAdapter.refresher = this
+        listView.adapter = arrayAdapter
+        this.setScrollListener(listView)
+
+        this.index = 0
+        this.fetched = false
+        this.arrayAdapter.clear()
+        this.fetchGames()
     }
 
     override fun onRefresh() {
@@ -90,15 +99,6 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
 
     override fun refresh() {
         this.onResume()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        this.notificationManager.cancelAll()
-        this.index = 0
-        this.fetched = false
-        this.arrayAdapter.clear()
-        this.fetchGames()
     }
 
     private fun fetchGames() {

@@ -22,7 +22,7 @@ import io.tschess.tschess.model.ExtendedDataHolder
 class ActivityConfig : AppCompatActivity() {
 
     lateinit var progressBar: ProgressBar
-    private lateinit var playerSelf: EntityPlayer
+    lateinit var playerSelf: EntityPlayer
 
     override fun onBackPressed() {
         val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
@@ -30,12 +30,8 @@ class ActivityConfig : AppCompatActivity() {
         finish()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_config)
-        this.progressBar = findViewById<ProgressBar>(R.id.progress_bar)
-        this.progressBar.visibility = View.INVISIBLE
-
+    override fun onResume() {
+        super.onResume()
         val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
         this.playerSelf = extras.getExtra("player_self") as EntityPlayer
         extras.clear()
@@ -87,6 +83,15 @@ class ActivityConfig : AppCompatActivity() {
             applicationContext.startActivity(intent)
             finish()
         })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_config)
+        this.progressBar = findViewById<ProgressBar>(R.id.progress_bar)
+        //this.progressBar.visibility = View.INVISIBLE
+
+
 
         val tabLayout: TabLayout = findViewById<View>(R.id.tab_layout) as TabLayout
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
