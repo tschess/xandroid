@@ -219,10 +219,6 @@ class ViewHolderHome(
     private fun setRematch() {
         this.rematch_title!!.text = "SNAPSHOT"
         this.layout_rematch!!.setOnClickListener {
-
-            //if (this.layout_swipe!!.isOpened) {
-
-            //} else {
             val intent = Intent(context, ActivitySnapshot::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
@@ -231,38 +227,16 @@ class ViewHolderHome(
             extras.putExtra("game", game)
             context.startActivity(intent)
             this.layout_swipe!!.close(false)
-            //this.layout_swipe!!.close(false)
-            //}
-
-            //this.layout_swipe!!.close(true)
-            //activityHome.dialogRematch()
-
-            //val intent = Intent(context, ActivityQuick::class.java)
-            //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            //val config: Int = (0..3).random()
-            //val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
-            //extras.putExtra("player_self", playerSelf)
-            //extras.putExtra("player_other", playerOther)
-            //extras.putExtra("config", config)
-            //extras.putExtra("game", game)
-            //extras.putExtra("white", !game.getWhite(playerSelf.username))
-            //extras.putExtra("action", "REMATCH")
-            //context.startActivity(intent)
-            //this.layout_swipe!!.close(false)
         }
     }
 
     private fun setSnapshot() {
         this.layout_row!!.setOnClickListener {
-
             if (this.layout_swipe!!.isOpened) {
                 this.layout_swipe!!.close(true)
                 return@setOnClickListener
             }
-
             this.layout_swipe!!.close(true)
-            //activityHome.dialogRematch(playerSelf, playerOther)
             activityHome.dialogRematch(playerSelf, playerOther, game, "REMATCH")
         }
     }

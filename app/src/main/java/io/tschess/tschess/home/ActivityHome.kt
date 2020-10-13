@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AbsListView
 import android.widget.ListView
@@ -77,11 +78,27 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
 
         this.swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         swipeRefreshLayout.setOnRefreshListener(this)
-        this.fetchGames()
 
         val headerSelf: HeaderSelf = findViewById(R.id.header)
         headerSelf.initialize(this.playerSelf)
         headerSelf.setListenerProfile(this.playerSelf)
+    }
+
+    override fun onRefresh() {
+        this.onResume()
+    }
+
+    override fun refresh() {
+        this.onResume()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        this.notificationManager.cancelAll()
+        this.index = 0
+        this.fetched = false
+        this.arrayAdapter.clear()
+        this.fetchGames()
     }
 
     private fun fetchGames() {
@@ -105,10 +122,9 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
                 { response ->
                     for (i: Int in 0 until response.length()) {
                         val game: EntityGame = parseGame.execute(response.getJSONObject(i))
-                        if(!listMenu.contains(game)){
-                            listMenu.add(game)
-                        }
-
+                        //if(!listMenu.contains(game)){
+                        listMenu.add(game)
+                        //}
                     }
                     this.arrayAdapter.notifyDataSetChanged()
                     this.progressBar.visibility = View.INVISIBLE
@@ -122,46 +138,6 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
             )
         VolleySingleton.getInstance(this).addToRequestQueue(request)
         this.index += 1
-    }
-
-
-
-
-
-    override fun onRefresh() {
-        /* * */
-        (getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
-        /* * */
-        this.progressBar.visibility = View.INVISIBLE
-        this.arrayAdapter.clear()
-        this.index = 0
-        this.fetched = false
-        this.fetchGames()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        /* * */
-        (getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
-        /* * */
-        this.progressBar.visibility = View.INVISIBLE
-        this.arrayAdapter.clear()
-        this.index = 0
-        this.fetched = false
-        this.fetchGames()
-    }
-
-    //override fun onRestart() {
-        //super.onRestart()
-        //this.progressBar = findViewById<ProgressBar>(R.id.progress_bar)
-        //this.progressBar.visibility = View.INVISIBLE
-    //}
-
-    override fun refresh() {
-        this.arrayAdapter.clear()
-        this.index = 0
-        this.fetchGames()
     }
 
     fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame, action: String = "INVITATION") {
