@@ -21,9 +21,15 @@ import org.json.JSONObject
 
 class UtilityStart(private val activity: AppCompatActivity, val progressBar: ProgressBar) {
 
-    private val parsePlayer: ParsePlayer = ParsePlayer()
-    val context: Context = activity.applicationContext
-    val dialog: DialogOk = DialogOk(context)
+    val parsePlayer: ParsePlayer
+    val context: Context
+    val dialog: DialogOk
+
+    init {
+        this.parsePlayer = ParsePlayer()
+        this.context = activity.applicationContext
+        this.dialog = DialogOk(context)
+    }
 
     fun requestServer(username: String, password: String, device: String, url: String) {
         progressBar.visibility = View.VISIBLE
@@ -37,11 +43,6 @@ class UtilityStart(private val activity: AppCompatActivity, val progressBar: Pro
         val request = JsonObjectRequest(
             Request.Method.POST, url, jsonObject,
             Response.Listener { response: JSONObject ->
-
-
-                Log.e("RESPINSE!!!", response.toString())
-
-
                 this.progressBar.visibility = View.INVISIBLE
                 if (dialog.fail(response)) {
                     return@Listener
@@ -51,7 +52,9 @@ class UtilityStart(private val activity: AppCompatActivity, val progressBar: Pro
             },
             Response.ErrorListener {
                 this.progressBar.visibility = View.INVISIBLE
-                //this.dialogInvalid()
+                val title: String = "⚡ server error ⚡"
+                val message: String = "\uD83D\uDD0C unable to reach server.\ncheck connection and try again. \uD83D\uDCF1"
+                DialogOk(context).render(title, message)
             }
         )
         request.retryPolicy = DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 1F)
