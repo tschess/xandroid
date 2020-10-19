@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.widget.AbsListView
 import android.widget.ListView
@@ -36,8 +37,10 @@ import io.tschess.tschess.server.VolleySingleton
 import kotlinx.android.synthetic.main.card_home.view.*
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.concurrent.schedule
 
 class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefreshListener {
 
@@ -130,32 +133,37 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     private lateinit var rival1: CardHome
     private lateinit var rival2: CardHome
 
-    fun setRivals() {
-
-        Log.e("listMenu","${listMenu.size}")
-
-        for(game: EntityGame in listMenu){
-            Log.e("-->","${game.status}")
+    fun setShudder(rival: CardHome) {
+        rival.setOnClickListener {
+            rival.imageView.visibility = View.INVISIBLE
+            rival.name.visibility = View.INVISIBLE
+            window.decorView.rootView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            Timer().schedule(11) {
+                runOnUiThread {
+                    rival.imageView.visibility = View.VISIBLE
+                    rival.name.visibility = View.VISIBLE
+                }
+            }
         }
+        rival.imageView.alpha = 0.5F
+        rival.name.alpha = 0.5F
+    }
 
+    fun setRivals() {
+        //Log.e("listMenu","${listMenu.size}")
+        //for(game: EntityGame in listMenu){
+            //Log.e("-->","${game.status}")
+        //}
         val listOngoing: List<EntityGame> = listMenu.filter { it.status == "ONGOING" }
-
-        Log.e("listOngoing","${listOngoing.size}")
-
+        //Log.e("listOngoing","${listOngoing.size}")
         for(game: EntityGame in listOngoing){
             val usernameOther: String = game.getUsernameOther(playerSelf.username)
-
-            Log.e("usernameOther","${usernameOther}")
-            Log.e("rival0","${rival0.name.text}")
-            Log.e("rival1","${rival1.name.text}")
-            Log.e("rival2","${rival2.name.text}")
-
+            //Log.e("usernameOther","${usernameOther}")
+            //Log.e("rival0","${rival0.name.text}")
+            //Log.e("rival1","${rival1.name.text}")
+            //Log.e("rival2","${rival2.name.text}")
             if(usernameOther == rival0.name.text){
-                rival0.imageView.alpha = 0.5F
-                rival0.name.alpha = 0.5F
-                rival0.setOnClickListener {
-                    //shudder
-                }
+                this.setShudder(rival0)
 
             } else {
                 rival0.imageView.alpha = 1F
@@ -169,6 +177,22 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
             if(usernameOther == rival1.name.text){
                 rival1.imageView.alpha = 0.5F
                 rival1.name.alpha = 0.5F
+
+                rival1.setOnClickListener {
+                    //shudder
+                    rival1.imageView.visibility = View.INVISIBLE
+                    rival1.name.visibility = View.INVISIBLE
+                    window.decorView.rootView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                    Timer().schedule(11) {
+                        runOnUiThread {
+                            rival1.imageView.visibility = View.VISIBLE
+                            rival1.name.visibility = View.VISIBLE
+                        }
+                    }
+                }
+
+
+
             }else {
                 rival1.imageView.alpha = 1F
                 rival1.name.alpha = 1F
@@ -176,6 +200,21 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
             if(usernameOther == rival2.name.text){
                 rival2.imageView.alpha = 0.5F
                 rival2.name.alpha = 0.5F
+
+                rival2.setOnClickListener {
+                    //shudder
+                    rival2.imageView.visibility = View.INVISIBLE
+                    rival2.name.visibility = View.INVISIBLE
+                    window.decorView.rootView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                    Timer().schedule(11) {
+                        runOnUiThread {
+                            rival2.imageView.visibility = View.VISIBLE
+                            rival2.name.visibility = View.VISIBLE
+                        }
+                    }
+                }
+
+
             }else {
                 rival2.imageView.alpha = 1F
                 rival2.name.alpha = 1F
