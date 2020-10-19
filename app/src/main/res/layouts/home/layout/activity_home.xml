@@ -55,7 +55,7 @@
             android:orientation="horizontal">
 
         <io.tschess.tschess.home.CardHome
-                android:id="@+id/queen"
+                android:id="@+id/rival_0"
                 app:home_image="@drawable/default_avatar"
                 app:home_name="queen"
 
@@ -66,7 +66,7 @@
         />
 
         <io.tschess.tschess.home.CardHome
-                android:id="@+id/poison"
+                android:id="@+id/rival_1"
                 app:home_image="@drawable/default_avatar"
                 app:home_name="poison"
 
@@ -77,7 +77,7 @@
         />
 
         <io.tschess.tschess.home.CardHome
-                android:id="@+id/hunter"
+                android:id="@+id/rival_2"
                 app:home_image="@drawable/default_avatar"
                 app:home_name="hunter"
 

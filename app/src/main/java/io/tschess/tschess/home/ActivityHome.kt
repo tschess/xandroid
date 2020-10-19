@@ -12,7 +12,11 @@ import android.widget.ListView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.config.ActivityConfig
@@ -25,6 +29,8 @@ import io.tschess.tschess.profile.ActivityProfile
 import io.tschess.tschess.server.CustomJsonArrayRequest
 import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
+import kotlinx.android.synthetic.main.card_home.view.*
+import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -36,6 +42,7 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     private var index: Int
     private var fetched: Boolean
     private val parseGame: ParseGame
+    private val parsePlayer: ParsePlayer
     private var listMenu: ArrayList<EntityGame>
     private lateinit var playerSelf: EntityPlayer
     private lateinit var extendedDataHolder: ExtendedDataHolder
@@ -45,6 +52,7 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.index = 0
         this.fetched = false
         this.parseGame = ParseGame()
+        this.parsePlayer = ParsePlayer()
         this.listMenu = arrayListOf()
     }
 
@@ -91,6 +99,10 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.fetched = false
         this.arrayAdapter.clear()
         this.fetchGames()
+
+        /* * */
+        this.fetchRivals()
+        /* * */
     }
 
     override fun onRefresh() {
@@ -99,6 +111,38 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
 
     override fun refresh() {
         this.onResume()
+    }
+
+    private fun fetchRivals() {
+
+        val rival0: CardHome = findViewById(R.id.rival_0)
+        rival0.name.text = "000"
+        val rival1: CardHome = findViewById(R.id.rival_1)
+        val rival2: CardHome = findViewById(R.id.rival_2)
+
+        val url = "${ServerAddress().IP}:8080/player/rivals/${this.playerSelf.id}"
+        val request = JsonArrayRequest(
+            Request.Method.POST, url, null,
+            Response.Listener { response: JSONArray ->
+
+                Log.e("zzz",response.toString())
+                Log.e("xxx",response.length().toString())
+
+                val playerRival0: EntityPlayer = parsePlayer.execute(response.getJSONObject(0))
+                rival0.name.text = playerRival0.username
+                val playerRival1: EntityPlayer = parsePlayer.execute(response.getJSONObject(1))
+                rival1.name.text = playerRival1.username
+                val playerRival2: EntityPlayer = parsePlayer.execute(response.getJSONObject(2))
+                rival2.name.text = playerRival2.username
+
+
+            },
+            Response.ErrorListener {
+
+            }
+        )
+        request.retryPolicy = DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 1F)
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
     }
 
     private fun fetchGames() {
