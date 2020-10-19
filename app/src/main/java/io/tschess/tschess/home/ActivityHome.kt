@@ -4,6 +4,7 @@ package io.tschess.tschess.home
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,9 +15,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.JsonObjectRequest
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.config.ActivityConfig
@@ -32,7 +36,6 @@ import io.tschess.tschess.server.VolleySingleton
 import kotlinx.android.synthetic.main.card_home.view.*
 import org.json.JSONArray
 import org.json.JSONObject
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -44,8 +47,13 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     private val parseGame: ParseGame
     private val parsePlayer: ParsePlayer
     private var listMenu: ArrayList<EntityGame>
+
+
+
+    private lateinit var glide: RequestManager
     private lateinit var playerSelf: EntityPlayer
     private lateinit var extendedDataHolder: ExtendedDataHolder
+
 
     init {
         this.size = 9
@@ -80,10 +88,16 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     override fun onResume() {
         super.onResume()
         this.notificationManager.cancelAll()
+        this.glide = Glide.with(applicationContext)
+
 
         this.extendedDataHolder = ExtendedDataHolder().getInstance()
         this.playerSelf = extendedDataHolder.getExtra("player_self") as EntityPlayer
         this.extendedDataHolder.clear()
+
+        /* * */
+        this.getRivals()
+        /* * */
 
         val headerSelf: HeaderSelf = findViewById(R.id.header)
         headerSelf.initialize(this.playerSelf)
@@ -100,9 +114,8 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.arrayAdapter.clear()
         this.fetchGames()
 
-        /* * */
-        this.fetchRivals()
-        /* * */
+
+        //this.setRivals()
     }
 
     override fun onRefresh() {
@@ -113,31 +126,118 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.onResume()
     }
 
-    private fun fetchRivals() {
+    private lateinit var rival0: CardHome
+    private lateinit var rival1: CardHome
+    private lateinit var rival2: CardHome
 
-        val rival0: CardHome = findViewById(R.id.rival_0)
-        rival0.name.text = "000"
-        val rival1: CardHome = findViewById(R.id.rival_1)
-        val rival2: CardHome = findViewById(R.id.rival_2)
+    fun setRivals() {
+
+        Log.e("listMenu","${listMenu.size}")
+
+        for(game: EntityGame in listMenu){
+            Log.e("-->","${game.status}")
+        }
+
+        val listOngoing: List<EntityGame> = listMenu.filter { it.status == "ONGOING" }
+
+        Log.e("listOngoing","${listOngoing.size}")
+
+        for(game: EntityGame in listOngoing){
+            val usernameOther: String = game.getUsernameOther(playerSelf.username)
+
+            Log.e("usernameOther","${usernameOther}")
+            Log.e("rival0","${rival0.name.text}")
+            Log.e("rival1","${rival1.name.text}")
+            Log.e("rival2","${rival2.name.text}")
+
+            if(usernameOther == rival0.name.text){
+                rival0.imageView.alpha = 0.5F
+                rival0.name.alpha = 0.5F
+                rival0.setOnClickListener {
+                    //shudder
+                }
+
+            } else {
+                rival0.imageView.alpha = 1F
+                rival0.name.alpha = 1F
+
+                rival0.setOnClickListener {
+                    //create game...
+                }
+
+            }
+            if(usernameOther == rival1.name.text){
+                rival1.imageView.alpha = 0.5F
+                rival1.name.alpha = 0.5F
+            }else {
+                rival1.imageView.alpha = 1F
+                rival1.name.alpha = 1F
+            }
+            if(usernameOther == rival2.name.text){
+                rival2.imageView.alpha = 0.5F
+                rival2.name.alpha = 0.5F
+            }else {
+                rival2.imageView.alpha = 1F
+                rival2.name.alpha = 1F
+            }
+        }
+
+    }
+
+    private fun getRivals() {
+        //val rival0: CardHome = findViewById(R.id.rival_0)
+        this.rival0 = findViewById(R.id.rival_0)
+        rival0.visibility = View.INVISIBLE
+        //val rival1: CardHome = findViewById(R.id.rival_1)
+        this.rival1 = findViewById(R.id.rival_1)
+        rival1.visibility = View.INVISIBLE
+        //val rival2: CardHome = findViewById(R.id.rival_2)
+        this.rival2 = findViewById(R.id.rival_2)
+        rival2.visibility = View.INVISIBLE
 
         val url = "${ServerAddress().IP}:8080/player/rivals/${this.playerSelf.id}"
         val request = JsonArrayRequest(
             Request.Method.POST, url, null,
-            Response.Listener { response: JSONArray ->
+            { response: JSONArray ->
 
-                Log.e("zzz",response.toString())
-                Log.e("xxx",response.length().toString())
 
                 val playerRival0: EntityPlayer = parsePlayer.execute(response.getJSONObject(0))
                 rival0.name.text = playerRival0.username
+
+                glide.load(playerRival0.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
+                    override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                        rival0.imageView.setImageDrawable(resource)
+                        rival0.visibility = View.VISIBLE
+                    }
+                    override fun onLoadCleared(placeholder: Drawable?) {}
+                })
+
                 val playerRival1: EntityPlayer = parsePlayer.execute(response.getJSONObject(1))
                 rival1.name.text = playerRival1.username
+
+                glide.load(playerRival1.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
+                    override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                        rival1.imageView.setImageDrawable(resource)
+                        rival1.visibility = View.VISIBLE
+                    }
+                    override fun onLoadCleared(placeholder: Drawable?) {}
+                })
+
                 val playerRival2: EntityPlayer = parsePlayer.execute(response.getJSONObject(2))
                 rival2.name.text = playerRival2.username
 
+                glide.load(playerRival2.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
+                    override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                        rival2.imageView.setImageDrawable(resource)
+                        rival2.visibility = View.VISIBLE
+                    }
+                    override fun onLoadCleared(placeholder: Drawable?) {}
+                })
+
+                this.setRivals()
 
             },
-            Response.ErrorListener {
+            {
 
             }
         )
@@ -166,13 +266,13 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
                 { response ->
                     for (i: Int in 0 until response.length()) {
                         val game: EntityGame = parseGame.execute(response.getJSONObject(i))
-                        //if(!listMenu.contains(game)){
                         listMenu.add(game)
-                        //}
                     }
                     this.arrayAdapter.notifyDataSetChanged()
                     this.progressBar.visibility = View.INVISIBLE
                     this.swipeRefreshLayout.isRefreshing = false
+
+                    this.setRivals()
                 },
                 {
                     fetched = true
@@ -182,6 +282,8 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
             )
         VolleySingleton.getInstance(this).addToRequestQueue(request)
         this.index += 1
+
+
     }
 
     fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame, action: String = "INVITATION") {

@@ -21,11 +21,7 @@ class EntityGame(
     var condition: String,
     var moves: Int,
     var white: EntityPlayer,
-    //var white_elo: Int,
-    //var white_disp: Int?,
     var black: EntityPlayer,
-    //var black_elo: Int,
-    //var black_disp: Int?,
     var challenger: String,
     var winner: String?,
     var turn: String,
@@ -42,11 +38,7 @@ class EntityGame(
         parcel.readString()!!, //condition
         parcel.readInt(), //moves
         parcel.readParcelable<EntityPlayer>(EntityPlayer::class.java.classLoader)!!, //white
-        //parcel.readInt(), //white_elo
-        //parcel.readInt(), //white_disp
         parcel.readParcelable<EntityPlayer>(EntityPlayer::class.java.classLoader)!!, //black
-        //parcel.readInt(), //black_elo
-        //parcel.readInt(), //black_disp
         parcel.readString()!!,//challenger
         parcel.readString(),//winner
         parcel.readString()!!,//turn
@@ -63,19 +55,7 @@ class EntityGame(
         parcel.writeString(this.condition)
         parcel.writeInt(this.moves)
         parcel.writeParcelable(this.white, 0)
-        //parcel.writeInt(this.white_elo)
-        //if(this.white_disp != null){
-        //parcel.writeInt(this.white_disp!!)
-        //} else {
-        //parcel.writeValue(null)
-        //}
         parcel.writeParcelable(this.black, 0)
-        //parcel.writeInt(this.black_elo)
-        //if(this.black_disp != null){
-        //parcel.writeInt(this.black_disp!!)
-        //} else {
-        //parcel.writeValue(null)
-        //}
         parcel.writeString(this.challenger)
         parcel.writeString(this.winner)
         parcel.writeString(this.turn)
@@ -131,18 +111,6 @@ class EntityGame(
             return true
         }
         return false
-    }
-
-    fun getOdds(username: String): String {
-        val odds: Int = if(this.white.username == username){
-            this.white.elo - this.black.elo
-        } else {
-            this.black.elo - this.white.elo
-        }
-        if(odds >= 0){
-            return "+"
-        }
-        return "-"
     }
 
     fun getOutbound(username: String): Boolean {
@@ -205,26 +173,6 @@ class EntityGame(
         }
         return this.black
     }
-
-    //fun getDispInd(username: String, context: Context): Drawable {
-    //if(this.white.username == username){
-    //if(this.white_disp!! >= 0){
-    //return ContextCompat.getDrawable(context, R.drawable.up)!!
-    //}
-    //return ContextCompat.getDrawable(context, R.drawable.down)!!
-    //}
-    //if(this.black_disp!! >= 0){
-    //return ContextCompat.getDrawable(context, R.drawable.up)!!
-    //}
-    //return ContextCompat.getDrawable(context, R.drawable.down)!!
-    //}
-
-    //fun getDispCnt(username: String): String {
-    //if(this.white.username == username){
-    //return abs(this.white_disp!!).toString()
-    //}
-    //return abs(this.black_disp!!).toString()
-    //}
 
     fun getMatrix(username: String): Array<Array<Piece?>> {
         val matrix: Array<Array<Piece?>> = Array<Array<Piece?>>(8) {
