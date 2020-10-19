@@ -9,12 +9,15 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import io.tschess.tschess.R
+import io.tschess.tschess.model.EntityPlayer
 
 class CardHome(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
 
     private val glide = Glide.with(context)
     val imageView: ImageView
     val textViewName: TextView
+
+    lateinit var playerRival: EntityPlayer
 
     init {
         inflate(context, R.layout.card_home, this)

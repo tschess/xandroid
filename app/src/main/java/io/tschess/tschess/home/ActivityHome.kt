@@ -51,12 +51,12 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     private val parsePlayer: ParsePlayer
     private var listMenu: ArrayList<EntityGame>
 
-
-
+    private lateinit var rival0: CardHome
+    private lateinit var rival1: CardHome
+    private lateinit var rival2: CardHome
     private lateinit var glide: RequestManager
     private lateinit var playerSelf: EntityPlayer
     private lateinit var extendedDataHolder: ExtendedDataHolder
-
 
     init {
         this.size = 9
@@ -93,7 +93,6 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.notificationManager.cancelAll()
         this.glide = Glide.with(applicationContext)
 
-
         this.extendedDataHolder = ExtendedDataHolder().getInstance()
         this.playerSelf = extendedDataHolder.getExtra("player_self") as EntityPlayer
         this.extendedDataHolder.clear()
@@ -116,9 +115,6 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.fetched = false
         this.arrayAdapter.clear()
         this.fetchGames()
-
-
-        //this.setRivals()
     }
 
     override fun onRefresh() {
@@ -128,10 +124,6 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
     override fun refresh() {
         this.onResume()
     }
-
-    private lateinit var rival0: CardHome
-    private lateinit var rival1: CardHome
-    private lateinit var rival2: CardHome
 
     fun setShudder(rival: CardHome) {
         rival.setOnClickListener {
@@ -149,88 +141,46 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         rival.name.alpha = 0.5F
     }
 
+   fun setChallenge(rival: CardHome){
+       rival.imageView.alpha = 1F
+       rival.name.alpha = 1F
+       rival.setOnClickListener {
+           val dialogChallenge: DialogChallenge = DialogChallenge(this, playerSelf,  rival.playerRival, null,"INVITATION")
+           dialogChallenge.show()
+       }
+   }
+
     fun setRivals() {
-        //Log.e("listMenu","${listMenu.size}")
-        //for(game: EntityGame in listMenu){
-            //Log.e("-->","${game.status}")
-        //}
         val listOngoing: List<EntityGame> = listMenu.filter { it.status == "ONGOING" }
-        //Log.e("listOngoing","${listOngoing.size}")
         for(game: EntityGame in listOngoing){
-            val usernameOther: String = game.getUsernameOther(playerSelf.username)
-            //Log.e("usernameOther","${usernameOther}")
-            //Log.e("rival0","${rival0.name.text}")
-            //Log.e("rival1","${rival1.name.text}")
-            //Log.e("rival2","${rival2.name.text}")
-            if(usernameOther == rival0.name.text){
+            val playerOther: EntityPlayer = game.getPlayerOther(playerSelf.username)
+            val usernameOther: String = playerOther.username
+            val usernameRival0: String = rival0.name.text.toString()
+            if(usernameOther == usernameRival0){
                 this.setShudder(rival0)
-
             } else {
-                rival0.imageView.alpha = 1F
-                rival0.name.alpha = 1F
-
-                rival0.setOnClickListener {
-                    //create game...
-                }
-
+                this.setChallenge(rival0)
             }
-            if(usernameOther == rival1.name.text){
-                rival1.imageView.alpha = 0.5F
-                rival1.name.alpha = 0.5F
-
-                rival1.setOnClickListener {
-                    //shudder
-                    rival1.imageView.visibility = View.INVISIBLE
-                    rival1.name.visibility = View.INVISIBLE
-                    window.decorView.rootView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                    Timer().schedule(11) {
-                        runOnUiThread {
-                            rival1.imageView.visibility = View.VISIBLE
-                            rival1.name.visibility = View.VISIBLE
-                        }
-                    }
-                }
-
-
-
-            }else {
-                rival1.imageView.alpha = 1F
-                rival1.name.alpha = 1F
+            val usernameRival1: String = rival1.name.text.toString()
+            if(usernameOther == usernameRival1){
+                this.setShudder(rival1)
+            } else {
+                this.setChallenge(rival1)
             }
-            if(usernameOther == rival2.name.text){
-                rival2.imageView.alpha = 0.5F
-                rival2.name.alpha = 0.5F
-
-                rival2.setOnClickListener {
-                    //shudder
-                    rival2.imageView.visibility = View.INVISIBLE
-                    rival2.name.visibility = View.INVISIBLE
-                    window.decorView.rootView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                    Timer().schedule(11) {
-                        runOnUiThread {
-                            rival2.imageView.visibility = View.VISIBLE
-                            rival2.name.visibility = View.VISIBLE
-                        }
-                    }
-                }
-
-
-            }else {
-                rival2.imageView.alpha = 1F
-                rival2.name.alpha = 1F
+            val usernameRival2: String = rival2.name.text.toString()
+            if(usernameOther == usernameRival2){
+                this.setShudder(rival2)
+            } else {
+                this.setChallenge(rival2)
             }
         }
-
     }
 
     private fun getRivals() {
-        //val rival0: CardHome = findViewById(R.id.rival_0)
         this.rival0 = findViewById(R.id.rival_0)
         rival0.visibility = View.INVISIBLE
-        //val rival1: CardHome = findViewById(R.id.rival_1)
         this.rival1 = findViewById(R.id.rival_1)
         rival1.visibility = View.INVISIBLE
-        //val rival2: CardHome = findViewById(R.id.rival_2)
         this.rival2 = findViewById(R.id.rival_2)
         rival2.visibility = View.INVISIBLE
 
@@ -238,11 +188,9 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         val request = JsonArrayRequest(
             Request.Method.POST, url, null,
             { response: JSONArray ->
-
-
                 val playerRival0: EntityPlayer = parsePlayer.execute(response.getJSONObject(0))
+                rival0.playerRival = playerRival0
                 rival0.name.text = playerRival0.username
-
                 glide.load(playerRival0.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
                     override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                         rival0.imageView.setImageDrawable(resource)
@@ -250,10 +198,9 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
                     }
                     override fun onLoadCleared(placeholder: Drawable?) {}
                 })
-
                 val playerRival1: EntityPlayer = parsePlayer.execute(response.getJSONObject(1))
+                rival1.playerRival = playerRival1
                 rival1.name.text = playerRival1.username
-
                 glide.load(playerRival1.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
                     override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                         rival1.imageView.setImageDrawable(resource)
@@ -261,10 +208,9 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
                     }
                     override fun onLoadCleared(placeholder: Drawable?) {}
                 })
-
                 val playerRival2: EntityPlayer = parsePlayer.execute(response.getJSONObject(2))
+                rival2.playerRival = playerRival2
                 rival2.name.text = playerRival2.username
-
                 glide.load(playerRival2.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
                     override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                         rival2.imageView.setImageDrawable(resource)
@@ -272,12 +218,9 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
                     }
                     override fun onLoadCleared(placeholder: Drawable?) {}
                 })
-
                 this.setRivals()
-
             },
             {
-
             }
         )
         request.retryPolicy = DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 1F)
@@ -321,11 +264,9 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
             )
         VolleySingleton.getInstance(this).addToRequestQueue(request)
         this.index += 1
-
-
     }
 
-    fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame, action: String = "INVITATION") {
+    fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame?, action: String = "INVITATION") {
         val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action)
         dialogRematch.show()
     }
