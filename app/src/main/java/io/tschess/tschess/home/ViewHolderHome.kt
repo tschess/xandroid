@@ -85,10 +85,12 @@ class ViewHolderHome(
                 this.layout_option_swipe!!.removeView(layout_accept)
             }
             if (game.getOutbound(playerSelf.username)) {
-                this.action_title!!.text = "outbound"
+                //this.action_title!!.text = "outbound"
+                this.action_title!!.text = "\t\t\tinvite ⌛"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_outbound)!!)
             } else {
-                this.action_title!!.text = "inbound"
+                //this.action_title!!.text = "inbound"
+                this.action_title!!.text = "\t\t\tinvite ⭐"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_inbound)!!)
             }
         }
@@ -98,10 +100,12 @@ class ViewHolderHome(
             this.layout_option_swipe!!.removeView(layout_reject)
             this.layout_option_swipe!!.removeView(layout_rematch)
             if (game.getTurn(playerSelf.username)) {
-                this.action_title!!.text = "action!"
+                //this.action_title!!.text = "action!"
+                this.action_title!!.text = "\t\t\tgame ⭐"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_action)!!)
             } else {
-                this.action_title!!.text = "pending"
+                //this.action_title!!.text = "pending"
+                this.action_title!!.text = "\t\t\tgame ⌛"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_pending)!!)
             }
         }
@@ -133,7 +137,10 @@ class ViewHolderHome(
 
     private fun setActive() {
         this.layout_row!!.setBackgroundColor(Color.WHITE)
-        this.username!!.visibility = View.INVISIBLE
+        //this.username!!.visibility = View.INVISIBLE
+
+        /* *FUCK* */
+
         this.action_title!!.setTextColor(Color.BLACK)
         this.action_title!!.visibility = View.VISIBLE
         this.action_image!!.visibility = View.VISIBLE
