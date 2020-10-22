@@ -151,7 +151,7 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
    }
 
     fun setRivals() {
-        val listOngoing: List<EntityGame> = listMenu.filter { it.status == "ONGOING" }
+        val listOngoing: List<EntityGame> = listMenu.filter { it.status == "ONGOING" || it.status == "PENDING" }
         for(game: EntityGame in listOngoing){
             val playerOther: EntityPlayer = game.getPlayerOther(playerSelf.username)
             val usernameOther: String = playerOther.username
@@ -195,6 +195,8 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
                     override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                         rival0.imageView.setImageDrawable(resource)
                         rival0.visibility = View.VISIBLE
+
+                        setRivals()
                     }
                     override fun onLoadCleared(placeholder: Drawable?) {}
                 })
@@ -205,6 +207,8 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
                     override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                         rival1.imageView.setImageDrawable(resource)
                         rival1.visibility = View.VISIBLE
+
+                        setRivals()
                     }
                     override fun onLoadCleared(placeholder: Drawable?) {}
                 })
@@ -215,10 +219,12 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
                     override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                         rival2.imageView.setImageDrawable(resource)
                         rival2.visibility = View.VISIBLE
+
+                        setRivals()
                     }
                     override fun onLoadCleared(placeholder: Drawable?) {}
                 })
-                this.setRivals()
+
             },
             {
             }
