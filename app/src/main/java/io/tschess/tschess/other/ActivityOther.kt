@@ -8,10 +8,12 @@ import android.widget.AbsListView
 import android.widget.ListView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
+import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.ParseGame
@@ -99,6 +101,12 @@ class ActivityOther : AppCompatActivity() {
                 //extras.putExtra("player_other", playerOther)
                 //extras.putExtra("action", "OTHER")
                 //applicationContext.startActivity(intent)
+
+
+                val dialogChallenge: DialogChallenge = DialogChallenge(applicationContext, playerSelf, playerOther, null, "INVITATION")
+                dialogChallenge.show()
+
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {

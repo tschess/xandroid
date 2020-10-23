@@ -41,7 +41,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.concurrent.schedule
 
-class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefreshListener {
+class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.OnRefreshListener {
 
     private var size: Int
     private var index: Int
@@ -86,18 +86,18 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         super.onResume()
         this.notificationManager.cancelAll()
 
-
         this.extendedDataHolder = ExtendedDataHolder().getInstance()
-        this.playerSelf = extendedDataHolder.getExtra("player_self") as EntityPlayer
-        this.extendedDataHolder.clear()
+        if(extendedDataHolder.hasExtra("player_self")){
+            this.playerSelf = extendedDataHolder.getExtra("player_self") as EntityPlayer
+            this.extendedDataHolder.clear()
+        }
+
 
         /* * */
-        val glide: RequestManager = Glide.with(applicationContext)
         val rival0: CardHome  = findViewById(R.id.rival_0)
         val rival1: CardHome = findViewById(R.id.rival_1)
         val rival2: CardHome = findViewById(R.id.rival_2)
-        this.utilityRival = UtilityRival(rival0, rival1, rival2, this.playerSelf, glide)
-        this.utilityRival.getRivals(applicationContext)
+        this.utilityRival = UtilityRival(rival0, rival1, rival2, this.playerSelf, this, this)
         /* * */
 
         val headerSelf: HeaderSelf = findViewById(R.id.header)
@@ -222,6 +222,32 @@ class ActivityHome : AppCompatActivity(), Refresher, SwipeRefreshLayout.OnRefres
         this.extendedDataHolder.putExtra("player_self", playerSelf)
         val intent = Intent(applicationContext, ActivityProfile::class.java)
         this.startIntent(intent)
+    }
+
+    override fun shudder(rival: CardHome) {
+        rival.setOnClickListener {
+            rival.imageView.visibility = View.INVISIBLE
+            rival.name.visibility = View.INVISIBLE
+            window.decorView.rootView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            Timer().schedule(11) {
+                runOnUiThread {
+                    rival.imageView.visibility = View.VISIBLE
+                    rival.name.visibility = View.VISIBLE
+                }
+            }
+        }
+        rival.imageView.alpha = 0.5F
+        rival.name.alpha = 0.5F
+    }
+
+    override fun challenge(rival: CardHome) {
+        rival.imageView.alpha = 1F
+        rival.name.alpha = 1F
+        rival.setOnClickListener {
+            val dialogChallenge: DialogChallenge =
+                DialogChallenge(this, playerSelf, rival.playerRival, null, "INVITATION")
+            dialogChallenge.show()
+        }
     }
 }
 

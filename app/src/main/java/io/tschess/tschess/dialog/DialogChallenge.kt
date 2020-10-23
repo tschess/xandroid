@@ -41,7 +41,7 @@ class DialogChallenge(
         val textConfig: TextView = findViewById(R.id.config_text)
         textConfig.text = "config:"
 
-        val listOption: MutableList<String> = mutableListOf("random", "config. x", "config. y", "config. z", "   traditional (chess)   ")
+        val listOption: MutableList<String> = mutableListOf("random", "config. 0", "config. 1", "config. 2", "   traditional (chess)   ")
         if(action == "ACCEPT"){
             listOption.add("mirror opponent")
             textSend.text = "let's play! \uD83C\uDF89"
@@ -123,5 +123,7 @@ class DialogChallenge(
             JsonObjectRequest(Request.Method.POST, url!!, jsonObject, listenerResponse!!, listenerError!!)
         VolleySingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
     }
+
+    
 }
 
