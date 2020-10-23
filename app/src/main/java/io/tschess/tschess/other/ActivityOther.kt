@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.header.HeaderSelf
+import io.tschess.tschess.home.CardHome
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.ParseGame
 import io.tschess.tschess.model.EntityPlayer
@@ -23,6 +24,8 @@ import io.tschess.tschess.server.CustomJsonArrayRequest
 import io.tschess.tschess.model.ExtendedDataHolder
 import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
+import kotlinx.android.synthetic.main.activity_tschess.*
+import kotlinx.android.synthetic.main.card_home.view.*
 import org.json.JSONObject
 
 class ActivityOther : AppCompatActivity() {
@@ -103,10 +106,8 @@ class ActivityOther : AppCompatActivity() {
                 //applicationContext.startActivity(intent)
 
 
-                val dialogChallenge: DialogChallenge = DialogChallenge(applicationContext, playerSelf, playerOther, null, "INVITATION")
-                dialogChallenge.show()
 
-
+                challenge()
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
@@ -121,15 +122,19 @@ class ActivityOther : AppCompatActivity() {
 
     }
 
+    fun challenge() {
+        val dialogChallenge: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, null, "INVITATION")
+        dialogChallenge.show()
+    }
+
     private fun fetchGames() {
         if (fetched) {
             return
         }
         this.progressBar.visibility = View.VISIBLE
-
         val url = "${ServerAddress().IP}:8080/game/menu"
         val params = HashMap<String, Any>()
-        params["id"] = playerOther.id!!
+        params["id"] = playerOther.id
         params["index"] = this.index.toString()
         params["size"] = this.size.toString()
         params["self"] = false
@@ -138,15 +143,10 @@ class ActivityOther : AppCompatActivity() {
             CustomJsonArrayRequest(
                 Request.Method.POST, url, jsonObject,
                 { response ->
-
                     for (i: Int in 0 until response.length()) {
-                        //val game: EntityGame =
-                        //Gson().fromJson(response.getJSONObject(i).toString(), EntityGame::class.java)!!
-
-                        val jsonObject: JSONObject = response.getJSONObject(i)
-                        val game: EntityGame = parseGame.execute(jsonObject)
+                        val jsonObject00: JSONObject = response.getJSONObject(i)
+                        val game: EntityGame = parseGame.execute(jsonObject00)
                         this.listOther.add(game)
-                        //Log.e("-->", "${game.getDate()}")
                     }
                     this.adapterOther.notifyDataSetChanged()
                     this.progressBar.visibility = View.INVISIBLE

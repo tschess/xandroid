@@ -3,8 +3,10 @@ package io.tschess.tschess.dialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.NumberPicker
 import android.widget.TextView
 import com.android.volley.Request
@@ -124,6 +126,15 @@ class DialogChallenge(
         VolleySingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
     }
 
-    
+    //override fun show() {
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //this.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
+        //}
+        //else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //this.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
+        //}
+        //super.show()
+    //}
+
 }
 
