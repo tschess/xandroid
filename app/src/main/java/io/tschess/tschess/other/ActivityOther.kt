@@ -104,10 +104,7 @@ class ActivityOther : AppCompatActivity() {
                 //extras.putExtra("player_other", playerOther)
                 //extras.putExtra("action", "OTHER")
                 //applicationContext.startActivity(intent)
-
-
-
-                challenge()
+                challenge(playerSelf, playerOther)
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
@@ -122,8 +119,8 @@ class ActivityOther : AppCompatActivity() {
 
     }
 
-    fun challenge() {
-        val dialogChallenge: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, null, "INVITATION")
+    fun challenge(playerSelf: EntityPlayer, playerOther: EntityPlayer) {
+        val dialogChallenge: DialogChallenge = DialogChallenge(this, playerSelf, playerOther)
         dialogChallenge.show()
     }
 

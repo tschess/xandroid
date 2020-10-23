@@ -3,16 +3,17 @@ package io.tschess.tschess.dialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import android.widget.NumberPicker
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import io.tschess.tschess.R
+import io.tschess.tschess.home.Refresher
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.model.ExtendedDataHolder
@@ -26,8 +27,10 @@ class DialogChallenge(
     context: Context,
     val playerSelf: EntityPlayer,
     val playerOther: EntityPlayer,
-    val game: EntityGame?,
-    val action: String) : Dialog(context) {
+    val game: EntityGame? = null,
+    val action: String = "INVITATION",
+    val refresher: Refresher? = null
+) : Dialog(context) {
 
     private val parseGame: ParseGame = ParseGame()
 
@@ -43,8 +46,12 @@ class DialogChallenge(
         val textConfig: TextView = findViewById(R.id.config_text)
         textConfig.text = "config:"
 
-        val listOption: MutableList<String> = mutableListOf("random", "config. 0", "config. 1", "config. 2", "   traditional (chess)   ")
-        if(action == "ACCEPT"){
+        val listOption: MutableList<String> =
+            mutableListOf("random", "config. 0", "config. 1", "config. 2", "   traditional (chess)   ")
+        if (action == "ACCEPT") { //????????
+            //????????
+            //????????
+            //????????
             listOption.add("mirror opponent")
             textSend.text = "let's play! \uD83C\uDF89"
         }
@@ -56,13 +63,13 @@ class DialogChallenge(
 
         textSend.setOnClickListener {
             //...
-            if(action == "ACCEPT"){
+            if (action == "ACCEPT") {
                 accept(picker.value, game!!.id)
                 return@setOnClickListener
             }
-            if(action == "REMATCH"){
+            if (action == "REMATCH") {
                 val white: Boolean = game!!.getWhite(playerSelf.username)
-                rematch(picker.value, playerOther.id, white)
+                rematch(picker.value, white)
                 return@setOnClickListener
             }
             //"INVITATION"
@@ -70,19 +77,29 @@ class DialogChallenge(
         }
     }
 
-    fun rematch(config: Int, id_other: String, white: Boolean) {
+    fun rematch(config: Int, white: Boolean) {
         val url: String = "${ServerAddress().IP}:8080/game/rematch"
 
         val params: MutableMap<String, String> = mutableMapOf()
-        params["id_other"] = id_other
+        params["id_self"] = playerSelf.id
+        params["id_other"] = playerOther.id
         params["config"] = config.toString()
         params["white"] = white.toString()
 
         val listenerResponse: Response.Listener<JSONObject>? = Response.Listener {
-            dismiss()
+
+            refresher!!.refresh()
             //dialogConfirm()
+            Log.e("!!!!", it.toString())
+            dismiss()
+
+
         }
         val listenerError: Response.ErrorListener? = Response.ErrorListener {
+
+
+            Log.e("????", it.toString())
+
             dismiss()
             //dialogError()
         }
@@ -127,13 +144,13 @@ class DialogChallenge(
     }
 
     //override fun show() {
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //this.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
-        //}
-        //else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //this.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-        //}
-        //super.show()
+    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    //this.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
+    //}
+    //else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+    //this.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
+    //}
+    //super.show()
     //}
 
 }

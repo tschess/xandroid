@@ -27,7 +27,7 @@ class ParsePlayer {
         val disp: Int = json["disp"].toString().toInt()
         val date: String = json["date"].toString()
 
-        val note_value: Boolean = json["note_value"].toString().toBoolean()
+        //val note_value: Boolean = json["note_value"].toString().toBoolean()
         val note_key: String? = json["note_key"].toString()
 
         val config0: JSONArray = json["config0"] as JSONArray
@@ -45,7 +45,7 @@ class ParsePlayer {
             rank = rank,
             disp = disp,
             date = date,
-            note_value = note_value,
+            //note_value = note_value,
             note_key = note_key,
             config0 = list0,
             config1 = list1,

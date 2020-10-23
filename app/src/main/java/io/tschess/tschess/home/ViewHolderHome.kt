@@ -68,7 +68,6 @@ class ViewHolderHome(
                 avatar!!.visibility = View.VISIBLE
                 avatar.setImageDrawable(resource)
             }
-
             override fun onLoadCleared(placeholder: Drawable?) {}
         })
         if (game.status.contains("RESOLVED")) {
@@ -85,11 +84,9 @@ class ViewHolderHome(
                 this.layout_option_swipe!!.removeView(layout_accept)
             }
             if (game.getOutbound(playerSelf.username)) {
-                //this.action_title!!.text = "outbound"
                 this.action_title!!.text = "\t\t\t\tinvite ⌛"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_outbound)!!)
             } else {
-                //this.action_title!!.text = "inbound"
                 this.action_title!!.text = "\t\t\t\tinvite ⭐"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_inbound)!!)
             }
@@ -100,11 +97,9 @@ class ViewHolderHome(
             this.layout_option_swipe!!.removeView(layout_reject)
             this.layout_option_swipe!!.removeView(layout_rematch)
             if (game.getTurn(playerSelf.username)) {
-                //this.action_title!!.text = "action!"
                 this.action_title!!.text = "\t\t\t\tgame ⭐"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_action)!!)
             } else {
-                //this.action_title!!.text = "pending"
                 this.action_title!!.text = "\t\t\t\tgame ⌛"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_pending)!!)
             }
@@ -137,10 +132,6 @@ class ViewHolderHome(
 
     private fun setActive() {
         this.layout_row!!.setBackgroundColor(Color.WHITE)
-        //this.username!!.visibility = View.INVISIBLE
-
-        /* *FUCK* */
-
         this.action_title!!.setTextColor(Color.BLACK)
         this.action_title!!.visibility = View.VISIBLE
         this.action_image!!.visibility = View.VISIBLE
@@ -186,13 +177,25 @@ class ViewHolderHome(
                 params["id_game"] = game.id
                 params["id_self"] = playerSelf.id
                 val jsonObject = JSONObject(params as Map<*, *>)
+
+                Log.e("FUCK ~~ FUCK", jsonObject.toString())
+                Log.e("FUCK XXX FUCK", url.toString())
+
+
                 val request =
                     JsonObjectRequest(
                         Request.Method.POST, url, jsonObject,
                         {
+
+
+                            Log.e("FUCK FUCK FUCK", it.toString())
+
                             refresher.refresh()
                         },
                         {
+
+                            Log.e("SHIT SHIT SHIT", it.toString())
+
                             Log.e("error in volley request", "${it.message}")
                         }
                     )
@@ -253,51 +256,6 @@ class ViewHolderHome(
         this.action_image!!.visibility = View.INVISIBLE
         this.layout_option_swipe!!.removeView(layout_accept)
         this.layout_option_swipe!!.removeView(layout_reject)
-
-        //TODO: maybe if 'confirm' remove rematch also...
-
-        val white: Boolean = game.getWhite(playerSelf.username)
-
-        //Log.e("STATUS", "${game.status}")
-        //Log.e("white", "${white}")
-        //Log.e("playerSelf.username", "${playerSelf.username}")
-
-        if (game.status == "RESOLVED") {
-
-            Log.e("-->", "A")
-
-            this.setResolved()
-            return
-        }
-
-        if (game.status.contains("WHITE")) {
-            //RESOLVED_WHITE_BLACK
-            //RESOLVED_WHITE
-            if (white) {
-
-                Log.e("-->", "B")
-
-                this.updateConfirm(white)
-                return
-            }
-
-            Log.e("-->", "C")
-
-            this.setResolved()
-            return
-        }
-        if (!white) {
-
-            Log.e("-->", "D")
-
-            //RESOLVED_WHITE_BLACK
-            //RESOLVED_BLACK
-            this.updateConfirm(white)
-            return
-        }
-
-        Log.e("-->", "E")
-
         this.setResolved()
     }
 
@@ -326,37 +284,5 @@ class ViewHolderHome(
         this.rematch_title!!.setTextColor(Color.argb(255, 255, 0, 0))
     }
 
-    private fun updateConfirm(white: Boolean) {
-        this.layout_row!!.setBackgroundColor(Color.WHITE)
-        this.layout_option_swipe!!.removeView(layout_rematch)
-        this.more_vert!!.visibility = View.INVISIBLE
-        this.layout_row!!.setOnClickListener {
-
-            val url = "${ServerAddress().IP}:8080/game/confirm"
-            val params = HashMap<String, Any>()
-            params["id_game"] = game.id
-            params["white"] = white
-            val jsonObject = JSONObject(params as Map<*, *>)
-            val request =
-                JsonObjectRequest(
-                    Request.Method.POST, url, jsonObject,
-                    {
-                        refresher.refresh()
-                    },
-                    {
-                        Log.e("error in volley request", "${it.message}")
-                    }
-                )
-            VolleySingleton.getInstance(context).addToRequestQueue(request)
-
-            val intent = Intent(context, ActivitySnapshot::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
-            extras.putExtra("player_self", playerSelf)
-            extras.putExtra("game", game)
-            context.startActivity(intent)
-        }
-    }
 }
 

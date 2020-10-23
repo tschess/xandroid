@@ -83,7 +83,7 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     }
 
     override fun onResume() {
-        super.onResume()
+
         this.notificationManager.cancelAll()
 
         this.extendedDataHolder = ExtendedDataHolder().getInstance()
@@ -91,8 +91,6 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
             this.playerSelf = extendedDataHolder.getExtra("player_self") as EntityPlayer
             this.extendedDataHolder.clear()
         }
-
-
         /* * */
         val rival0: CardHome  = findViewById(R.id.rival_0)
         val rival1: CardHome = findViewById(R.id.rival_1)
@@ -114,6 +112,8 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         this.fetched = false
         this.arrayAdapter.clear()
         this.fetchGames()
+
+        super.onResume()
     }
 
     override fun onRefresh() {
@@ -164,7 +164,7 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     }
 
     fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame?, action: String = "INVITATION") {
-        val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action)
+        val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action, refresher = this)
         dialogRematch.show()
     }
 

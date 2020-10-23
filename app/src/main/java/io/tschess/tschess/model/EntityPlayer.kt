@@ -20,7 +20,7 @@ class EntityPlayer(
     var rank: Int,
     var disp: Int,
     var date: String,
-    var note_value: Boolean,
+    //var note_value: Boolean,
     var note_key: String?,
     var config0: List<List<String>>,
     var config1: List<List<String>>,
@@ -38,7 +38,7 @@ class EntityPlayer(
         parcel.readInt(), //rank
         parcel.readInt(), //disp
         parcel.readString()!!, //date
-        parcel.readInt() != 0, //note_value
+        //parcel.readInt() != 0, //note_value
         parcel.readString(), //note_key
         parcel.createStringArrayList()!!.chunked(8),
         parcel.createStringArrayList()!!.chunked(8),
@@ -54,7 +54,7 @@ class EntityPlayer(
         parcel.writeInt(this.rank)
         parcel.writeInt(this.disp)
         parcel.writeString(this.date)
-        parcel.writeInt(if (this.note_value) 1 else 0)
+        //parcel.writeInt(if (this.note_value) 1 else 0)
         parcel.writeString(this.note_key)
         parcel.writeStringList(this.config0.flatten())
         parcel.writeStringList(this.config1.flatten())
