@@ -245,7 +245,7 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         rival.name.alpha = 1F
         rival.setOnClickListener {
             val dialogChallenge: DialogChallenge =
-                DialogChallenge(this, playerSelf, rival.playerRival, null, "INVITATION")
+                DialogChallenge(this, playerSelf, rival.playerRival, null, "INVITATION", refresher = this)
             dialogChallenge.show()
         }
     }

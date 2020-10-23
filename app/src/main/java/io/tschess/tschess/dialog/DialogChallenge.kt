@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.widget.NumberPicker
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -73,7 +72,7 @@ class DialogChallenge(
                 return@setOnClickListener
             }
             //"INVITATION"
-            invitation()
+            invitation(picker.value)
         }
     }
 
@@ -127,7 +126,32 @@ class DialogChallenge(
         execute(url, listenerResponse, listenerError, params)
     }
 
-    fun invitation() {
+    fun invitation(config: Int) {
+        val url: String = "${ServerAddress().IP}:8080/game/challenge"
+
+        val params: MutableMap<String, String> = mutableMapOf()
+        params["id_self"] = playerSelf.id
+        params["id_other"] = playerOther.id
+        params["config"] = config.toString()
+
+        val listenerResponse: Response.Listener<JSONObject>? = Response.Listener {
+
+            refresher!!.refresh()
+            //dialogConfirm() !!!!!!!!!!!!
+            Log.e("!!!!", it.toString())
+            dismiss()
+
+
+        }
+        val listenerError: Response.ErrorListener? = Response.ErrorListener {
+
+
+            Log.e("????", it.toString())
+
+            dismiss()
+            //dialogError()
+        }
+        execute(url, listenerResponse, listenerError, params)
 
     }
 
@@ -142,16 +166,6 @@ class DialogChallenge(
             JsonObjectRequest(Request.Method.POST, url!!, jsonObject, listenerResponse!!, listenerError!!)
         VolleySingleton.getInstance(context).addToRequestQueue(jsonObjectRequest)
     }
-
-    //override fun show() {
-    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-    //this.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
-    //}
-    //else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-    //this.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-    //}
-    //super.show()
-    //}
 
 }
 
