@@ -31,8 +31,3 @@ class CardHome(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
 }
 
-@FunctionalInterface
-interface Rival {
-    fun shudder(rival: CardHome)
-    fun challenge(rival: CardHome)
-}

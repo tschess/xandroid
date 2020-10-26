@@ -47,6 +47,9 @@ class AdapterHome(val playerSelf: EntityPlayer, context: Context, objects: List<
             row.findViewById(R.id.layout_rematch) as FrameLayout,
             row.findViewById(R.id.rematch_image) as ImageView,
             row.findViewById(R.id.rematch_title) as TextView,
+
+            row.findViewById(R.id.emoji_indicator) as TextView,
+
             game,
             playerSelf,
             playerOther,

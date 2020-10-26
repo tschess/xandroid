@@ -48,6 +48,7 @@ class ViewHolderHome(
     var layout_rematch: FrameLayout? = null,
     var rematch_image: ImageView? = null,
     var rematch_title: TextView? = null,
+    var emoji: TextView? = null,
     val game: EntityGame,
     val playerSelf: EntityPlayer,
     val playerOther: EntityPlayer,
@@ -84,10 +85,12 @@ class ViewHolderHome(
                 this.layout_option_swipe!!.removeView(layout_accept)
             }
             if (game.getOutbound(playerSelf.username)) {
-                this.action_title!!.text = "\t\t\t\tinvite ⌛"
+                this.emoji!!.text = "⌛"
+                this.action_title!!.text = "invite"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_outbound)!!)
             } else {
-                this.action_title!!.text = "\t\t\t\tinvite ⭐"
+                this.emoji!!.text = "⭐"
+                this.action_title!!.text = "invite"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_inbound)!!)
             }
         }
@@ -97,10 +100,12 @@ class ViewHolderHome(
             this.layout_option_swipe!!.removeView(layout_reject)
             this.layout_option_swipe!!.removeView(layout_rematch)
             if (game.getTurn(playerSelf.username)) {
-                this.action_title!!.text = "\t\t\t\tgame ⭐"
+                this.emoji!!.text = "⭐"
+                this.action_title!!.text = "game"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_action)!!)
             } else {
-                this.action_title!!.text = "\t\t\t\tgame ⌛"
+                this.emoji!!.text = "⌛"
+                this.action_title!!.text = "game"
                 this.action_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_pending)!!)
             }
         }

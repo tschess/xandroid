@@ -186,6 +186,8 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
 
+                android:gravity="center"
+
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -212,7 +214,21 @@
         </LinearLayout>
 
 
+        <TextView
+                android:id="@+id/emoji_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="⭐"
+                android:textColor="@android:color/black"
 
+                android:layout_marginEnd="6dp"
+                android:layout_marginTop="2dp"
+
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+        />
 
 
         <ImageView
