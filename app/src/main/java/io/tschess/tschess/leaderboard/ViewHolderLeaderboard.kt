@@ -51,6 +51,7 @@ class ViewHolderLeaderboard(
     var progressBar: ProgressBar,
     var dialogger: Dialogger,
     var shudder: Shudder,
+   
     val activityLeaderboard: ActivityLeaderboard
 
 ) {
@@ -83,12 +84,9 @@ class ViewHolderLeaderboard(
             val selfClick: Boolean =  this.username!!.text == playerSelf.username
             if(selfClick){
                 //TODO: shudder or something...
-
                 shudder.shake(this.avatar!!, this.username!!)
-
                 return@setOnClickListener
             }
-
             activityLeaderboard.dialogChallenge(playerSelf = playerSelf, playerOther = playerOther, action = "INVITATION")
         }
 
@@ -100,10 +98,8 @@ class ViewHolderLeaderboard(
 
         val selfClick: Boolean =  this.username!!.text == playerSelf.username
         if(selfClick){
-            //this.layout_recent!!
             this.layout_option_swipe!!.removeView(layout_recent)
-
-           this.more_vert!!.visibility = View.INVISIBLE
+            this.more_vert!!.visibility = View.INVISIBLE
         } else {
             this.more_vert!!.visibility = View.VISIBLE
         }

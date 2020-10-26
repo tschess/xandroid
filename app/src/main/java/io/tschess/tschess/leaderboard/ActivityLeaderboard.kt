@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.header.HeaderSelf
+import io.tschess.tschess.home.Refresher
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.model.ExtendedDataHolder
@@ -27,7 +28,7 @@ import java.util.*
 import kotlin.collections.HashMap
 import kotlin.concurrent.schedule
 
-class ActivityLeaderboard : AppCompatActivity(), Dialogger, Shudder, SwipeRefreshLayout.OnRefreshListener {
+class ActivityLeaderboard : AppCompatActivity(), Dialogger, Shudder, Refresher, SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
@@ -216,8 +217,12 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, Shudder, SwipeRefres
         finish()
     }
 
+    override fun refresh() {
+        this.onResume()
+    }
+
     fun dialogChallenge(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame? = null, action: String) {
-        val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action)
+        val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action, refresher = this)
         dialogRematch.show()
     }
 
