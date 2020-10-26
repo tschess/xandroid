@@ -12,8 +12,3 @@ interface Dialogger {
 interface Shudder {
     fun shake(avatar: ImageView, username: TextView)
 }
-
-@FunctionalInterface
-interface Refresher {
-    fun refresh()
-}

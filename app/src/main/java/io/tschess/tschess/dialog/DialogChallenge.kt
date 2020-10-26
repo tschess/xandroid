@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.NumberPicker
 import android.widget.TextView
@@ -86,21 +85,13 @@ class DialogChallenge(
         params["white"] = white.toString()
 
         val listenerResponse: Response.Listener<JSONObject>? = Response.Listener {
-
+            DialogOk(context).confirm(playerOther.username)
             refresher!!.refresh()
-            //dialogConfirm()
-            Log.e("!!!!", it.toString())
             dismiss()
-
-
         }
         val listenerError: Response.ErrorListener? = Response.ErrorListener {
-
-
-            Log.e("????", it.toString())
-
+            DialogOk(context).error("something went wrong! challenge wasn't delivered.")
             dismiss()
-            //dialogError()
         }
         execute(url, listenerResponse, listenerError, params)
     }
@@ -119,8 +110,8 @@ class DialogChallenge(
             dismiss()
         }
         val listenerError: Response.ErrorListener? = Response.ErrorListener {
+            DialogOk(context).error("something went wrong! please try again later.")
             dismiss()
-            //dialogError()
         }
         val url: String = "${ServerAddress().IP}:8080/game/ack"
         execute(url, listenerResponse, listenerError, params)
@@ -135,24 +126,15 @@ class DialogChallenge(
         params["config"] = config.toString()
 
         val listenerResponse: Response.Listener<JSONObject>? = Response.Listener {
-
+            DialogOk(context).confirm(playerOther.username)
             refresher!!.refresh()
-            //dialogConfirm() !!!!!!!!!!!!
-            Log.e("!!!!", it.toString())
             dismiss()
-
-
         }
         val listenerError: Response.ErrorListener? = Response.ErrorListener {
-
-
-            Log.e("????", it.toString())
-
+            DialogOk(context).error("something went wrong! challenge wasn't delivered.")
             dismiss()
-            //dialogError()
         }
         execute(url, listenerResponse, listenerError, params)
-
     }
 
     fun execute(

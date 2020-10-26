@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.card_home.view.*
 import java.util.*
 import kotlin.concurrent.schedule
 
-
 class ViewHolderLeaderboard(
     var layout_swipe: SwipeRevealLayout? = null,
     var layout_row: ConstraintLayout? = null,
@@ -51,9 +50,8 @@ class ViewHolderLeaderboard(
     var progressBar: ProgressBar,
     var dialogger: Dialogger,
     var shudder: Shudder,
-   
-    val activityLeaderboard: ActivityLeaderboard
 
+    val activityLeaderboard: ActivityLeaderboard
 ) {
 
     private val glide = Glide.with(context)

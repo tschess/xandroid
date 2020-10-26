@@ -10,6 +10,17 @@ import org.json.JSONObject
 
 class DialogOk(val context: Context) {
 
+    fun error(message: String) {
+        val title: String = "❌ error ✋"
+        this.render(title, message)
+    }
+
+    fun confirm(username: String) {
+        val title: String = "✅ success \uD83D\uDC4C"
+        val message: String = "challenge dispatched to ${username} ♟️"
+        this.render(title, message)
+    }
+
     fun render(title: String, message: String) {
         val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
         dialogBuilder.setTitle(title)
