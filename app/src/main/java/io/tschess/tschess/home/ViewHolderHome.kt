@@ -177,6 +177,10 @@ class ViewHolderHome(
             this.reject_image!!.setColorFilter(Color.parseColor("#aaaaaa"))
             this.reject_title!!.text = "rescind"
             this.layout_reject!!.setOnClickListener {
+
+                this.activityHome.progressBar.visibility = View.VISIBLE
+                this.layout_swipe!!.close(true)
+
                 val url = "${ServerAddress().IP}:8080/game/rescind"
                 val params = HashMap<String, Any>()
                 params["id_game"] = game.id
