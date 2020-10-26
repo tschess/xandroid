@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.NumberPicker
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.android.volley.Request
 import com.android.volley.Response
@@ -30,11 +31,17 @@ class DialogChallenge(
     val refresher: Refresher? = null
 ) : Dialog(context) {
 
+    lateinit var progressBar: ProgressBar
     private val parseGame: ParseGame = ParseGame()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_challenge)
+
+        //progress_bar
+
+        this.progressBar = findViewById(R.id.progress_bar)
+        this.progressBar.visibility = View.INVISIBLE
 
         val textSend: TextView = findViewById(R.id.text_send)
 
@@ -60,7 +67,8 @@ class DialogChallenge(
         picker.displayedValues = listOption.toTypedArray()
 
         textSend.setOnClickListener {
-            //...
+            this.progressBar.visibility = View.VISIBLE
+
             if (action == "ACCEPT") {
                 accept(picker.value, game!!.id)
                 return@setOnClickListener
@@ -85,11 +93,13 @@ class DialogChallenge(
         params["white"] = white.toString()
 
         val listenerResponse: Response.Listener<JSONObject>? = Response.Listener {
+            this.progressBar.visibility = View.INVISIBLE
             DialogOk(context).confirm(playerOther.username)
             refresher!!.refresh()
             dismiss()
         }
         val listenerError: Response.ErrorListener? = Response.ErrorListener {
+            this.progressBar.visibility = View.INVISIBLE
             DialogOk(context).error("something went wrong! challenge wasn't delivered.")
             dismiss()
         }
@@ -101,6 +111,7 @@ class DialogChallenge(
         params["id_game"] = game_id
         params["config"] = config.toString()
         val listenerResponse: Response.Listener<JSONObject>? = Response.Listener { response ->
+            this.progressBar.visibility = View.INVISIBLE
             val game: EntityGame = parseGame.execute(response)
             val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
             extras.putExtra("game", game)
@@ -110,6 +121,7 @@ class DialogChallenge(
             dismiss()
         }
         val listenerError: Response.ErrorListener? = Response.ErrorListener {
+            this.progressBar.visibility = View.INVISIBLE
             DialogOk(context).error("something went wrong! please try again later.")
             dismiss()
         }
@@ -126,11 +138,13 @@ class DialogChallenge(
         params["config"] = config.toString()
 
         val listenerResponse: Response.Listener<JSONObject>? = Response.Listener {
+            this.progressBar.visibility = View.INVISIBLE
             DialogOk(context).confirm(playerOther.username)
             refresher!!.refresh()
             dismiss()
         }
         val listenerError: Response.ErrorListener? = Response.ErrorListener {
+            this.progressBar.visibility = View.INVISIBLE
             DialogOk(context).error("something went wrong! challenge wasn't delivered.")
             dismiss()
         }
