@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -18,6 +19,9 @@ import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.model.ExtendedDataHolder
 import io.tschess.tschess.model.ParseGame
 import io.tschess.tschess.other.ActivityOther
+import kotlinx.android.synthetic.main.card_home.view.*
+import java.util.*
+import kotlin.concurrent.schedule
 
 
 class ViewHolderLeaderboard(
@@ -37,12 +41,16 @@ class ViewHolderLeaderboard(
     val rank_ind: TextView? = null, //TODO: maybe don't need this...
     val rating_value: TextView? = null,
     val rating_ind: TextView? = null,
+
+    val more_vert: ImageView? = null,
+
     val context: Context,
     val playerOther: EntityPlayer,
     val playerSelf: EntityPlayer,
 
     var progressBar: ProgressBar,
     var dialogger: Dialogger,
+    var shudder: Shudder,
     val activityLeaderboard: ActivityLeaderboard
 
 ) {
@@ -72,6 +80,15 @@ class ViewHolderLeaderboard(
                 layout_swipe!!.close(true)
                 return@setOnClickListener
             }
+            val selfClick: Boolean =  this.username!!.text == playerSelf.username
+            if(selfClick){
+                //TODO: shudder or something...
+
+                shudder.shake(this.avatar!!, this.username!!)
+
+                return@setOnClickListener
+            }
+
             activityLeaderboard.dialogChallenge(playerSelf = playerSelf, playerOther = playerOther, action = "INVITATION")
         }
 
@@ -80,6 +97,16 @@ class ViewHolderLeaderboard(
 
         this.rating_ind!!.text = "rating:"
         this.rating_value!!.text = playerOther.elo.toString()
+
+        val selfClick: Boolean =  this.username!!.text == playerSelf.username
+        if(selfClick){
+            //this.layout_recent!!
+            this.layout_option_swipe!!.removeView(layout_recent)
+
+           this.more_vert!!.visibility = View.INVISIBLE
+        } else {
+            this.more_vert!!.visibility = View.VISIBLE
+        }
 
         this.recent_image!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.img_recent)!!)
         this.recent_title!!.text = "GAMES"

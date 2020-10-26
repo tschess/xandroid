@@ -18,6 +18,7 @@ class AdapterLeaderboard(
     objects: List<EntityPlayer>,
     var progressBar: ProgressBar,
     var dialogger: Dialogger,
+    var shudder: Shudder,
     val activityLeaderboard: ActivityLeaderboard
 ) : ArrayAdapter<EntityPlayer>(context, R.layout.item_leaderboard, objects) {
 
@@ -46,12 +47,14 @@ class AdapterLeaderboard(
             row.findViewById(R.id.rank_indicator) as TextView,
             row.findViewById(R.id.rating_value) as TextView,
             row.findViewById(R.id.rating_indicator) as TextView,
+            row.findViewById(R.id.more_vert) as ImageView,
 
             context,
             playerOther,
             this.playerSelf,
             progressBar,
             dialogger,
+            shudder,
             activityLeaderboard
         )
         row.tag = holder

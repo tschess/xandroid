@@ -3,10 +3,9 @@ package io.tschess.tschess.leaderboard
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.View
-import android.widget.AbsListView
-import android.widget.ListView
-import android.widget.ProgressBar
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -26,8 +25,9 @@ import io.tschess.tschess.server.VolleySingleton
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.HashMap
+import kotlin.concurrent.schedule
 
-class ActivityLeaderboard : AppCompatActivity(), Dialogger, SwipeRefreshLayout.OnRefreshListener {
+class ActivityLeaderboard : AppCompatActivity(), Dialogger, Shudder, SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
@@ -78,7 +78,7 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, SwipeRefreshLayout.O
         extras.clear()
 
         this.listHome = arrayListOf()
-        this.adapterHome = AdapterLeaderboard(this.playerSelf, this, this.listHome, this.progressBar, this, this)
+        this.adapterHome = AdapterLeaderboard(this.playerSelf, this, this.listHome, this.progressBar, this, this, this)
         this.adapterHome.progressBar = this.progressBar
         this.adapterHome.dialogger = this
         this.listView = findViewById(R.id.list_view)
@@ -220,11 +220,20 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, SwipeRefreshLayout.O
         val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action)
         dialogRematch.show()
     }
+
+    override fun shake(avatar: ImageView, username: TextView) {
+       avatar.visibility =  View.INVISIBLE
+        username.visibility = View.INVISIBLE
+        window.decorView.rootView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        Timer().schedule(11) {
+            runOnUiThread {
+                avatar.visibility =  View.VISIBLE
+                username.visibility = View.VISIBLE
+            }
+        }
+    }
 }
 
-@FunctionalInterface
-interface Dialogger {
-    fun render(username: String)
-}
+
 
 
