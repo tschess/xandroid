@@ -112,7 +112,6 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, Shudder, Refresher, 
             override fun onTabSelected(tab: TabLayout.Tab) {
                 extras.putExtra("player_self", playerSelf)
                 when (tab.position) {
-
                     0 -> { //search...
                         //extras.putExtra("player_self", playerSelf)
                         //val intent = Intent(applicationContext, ActivityProfile::class.java)

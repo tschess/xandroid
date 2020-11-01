@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:textColor="@android:color/darker_gray"
-                    android:text="outcome: "/>
+                    android:text="result: "/>
             <TextView
                     android:textSize="16sp"
                     android:id="@+id/outcome"

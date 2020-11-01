@@ -1,6 +1,5 @@
 package io.tschess.tschess.other
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,27 +7,23 @@ import android.widget.AbsListView
 import android.widget.ListView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.header.HeaderSelf
-import io.tschess.tschess.home.CardHome
+import io.tschess.tschess.home.Refresher
 import io.tschess.tschess.model.EntityGame
-import io.tschess.tschess.model.ParseGame
 import io.tschess.tschess.model.EntityPlayer
-
-import io.tschess.tschess.server.CustomJsonArrayRequest
 import io.tschess.tschess.model.ExtendedDataHolder
+import io.tschess.tschess.model.ParseGame
+import io.tschess.tschess.server.CustomJsonArrayRequest
 import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
-import kotlinx.android.synthetic.main.activity_tschess.*
-import kotlinx.android.synthetic.main.card_home.view.*
 import org.json.JSONObject
 
-class ActivityOther : AppCompatActivity() {
+class ActivityOther : AppCompatActivity(), Refresher {
 
     private val parseGame: ParseGame = ParseGame()
 
@@ -120,8 +115,11 @@ class ActivityOther : AppCompatActivity() {
     }
 
     fun challenge(playerSelf: EntityPlayer, playerOther: EntityPlayer) {
-        val dialogChallenge: DialogChallenge = DialogChallenge(this, playerSelf, playerOther)
+        val dialogChallenge: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, refresher = this)
         dialogChallenge.show()
+
+        //  val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action, refresher = this)
+        //        dialogRematch.show()
     }
 
     private fun fetchGames() {
@@ -158,4 +156,7 @@ class ActivityOther : AppCompatActivity() {
         this.index += 1
     }
 
+    override fun refresh() {
+        this.onResume()
+    }
 }
