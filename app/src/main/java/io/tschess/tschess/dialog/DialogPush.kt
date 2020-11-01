@@ -26,7 +26,7 @@ class DialogPush(private val context: Context, val progressBar: ProgressBar) {
 
     fun notifications(player: EntityPlayer) {
         val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
-        dialogBuilder.setTitle("\uD83D\uDC42 ¿now what? ☎")
+        dialogBuilder.setTitle("\uD83D\uDC42 notification ☎")
         dialogBuilder.setMessage("\uD83E\uDDE0️ once opponent has moved\nwould you like to know?")
             .setPositiveButton("yes \uD83D\uDC4C", DialogInterface.OnClickListener { dialog, id ->
                 val url = "${ServerAddress().IP}:8080/player/push"
