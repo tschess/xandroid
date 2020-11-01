@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Log
 import androidx.core.content.ContextCompat
 import io.tschess.tschess.R
 import io.tschess.tschess.piece.Piece
@@ -133,7 +134,10 @@ class EntityPlayer(
         return configXX.reversedArray()
     }
 
-    fun isPopup(): Boolean {
+    fun promptPopup(): Boolean {
+
+        Log.e("POPUP!!!!", this.note_key.toString())
+
         if(this.note_key == null){
             return false
         }

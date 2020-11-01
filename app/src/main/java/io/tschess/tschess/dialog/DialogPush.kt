@@ -32,41 +32,27 @@ class DialogPush(private val context: Context, val progressBar: ProgressBar) {
                 val url = "${ServerAddress().IP}:8080/player/push"
                 this.progressBar.visibility = View.VISIBLE
 
-                //FirebaseApp.initializeApp(context)
                 FirebaseInstanceId.getInstance().instanceId
                     .addOnCompleteListener(OnCompleteListener { task ->
-                        // Get new Instance ID token
                         val token: String? = task.result?.token
-                        // Log and toast
-                        //val msg = getString(R.string.msg_token_fmt, token)
                         var note_key: String = "NULL"
                         if (!token.isNullOrBlank()) {
                             note_key = token
                         }
-                        //Log.d("TAG", "ANDROID_${note_key}")
-                        //Toast.makeText(baseContext, note_key, Toast.LENGTH_LONG).show()
-
                         val params = HashMap<String, String>()
                         params["id"] = player.id
                         params["note_key"] = "ANDROID_${note_key}"
-
                         val jsonObject = JSONObject(params as Map<*, *>)
-                        Log.d("jsonObject", "${jsonObject}")
-
+                        //Log.d("jsonObject", "${jsonObject}")
                         val request = JsonObjectRequest(
                             Request.Method.POST, url, jsonObject,
                             { response: JSONObject ->
-
-                                Log.d("response", "${response}")
+                                //Log.d("response", "${response}")
                                 //response
-
                                 this.progressBar.visibility = View.INVISIBLE
-
-                                //TODO: ???
                             },
                             {
                                 this.progressBar.visibility = View.INVISIBLE
-                                //TODO: remove...
                             }
                         )
                         request.retryPolicy = DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 1F)
@@ -75,6 +61,38 @@ class DialogPush(private val context: Context, val progressBar: ProgressBar) {
             })
             .setNegativeButton("no", DialogInterface.OnClickListener { dialog, _ ->
                 //TODO: FUCK
+
+                val url = "${ServerAddress().IP}:8080/player/push"
+                this.progressBar.visibility = View.VISIBLE
+
+                //FirebaseInstanceId.getInstance().instanceId
+                    //.addOnCompleteListener(OnCompleteListener { task ->
+                        //val token: String? = task.result?.token
+                        var note_key: String = "DECLINE"
+                        //if (!token.isNullOrBlank()) {
+                            //note_key = token
+                        //}
+                        val params = HashMap<String, String>()
+                        params["id"] = player.id
+                        params["note_key"] = "ANDROID_${note_key}"
+                        val jsonObject = JSONObject(params as Map<*, *>)
+                        //Log.d("jsonObject", "${jsonObject}")
+                        val request = JsonObjectRequest(
+                            Request.Method.POST, url, jsonObject,
+                            { response: JSONObject ->
+                                //Log.d("response", "${response}")
+                                //response
+                                this.progressBar.visibility = View.INVISIBLE
+                            },
+                            {
+                                this.progressBar.visibility = View.INVISIBLE
+                            }
+                        )
+                        request.retryPolicy = DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 1F)
+                        VolleySingleton.getInstance(context).addToRequestQueue(request)
+                    //})
+
+
             })
         val alert: AlertDialog = dialogBuilder.create()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

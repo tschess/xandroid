@@ -484,7 +484,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 this.deliver(jsonObject)
 
                 /* * */
-                if(this.playerSelf.isPopup()){
+                if(this.playerSelf.promptPopup()){
                     DialogPush(applicationContext, progressBar).notifications(playerSelf)
 
                     //class DialogPush(private val context: Context, val progressBar: ProgressBar) {
@@ -542,7 +542,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
             return
         }
         val textTurn: String = this.textViewTurnary.text.toString()
-        this.textViewTurnary.text = "$textTurn (check)"
+        this.textViewTurnary.text = "$textTurn (✔️)"
     }
 
     private fun setCheckMate() {
