@@ -51,10 +51,6 @@ class DialogChallenge(
 
         val listOption: MutableList<String> = mutableListOf("config. 0", "config. 1", "config. 2", "   traditional (chess)   ", "random")
         //if (action == "ACCEPT") {
-            //????????
-            //????????
-            //????????
-            //????????
             //listOption.add("mirror opponent")
             //textSend.text = "let's play! \uD83C\uDF89"
         //}
@@ -96,18 +92,17 @@ class DialogChallenge(
             refresher!!.refresh()
             dismiss()
         }
-        val listenerError: Response.ErrorListener? = Response.ErrorListener {
-            this.progressBar.visibility = View.INVISIBLE
-            DialogOk(context).error("something went wrong! challenge wasn't delivered.")
-            dismiss()
-        }
-        execute(url, listenerResponse, listenerError, params)
+
+        execute(url, listenerResponse, this.getError("challenge wasn't delivered."), params)
     }
 
     fun accept(config: Int, game_id: String) {
+        val url: String = "${ServerAddress().IP}:8080/game/ack"
+
         val params: MutableMap<String, String> = mutableMapOf()
         params["id_game"] = game_id
         params["config"] = config.toString()
+
         val listenerResponse: Response.Listener<JSONObject>? = Response.Listener { response ->
             this.progressBar.visibility = View.INVISIBLE
             val game: EntityGame = parseGame.execute(response)
@@ -118,13 +113,7 @@ class DialogChallenge(
             context.startActivity(intent)
             dismiss()
         }
-        val listenerError: Response.ErrorListener? = Response.ErrorListener {
-            this.progressBar.visibility = View.INVISIBLE
-            DialogOk(context).error("something went wrong! please try again later.")
-            dismiss()
-        }
-        val url: String = "${ServerAddress().IP}:8080/game/ack"
-        execute(url, listenerResponse, listenerError, params)
+        execute(url, listenerResponse, this.getError("please try again later."), params)
     }
 
     fun invitation(config: Int) {
@@ -141,12 +130,15 @@ class DialogChallenge(
             refresher!!.refresh()
             dismiss()
         }
-        val listenerError: Response.ErrorListener? = Response.ErrorListener {
-            this.progressBar.visibility = View.INVISIBLE
-            DialogOk(context).error("something went wrong! challenge wasn't delivered.")
+        execute(url, listenerResponse, this.getError("challenge wasn't delivered."), params)
+    }
+
+    fun getError(message: String): Response.ErrorListener? {
+        return Response.ErrorListener {
+            progressBar.visibility = View.INVISIBLE
+            DialogOk(context).error("something went wrong! $message")
             dismiss()
         }
-        execute(url, listenerResponse, listenerError, params)
     }
 
     fun execute(
