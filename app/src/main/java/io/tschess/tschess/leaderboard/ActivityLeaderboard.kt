@@ -14,6 +14,7 @@ import com.android.volley.Request
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
 import io.tschess.tschess.dialog.DialogChallenge
+import io.tschess.tschess.dialog.DialogSearch
 import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.home.Refresher
 import io.tschess.tschess.model.EntityGame
@@ -118,6 +119,10 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, Shudder, Refresher, 
                         //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                         //applicationContext.startActivity(intent)
+
+
+                        //DialogSearch(context: Context)
+                       fuck()
                     }
                 }
             }
@@ -133,6 +138,12 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, Shudder, Refresher, 
         headerSelf.initialize(this.playerSelf)
         headerSelf.setListenerProfile(this.playerSelf)
         //this.setTimerNote()
+    }
+
+
+    fun fuck() {
+        val dialogSearch: DialogSearch = DialogSearch(this, playerSelf)
+        dialogSearch.show()
     }
 
     //private fun setTimerNote() {
