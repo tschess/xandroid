@@ -81,8 +81,8 @@
     >
 
         <com.google.android.material.tabs.TabItem
-                android:text="search"
-                android:icon="@drawable/profile"
+                android:text="home"
+                android:icon="@drawable/tab_home"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
         />
