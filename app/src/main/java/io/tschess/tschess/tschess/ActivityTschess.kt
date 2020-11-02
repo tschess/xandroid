@@ -410,7 +410,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
             dialog.cancel()
         })
         if (this.game.getTurn(this.playerSelf.username)) {
-            dialogBuilder.setNegativeButton("\uD83E\uDD1D propose draw", DialogInterface.OnClickListener { dialog, id ->
+            dialogBuilder.setNegativeButton("propose draw \uD83E\uDD1D", DialogInterface.OnClickListener { dialog, id ->
                 this.progressBar.visibility = View.VISIBLE
                 val url = "${ServerAddress().IP}:8080/game/prop/${this.game.id}"
                 val jsonObjectRequest = JsonObjectRequest(

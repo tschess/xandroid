@@ -38,8 +38,6 @@ class DialogChallenge(
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_challenge)
 
-        //progress_bar
-
         this.progressBar = findViewById(R.id.progress_bar)
         this.progressBar.visibility = View.INVISIBLE
 
@@ -51,15 +49,15 @@ class DialogChallenge(
         val textConfig: TextView = findViewById(R.id.config_text)
         textConfig.text = "config:"
 
-        val listOption: MutableList<String> =
-            mutableListOf("random", "config. 0", "config. 1", "config. 2", "   traditional (chess)   ")
-        if (action == "ACCEPT") { //????????
+        val listOption: MutableList<String> = mutableListOf("config. 0", "config. 1", "config. 2", "   traditional (chess)   ", "random")
+        //if (action == "ACCEPT") {
             //????????
             //????????
             //????????
-            listOption.add("mirror opponent")
-            textSend.text = "let's play! \uD83C\uDF89"
-        }
+            //????????
+            //listOption.add("mirror opponent")
+            //textSend.text = "let's play! \uD83C\uDF89"
+        //}
         val picker: NumberPicker = findViewById<View>(R.id.number_picker) as NumberPicker
         picker.minValue = 0
         picker.maxValue = listOption.size - 1
