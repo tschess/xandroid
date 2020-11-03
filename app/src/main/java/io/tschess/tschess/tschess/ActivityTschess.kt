@@ -49,51 +49,67 @@ import kotlin.concurrent.schedule
 
 class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
-    override fun onPause() {
-        super.onPause()
-        /* * */
-        (getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
-        /* * */
+    var white: Boolean
+
+    private val polling: Timer
+    private val parseGame: ParseGame
+    private var highlight: List<Array<Int>>
+
+    private var castle: Castle
+    private val passant: Passant
+    private var explode: Explode
+    private var promoLogic: PromoLogic
+
+    private val brooklyn: ZoneId
+    private val formatter: DateTimeFormatter
+
+    init {
+        this.polling = Timer()
+        this.parseGame = ParseGame()
+        this.highlight = listOf(arrayOf(9, 9), arrayOf(9, 9))
+        this.white = true
+
+        this.castle = Castle(activityTschess = this@ActivityTschess)
+        this.passant = Passant(activityTschess = this@ActivityTschess)
+        this.explode = Explode(activityTschess = this@ActivityTschess)
+        this.promoLogic = PromoLogic(activityTschess = this@ActivityTschess)
+
+        this.brooklyn = ZoneId.of("America/New_York")
+        this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
     }
+
+    lateinit var progressBar: ProgressBar
+    lateinit var notificationManager:  NotificationManager
 
     override fun onResume() {
         super.onResume()
-        /* * */
-        (getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)?.cancelAll()
-        /* * */
+        this.notificationManager.cancelAll()
+
+        this.polling.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                getUpdate()
+            }
+        }, 2000, TimeUnit.SECONDS.toMillis(1))
     }
-
-    private val parseGame: ParseGame = ParseGame()
-
-    lateinit var progressBar: ProgressBar
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-    private val brooklyn = ZoneId.of("America/New_York")
 
     private lateinit var chronometer: Chronometer
     private lateinit var textViewTitle: TextView
     private lateinit var textViewTurnary: TextView
     lateinit var textViewNotification: TextView
 
-    private lateinit var castle: Castle
-    private lateinit var explode: Explode
-    private lateinit var promoLogic: PromoLogic
-    private val passant: Passant = Passant(this)
-
-    private val polling: Timer = Timer()
-
     lateinit var validator: Validator
     lateinit var game: EntityGame
     lateinit var matrix: Array<Array<Piece?>>
-    var white: Boolean = true //TODO: <-- for highlight
 
     private lateinit var boardView: BoardView
     private lateinit var playerSelf: EntityPlayer
 
-    private var highlight: List<Array<Int>> = listOf(arrayOf(9, 9), arrayOf(9, 9))
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tschess)
+
+        this.notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        this.notificationManager.cancelAll()
 
         this.progressBar = findViewById<ProgressBar>(R.id.progress_bar)
         this.progressBar.visibility = View.INVISIBLE
@@ -103,11 +119,6 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.game = extras.getExtra("game") as EntityGame
         extras.clear()
         val playerOther: EntityPlayer = this.game.getPlayerOther(this.playerSelf.username)
-
-        this.castle = Castle()
-        this.castle.activityTschess = this@ActivityTschess
-        this.explode = Explode(this@ActivityTschess)
-        this.promoLogic = PromoLogic(this@ActivityTschess)
 
         val tabLayout: TabLayout = findViewById<View>(R.id.tab_layout) as TabLayout
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -147,11 +158,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.setTurn()
         this.setCheckLabel()
 
-        this.polling.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-                getUpdate()
-            }
-        }, 2000, TimeUnit.SECONDS.toMillis(1))
+
     }
 
     fun showSpecialAlert(text: String) {

@@ -50,7 +50,7 @@ class UtilityStart(private val activity: AppCompatActivity, val progressBar: Pro
                 val playerSelf: EntityPlayer = parsePlayer.execute(response)
                 this.startActivityHome(playerSelf)
             },
-            Response.ErrorListener {
+            {
                 this.progressBar.visibility = View.INVISIBLE
                 val title: String = "⚡ server error ⚡"
                 val message: String = "\uD83D\uDD0C unable to reach server.\ncheck connection and try again. \uD83D\uDCF1"

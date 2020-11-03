@@ -42,7 +42,7 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
 
     init {
         inflate(context, R.layout.dialog_promo, this)
-        val textView: TextView = findViewById(R.id.text_view)
+        //val textView: TextView = findViewById(R.id.text_view)
 
         val imageViewBiship: ImageView = findViewById(R.id.bishop)
         imageViewBiship.setOnClickListener(View.OnClickListener {

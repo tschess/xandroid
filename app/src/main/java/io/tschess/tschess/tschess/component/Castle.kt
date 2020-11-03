@@ -5,9 +5,7 @@ import io.tschess.tschess.tschess.ActivityTschess
 import org.json.JSONObject
 import java.util.*
 
-class Castle() {
-
-    lateinit var activityTschess: ActivityTschess
+class Castle(var activityTschess: ActivityTschess? = null) {
 
     private fun opponentCoordinateList(kingCoordinate: Array<Int>, state: Array<Array<Piece?>>): List<Array<Int>> {
         val opponentCoordinateList: MutableList<Array<Int>> = mutableListOf()
@@ -31,31 +29,22 @@ class Castle() {
             return false
         }
         val state1 = state0
-        val tschessElement = state1[coordinate[0]][coordinate[1]]
-        if (tschessElement == null) {
+        val tschessElement: Piece = state1[coordinate[0]][coordinate[1]] ?: return false
+        if (!tschessElement.name.contains("King")) {
             return false
         }
-        if (!tschessElement!!.name.contains("King")) {
+        val tschessElementProposed: Piece = state1[proposed[0]][proposed[1]] ?: return false
+        if (tschessElementProposed.name != "PieceAnte") {
             return false
         }
-        val tschessElementProposed = state1[proposed[0]][proposed[1]]
-        if (tschessElementProposed == null) {
-            return false
-        }
-        if (tschessElementProposed!!.name != "PieceAnte") {
-            return false
-        }
-        val affiliation = tschessElement!!.affiliation
-        if (affiliation.toLowerCase() == "white") {
+        val affiliation = tschessElement.affiliation
+        if (affiliation.toLowerCase(Locale.getDefault()) == "white") {
             if (proposed.contentEquals(arrayOf(7, 6))) {
-                val rook = state1[7][7]
-                if (rook == null) {
+                val rook: Piece = state1[7][7] ?: return false
+                if (!rook.name.contains("Rook")) {
                     return false
                 }
-                if (!rook!!.name.contains("Rook")) {
-                    return false
-                }
-                val imageDefault = tschessElement!!.imageDefault
+                val imageDefault = tschessElement.imageDefault
                 tschessElement!!.imageVisible = imageDefault
                 state1[7][6] = tschessElement
                 state1[7][6]!!.touched = true
@@ -64,21 +53,21 @@ class Castle() {
                 state1[7][5]!!.touched = true
                 state1[7][7] = null
 
-                val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(state1)
+                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.validator.deselect(state1)
                 val state: List<List<String>> =
-                    this.activityTschess.validator.render(matrix00, this.activityTschess.white)
-                val highlight: String = if (this.activityTschess.white) {
+                    this.activityTschess!!.validator.render(matrix00, this.activityTschess!!.white)
+                val highlight: String = if (this.activityTschess!!.white) {
                     "${coordinate[0]}${coordinate[1]}${proposed[0]}${proposed[1]}"
                 } else {
                     "${7 - coordinate[0]}${7 - coordinate[1]}${7 - proposed[0]}${7 - proposed[1]}"
                 }
                 val params = HashMap<String, Any>()
-                params["id_game"] = this.activityTschess.game.id
+                params["id_game"] = this.activityTschess!!.game.id
                 params["state"] = state
                 params["highlight"] = highlight
                 params["condition"] = "TBD"
                 val jsonObject = JSONObject(params as Map<*, *>)
-                this.activityTschess.deliver(jsonObject)
+                this.activityTschess!!.deliver(jsonObject)
                 return true
             }
             if (proposed.contentEquals(arrayOf(7, 2))) {
@@ -86,11 +75,11 @@ class Castle() {
                 if (rook == null) {
                     return false
                 }
-                if (!rook!!.name.contains("Rook")) {
+                if (!rook.name.contains("Rook")) {
                     return false
                 }
-                val imageDefault = tschessElement!!.imageDefault
-                tschessElement!!.imageVisible = imageDefault
+                val imageDefault = tschessElement.imageDefault
+                tschessElement.imageVisible = imageDefault
                 state1[7][2] = tschessElement
                 state1[7][2]!!.touched = true
                 state1[coordinate[0]][coordinate[1]] = null
@@ -98,21 +87,21 @@ class Castle() {
                 state1[7][3]!!.touched = true
                 state1[7][0] = null
 
-                val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(state1)
+                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.validator.deselect(state1)
                 val state: List<List<String>> =
-                    this.activityTschess.validator.render(matrix00, this.activityTschess.white)
-                val highlight: String = if (this.activityTschess.white) {
+                    this.activityTschess!!.validator.render(matrix00, this.activityTschess!!.white)
+                val highlight: String = if (this.activityTschess!!.white) {
                     "${coordinate[0]}${coordinate[1]}${proposed[0]}${proposed[1]}"
                 } else {
                     "${7 - coordinate[0]}${7 - coordinate[1]}${7 - proposed[0]}${7 - proposed[1]}"
                 }
                 val params = HashMap<String, Any>()
-                params["id_game"] = this.activityTschess.game.id
+                params["id_game"] = this.activityTschess!!.game.id
                 params["state"] = state
                 params["highlight"] = highlight
                 params["condition"] = "TBD"
                 val jsonObject = JSONObject(params as Map<*, *>)
-                this.activityTschess.deliver(jsonObject)
+                this.activityTschess!!.deliver(jsonObject)
                 return true
             }
         }
@@ -134,21 +123,21 @@ class Castle() {
                 state1[7][2]!!.touched = true
                 state1[7][0] = null
 
-                val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(state1)
+                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.validator.deselect(state1)
                 val state: List<List<String>> =
-                    this.activityTschess.validator.render(matrix00, this.activityTschess.white)
-                val highlight: String = if (this.activityTschess.white) {
+                    this.activityTschess!!.validator.render(matrix00, this.activityTschess!!.white)
+                val highlight: String = if (this.activityTschess!!.white) {
                     "${coordinate[0]}${coordinate[1]}${proposed[0]}${proposed[1]}"
                 } else {
                     "${7 - coordinate[0]}${7 - coordinate[1]}${7 - proposed[0]}${7 - proposed[1]}"
                 }
                 val params = HashMap<String, Any>()
-                params["id_game"] = this.activityTschess.game.id
+                params["id_game"] = this.activityTschess!!.game.id
                 params["state"] = state
                 params["highlight"] = highlight
                 params["condition"] = "TBD"
                 val jsonObject = JSONObject(params as Map<*, *>)
-                this.activityTschess.deliver(jsonObject)
+                this.activityTschess!!.deliver(jsonObject)
                 return true
             }
             if (proposed.contentEquals(arrayOf(7, 5))) {
@@ -168,21 +157,21 @@ class Castle() {
                 state1[7][4]!!.touched = true
                 state1[7][7] = null
 
-                val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(state1)
+                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.validator.deselect(state1)
                 val state: List<List<String>> =
-                    this.activityTschess.validator.render(matrix00, this.activityTschess.white)
-                val highlight: String = if (this.activityTschess.white) {
+                    this.activityTschess!!.validator.render(matrix00, this.activityTschess!!.white)
+                val highlight: String = if (this.activityTschess!!.white) {
                     "${coordinate[0]}${coordinate[1]}${proposed[0]}${proposed[1]}"
                 } else {
                     "${7 - coordinate[0]}${7 - coordinate[1]}${7 - proposed[0]}${7 - proposed[1]}"
                 }
                 val params = HashMap<String, Any>()
-                params["id_game"] = this.activityTschess.game.id
+                params["id_game"] = this.activityTschess!!.game.id
                 params["state"] = state
                 params["highlight"] = highlight
                 params["condition"] = "TBD"
                 val jsonObject = JSONObject(params as Map<*, *>)
-                this.activityTschess.deliver(jsonObject)
+                this.activityTschess!!.deliver(jsonObject)
                 return true
             }
         }
