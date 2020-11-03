@@ -42,7 +42,6 @@ class ActivityLeaderboard : AppCompatActivity(), Dialogger, Shudder, Refresher, 
 
     private lateinit var tabLayout: TabLayout
 
-    //private val pollingNote: Timer = Timer()
     private val parsePlayer: ParsePlayer = ParsePlayer()
 
     lateinit var playerSelf: EntityPlayer
