@@ -27,26 +27,25 @@ class DialogFairy(context: Context, val name: String) : Dialog(context) {
             "hunter" -> {
                 this.textTitle.text = "Hunter"
                 this.imageFairy.setImageResource(R.drawable.red_hunter)
-                contentText.text = "• moves forward as standard bishop\n" +
-                        "• moves backwards as standard knight"
+                contentText.text = "• moves forward as standard bishop.\n" +
+                        "• moves backwards as standard knight."
                 return
             }
             "poison" -> {
                 this.textTitle.text = "Poison Pawn"
                 this.imageFairy.setImageResource(R.drawable.red_landmine)
                 contentText.text =  "• appears to your opponent throughout the game as a standard pawn.\n" +
-
                         "• when captured, the opponent piece is also destroyed, i.e. eliminated from the game.\n" +
                         "• if king attempts to capture poison pawn the result is instant checkmate.\n" +
-                        "• behaviour identical to a standard pawn\n" +
+                        "• behaviour identical to a standard pawn.\n" +
                         "• cannot be promoted."
                 return
             }
         } //"amazon"
         this.textTitle.text = "Amazon"
         this.imageFairy.setImageResource(R.drawable.red_amazon)
-        contentText.text = "• performs all behavior of standard queen\n" +
-                "• performs all behavior of standard knight"
+        contentText.text = "• performs all behavior of standard queen.\n" +
+                "• performs all behavior of standard knight."
     }
 
     companion object {
