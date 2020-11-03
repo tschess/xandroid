@@ -21,9 +21,7 @@ import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayout
-import com.google.firebase.iid.FirebaseInstanceId
 import io.tschess.tschess.R
 import io.tschess.tschess.dialog.DialogPush
 import io.tschess.tschess.header.HeaderSelf
@@ -34,7 +32,7 @@ import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.tschess.component.Castle
 import io.tschess.tschess.tschess.component.Explode
 import io.tschess.tschess.tschess.component.Passant
-import io.tschess.tschess.tschess.component.PromoDialog
+import io.tschess.tschess.dialog.DialogPromo
 import io.tschess.tschess.tschess.component.PromoLogic
 import io.tschess.tschess.model.ExtendedDataHolder
 import io.tschess.tschess.server.ServerAddress
@@ -174,17 +172,8 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
     override fun onBackPressed() {
         this.polling.cancel()
-        //val intent = Intent(applicationContext, ActivityMenu::class.java)
-        //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        //intent.putExtra("player_self", playerSelf)
         val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
         extras.putExtra("player_self", playerSelf)
-        //extras.putExtra("game", game)
-
-        //applicationContext.startActivity(intent)
         finish()
     }
 
@@ -227,15 +216,15 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 val request =
                     JsonObjectRequest(
                         Request.Method.POST, url, jsonObject,
-                        Response.Listener { _ ->
+                        {
                             this.progressBar.visibility = View.VISIBLE
                         },
-                        Response.ErrorListener { _ -> }
+                        { }
                     )
                 VolleySingleton.getInstance(applicationContext).addToRequestQueue(request)
                 dialog.cancel()
             })
-            dialogBuilder.setNegativeButton("reject", DialogInterface.OnClickListener { dialog, _ ->
+            dialogBuilder.setNegativeButton("reject") { dialog, _ ->
                 val url = "${ServerAddress().IP}:8080/game/eval"
                 val params = HashMap<String, Any>()
                 params["id_game"] = this.game.id
@@ -246,14 +235,14 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 val request =
                     JsonObjectRequest(
                         Request.Method.POST, url, jsonObject,
-                        Response.Listener { _ ->
+                        {
                             this.progressBar.visibility = View.VISIBLE
                         },
-                        Response.ErrorListener { _ -> }
+                        { }
                     )
                 VolleySingleton.getInstance(applicationContext).addToRequestQueue(request)
                 dialog.cancel()
-            })
+            }
             val alert: AlertDialog = dialogBuilder.create()
             alert.show()
             alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.WHITE)
@@ -372,7 +361,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         //val dialogPromo = PromoDialog(coord, this, this) //this@ActivityTschess
         val dialogPromo =
-            PromoDialog(
+            DialogPromo(
                 coord,
                 this@ActivityTschess,
                 this
@@ -392,14 +381,14 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
         dialogBuilder.setTitle("⚡ tschess ⚡")
         dialogBuilder.setMessage("select game menu option below:")
-        dialogBuilder.setPositiveButton("resign position \uD83E\uDD26", DialogInterface.OnClickListener { dialog, id ->
+        dialogBuilder.setPositiveButton("resign position \uD83E\uDD26") { dialog, _ ->
             this.progressBar.visibility = View.VISIBLE
             val url = "${ServerAddress().IP}:8080/game/resign"
             val params = HashMap<String, Any>()
             params["id_game"] = this.game.id
             params["id_self"] = this.playerSelf.id
-            params["id_oppo"] = this.game.getPlayerOther(this.playerSelf.username!!).id!!
-            params["white"] = this.game.getWhite(this.playerSelf.username!!)
+            params["id_oppo"] = this.game.getPlayerOther(this.playerSelf.username).id
+            params["white"] = this.game.getWhite(this.playerSelf.username)
             val jsonObject = JSONObject(params as Map<*, *>)
             val jsonObjectRequest = JsonObjectRequest(
                 Request.Method.POST, url, jsonObject,
@@ -408,9 +397,9 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
             )
             VolleySingleton.getInstance(applicationContext).addToRequestQueue(jsonObjectRequest)
             dialog.cancel()
-        })
+        }
         if (this.game.getTurn(this.playerSelf.username)) {
-            dialogBuilder.setNegativeButton("propose draw \uD83E\uDD1D", DialogInterface.OnClickListener { dialog, id ->
+            dialogBuilder.setNegativeButton("propose draw \uD83E\uDD1D") { dialog, _ ->
                 this.progressBar.visibility = View.VISIBLE
                 val url = "${ServerAddress().IP}:8080/game/prop/${this.game.id}"
                 val jsonObjectRequest = JsonObjectRequest(
@@ -420,7 +409,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 )
                 VolleySingleton.getInstance(applicationContext).addToRequestQueue(jsonObjectRequest)
                 dialog.cancel()
-            })
+            }
         }
         val alert: AlertDialog = dialogBuilder.create()
         alert.show()
@@ -486,10 +475,6 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 /* * */
                 if(this.playerSelf.promptPopup()){
                     DialogPush(applicationContext, progressBar).notifications(playerSelf)
-
-                    //class DialogPush(private val context: Context, val progressBar: ProgressBar) {
-                    //
-                    //    fun notifications(player: EntityPlayer) {
                 }
                 /* * */
 

@@ -1,4 +1,4 @@
-package io.tschess.tschess.tschess.component
+package io.tschess.tschess.dialog
 
 import android.content.Context
 import android.util.AttributeSet
@@ -20,7 +20,7 @@ import io.tschess.tschess.tschess.ActivityTschess
 import org.json.JSONObject
 import java.util.*
 
-class PromoDialog(var coord: Array<Int>, var activityTschess: ActivityTschess, context: Context, attrs: AttributeSet? = null) : TableLayout(context, attrs) {
+class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, context: Context, attrs: AttributeSet? = null) : TableLayout(context, attrs) {
 
     private fun dispatch(coord: Array<Int>){
         val matrixXX: Array<Array<Piece?>> = this.activityTschess.validator.execute(propose = this.coord, matrix = this.activityTschess.matrix)
