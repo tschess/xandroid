@@ -26,8 +26,8 @@ class DialogPush(private val context: Context, val progressBar: ProgressBar) {
 
     fun notifications(player: EntityPlayer) {
         val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
-        dialogBuilder.setTitle("\uD83D\uDC42 notification ☎")
-        dialogBuilder.setMessage("\uD83E\uDDE0️ once opponent has moved\nwould you like to know?")
+        dialogBuilder.setTitle("☎️ notification ☎")
+        dialogBuilder.setMessage("once your opponent has moved would you like to know? \uD83D\uDC42")
             .setPositiveButton("yes \uD83D\uDC4C", DialogInterface.OnClickListener { dialog, id ->
                 val url = "${ServerAddress().IP}:8080/player/push"
                 this.progressBar.visibility = View.VISIBLE
@@ -59,7 +59,7 @@ class DialogPush(private val context: Context, val progressBar: ProgressBar) {
                         VolleySingleton.getInstance(context).addToRequestQueue(request)
                     })
             })
-            .setNegativeButton("no", DialogInterface.OnClickListener { dialog, _ ->
+            .setNegativeButton("no \uD83D\uDE45\u200D♂️", DialogInterface.OnClickListener { dialog, _ ->
                 //TODO: FUCK
 
                 val url = "${ServerAddress().IP}:8080/player/push"

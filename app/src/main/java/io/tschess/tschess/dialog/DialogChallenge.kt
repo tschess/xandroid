@@ -50,10 +50,10 @@ class DialogChallenge(
         textConfig.text = "config:"
 
         val listOption: MutableList<String> = mutableListOf("config. 0", "config. 1", "config. 2", "   traditional (chess)   ", "random")
-        //if (action == "ACCEPT") {
+        if (action == "ACCEPT") {
             //listOption.add("mirror opponent")
-            //textSend.text = "let's play! \uD83C\uDF89"
-        //}
+            textSend.text = "let's play! \uD83C\uDF89"
+        }
         val picker: NumberPicker = findViewById<View>(R.id.number_picker) as NumberPicker
         picker.minValue = 0
         picker.maxValue = listOption.size - 1
@@ -100,17 +100,23 @@ class DialogChallenge(
         val url: String = "${ServerAddress().IP}:8080/game/ack"
 
         val params: MutableMap<String, String> = mutableMapOf()
+        params["id_self"] = playerSelf.id
         params["id_game"] = game_id
         params["config"] = config.toString()
 
         val listenerResponse: Response.Listener<JSONObject>? = Response.Listener { response ->
             this.progressBar.visibility = View.INVISIBLE
+
             val game: EntityGame = parseGame.execute(response)
+
             val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
             extras.putExtra("game", game)
+            extras.putExtra("player_self", playerSelf)
+
             val intent = Intent(context, ActivityTschess::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
+
             dismiss()
         }
         execute(url, listenerResponse, this.getError("please try again later."), params)
