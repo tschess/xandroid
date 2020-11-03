@@ -23,7 +23,7 @@ class Explode(val activityTschess: ActivityTschess) {
         if(elementAttacked == null){
             return false
         }
-        if(!(elementAttacked!!.name.contains("Poison") && elementAttacked!!.target)){
+        if(!(elementAttacked.name.contains("Poison") && elementAttacked!!.target)){
             return false
         }
         //they are attacking a poison pawn...
@@ -40,7 +40,7 @@ class Explode(val activityTschess: ActivityTschess) {
             params["state"] = state
             val jsonObject = JSONObject(params as Map<*,*>)
             this.activityTschess.deliver(jsonObject, "mine")
-            this.activityTschess.showSpecialAlert("poison pawn!")
+            this.activityTschess.showSpecialAlert("\uD83D\uDCA3 poison pawn!")
             return true
         }
         stateX[proposed[0]][proposed[1]] = null
@@ -58,7 +58,7 @@ class Explode(val activityTschess: ActivityTschess) {
         params["condition"] = "LANDMINE"
         val jsonObject = JSONObject(params as Map<*,*>)
         this.activityTschess.deliver(jsonObject)
-        this.activityTschess.showSpecialAlert("poison pawn!")
+        this.activityTschess.showSpecialAlert("\uD83D\uDCA3 poison pawn!")
         return true
     }
 }
