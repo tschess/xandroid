@@ -55,10 +55,11 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     private val parseGame: ParseGame
     private var highlight: List<Array<Int>>
 
-    private var castle: Castle
+    private val czecher: Czecher
+    private val castle: Castle
     private val passant: Passant
-    private var explode: Explode
-    private var promoLogic: PromoLogic
+    private val explode: Explode
+    private val promoLogic: PromoLogic
 
     private val brooklyn: ZoneId
     private val formatter: DateTimeFormatter
@@ -69,6 +70,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.highlight = listOf(arrayOf(9, 9), arrayOf(9, 9))
         this.white = true
 
+        this.czecher = Czecher()
         this.castle = Castle(activityTschess = this@ActivityTschess)
         this.passant = Passant(activityTschess = this@ActivityTschess)
         this.explode = Explode(activityTschess = this@ActivityTschess)
@@ -212,7 +214,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
             val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
             dialogBuilder.setTitle("tschess")
             dialogBuilder.setMessage("$username has proposed a draw")
-            dialogBuilder.setPositiveButton("accept", DialogInterface.OnClickListener { dialog, _ ->
+            dialogBuilder.setPositiveButton("accept") { dialog, _ ->
                 val url = "${ServerAddress().IP}:8080/game/eval"
                 val params = HashMap<String, Any>()
                 params["id_game"] = this.game.id
@@ -230,7 +232,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                     )
                 VolleySingleton.getInstance(applicationContext).addToRequestQueue(request)
                 dialog.cancel()
-            })
+            }
             dialogBuilder.setNegativeButton("reject") { dialog, _ ->
                 val url = "${ServerAddress().IP}:8080/game/eval"
                 val params = HashMap<String, Any>()
@@ -366,7 +368,6 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
     fun showDialogPromo(coord: Array<Int>) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        //val dialogPromo = PromoDialog(coord, this, this) //this@ActivityTschess
         val dialogPromo =
             DialogPromo(
                 coord,
@@ -421,7 +422,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         val alert: AlertDialog = dialogBuilder.create()
         alert.show()
         alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.WHITE)
-        if (this.game.getTurn(this.playerSelf.username!!)) {
+        if (this.game.getTurn(this.playerSelf.username)) {
             alert.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.WHITE)
         }
     }
@@ -478,13 +479,11 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 params["condition"] = "TBD"
                 val jsonObject = JSONObject(params as Map<*, *>)
                 this.deliver(jsonObject)
-
                 /* * */
                 if(this.playerSelf.promptPopup()){
                     DialogPush(applicationContext, progressBar).notifications(playerSelf)
                 }
                 /* * */
-
                 return
             }
             val matrix00: Array<Array<Piece?>> = this.validator.deselect(this.matrix)
@@ -513,16 +512,16 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 this.setHighlightCoords()
 
                 this.matrix = this.game.getMatrix(this.playerSelf.username)
-                this.setCheckMate()
-
                 this.boardView.populateBoard(this.matrix, this.highlight, game.turn) //old turn??
+
+                this.setCheckMate()
                 this.setEndgame()
                 this.setTurn()
                 this.setCountdown(game.updated)
                 this.setLabelNotification()
                 this.setCheckLabel()
 
-            }, Response.ErrorListener {
+            }, {
                 Log.e("error in volley request", "${it.message}")
             })
         VolleySingleton.getInstance(this).addToRequestQueue(request)
@@ -538,9 +537,9 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     }
 
     private fun setCheckMate() {
-        val czecher: Czecher = Czecher()
         val affiliation: String = this.game.getAffiliationOther(this.playerSelf.username)
         val king: Array<Int> = czecher.kingCoordinate(affiliation, this.matrix)
+
         val mate: Boolean = czecher.mate(king, this.matrix)
         if (mate) {
             val url = "${ServerAddress().IP}:8080/game/mate/${this.game.id}"
