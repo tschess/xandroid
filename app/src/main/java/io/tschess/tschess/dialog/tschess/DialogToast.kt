@@ -19,7 +19,7 @@ class DialogToast {
     }
 
     private fun showSpecialAlert(text: String, context: Context, inflater: LayoutInflater) {
-        val toastView: View = inflater.inflate(R.layout.toast, null)
+        val toastView: View = inflater.inflate(R.layout.dialog_toast, null)
         val message: TextView = toastView.findViewById(R.id.message)
         message.text = text
         val toast = Toast(context)

@@ -203,7 +203,7 @@ class ActivityProfile : AppCompatActivity() {
                     .addOnCompleteListener(OnCompleteListener { task ->
                         // Get new Instance ID token
                         val token: String? = task.result?.token
-                        // Log and toast
+                        // Log and dialog_toast
                         //val msg = getString(R.string.msg_token_fmt, token)
                         var note_key: String = "NULL"
                         if (!token.isNullOrBlank()) {

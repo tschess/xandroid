@@ -325,24 +325,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
     lateinit var alertDialog: AlertDialog
 
-    fun showDialogPromo(coord: Array<Int>) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        val dialogPromo =
-            DialogPromo(
-                coord,
-                this@ActivityTschess,
-                this
-            )
-        dialogPromo.coord = coord
-        builder.setView(dialogPromo)
-        builder.setCancelable(false)
-        this.alertDialog = builder.create()
-        this.alertDialog.show()
-    }
 
-    fun killDialogPromo() {
-        this.alertDialog.dismiss()
-    }
 
     fun renderOptionMenu() {
         val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
@@ -415,7 +398,16 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 return
             }
             if (promoLogic.evaluate(coord01)) {
-                this.showDialogPromo(coord01)
+                //this.showDialogPromo(coord01)
+
+                    val dialogPromo =
+                        DialogPromo(
+                            coord01,
+                            this@ActivityTschess,
+                            this
+                        )
+                dialogPromo.show()
+
                 return
             }
             if (passant.evaluate(coord00, coord01, this.matrix)) {
