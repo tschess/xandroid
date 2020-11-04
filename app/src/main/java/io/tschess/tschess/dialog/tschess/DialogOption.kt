@@ -1,9 +1,11 @@
 package io.tschess.tschess.dialog.tschess
 
 import android.content.Context
-import android.content.DialogInterface
-import android.graphics.Color
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.view.View
+import android.view.WindowManager
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import com.android.volley.Request
@@ -14,7 +16,7 @@ import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
 import org.json.JSONObject
-import java.util.HashMap
+import java.util.*
 
 class DialogOption( //TODO: same signature as _DialogDraw_ (consolidate) ...
     val context: Context,
@@ -57,11 +59,15 @@ class DialogOption( //TODO: same signature as _DialogDraw_ (consolidate) ...
                 dialog.cancel()
             }
         }
-        val alert: AlertDialog = dialogBuilder.create()
-        alert.show()
-        alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.WHITE)
-        if (this.game.getTurn(this.playerSelf.username)) {
-            alert.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.WHITE)
+        Handler(Looper.getMainLooper()).post {
+            val alert: AlertDialog = dialogBuilder.create()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
+            }
+            alert.show()
         }
+
     }
 }

@@ -98,7 +98,6 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
         params["condition"] = "TBD"
         val jsonObject = JSONObject(params as Map<*,*>)
         this.activityTschess.deliver(jsonObject)
-        //this.activityTschess.killDialogPromo()
         this.dismiss()
     }
 
