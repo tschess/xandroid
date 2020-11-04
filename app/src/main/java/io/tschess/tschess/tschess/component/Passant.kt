@@ -1,13 +1,11 @@
 package io.tschess.tschess.tschess.component
 
-import android.content.Context
-import android.view.LayoutInflater
 import io.tschess.tschess.dialog.tschess.DialogToast
 import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.piece.chess.pawn.Pawn
 import io.tschess.tschess.tschess.ActivityTschess
 import org.json.JSONObject
-import java.util.HashMap
+import java.util.*
 
 class Passant(
     val activityTschess: ActivityTschess
@@ -30,7 +28,8 @@ class Passant(
         if (pawn0) {
 
             if (!Pawn()
-                    .advanceTwo(present = coordinate, propose = proposed, matrix = state1)) {
+                    .advanceTwo(present = coordinate, propose = proposed, matrix = state1)
+            ) {
                 return false
             }
             if (coordinate!![1] - 1 >= 0) {
@@ -47,7 +46,10 @@ class Passant(
                             state1[coordinate!![0]][coordinate!![1]] = null
 
                             val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(state1)
-                            val state: List<List<String>> = this.activityTschess.validator.render(matrix = matrix00, white = this.activityTschess.white)
+                            val state: List<List<String>> = this.activityTschess.validator.render(
+                                matrix = matrix00,
+                                white = this.activityTschess.white
+                            )
 
                             val highlight: String = if (this.activityTschess.white) {
                                 "${coordinate[0]}${coordinate[1]}${proposed[0]}${proposed[1]}"
@@ -59,7 +61,7 @@ class Passant(
                             params["state"] = state
                             params["highlight"] = highlight
                             params["condition"] = "TBD"
-                            val jsonObject = JSONObject(params as Map<*,*>)
+                            val jsonObject = JSONObject(params as Map<*, *>)
                             this.activityTschess.networker.deliver(jsonObject)
                             this.renderDialog()
                             return true
@@ -68,7 +70,7 @@ class Passant(
                 }
             }
             if (coordinate!![1] + 1 <= 7) {
-                val examinee = state1[4][coordinate!![1]+1]
+                val examinee = state1[4][coordinate!![1] + 1]
                 if (examinee != null) {
 
                     val pawn1: Boolean = examinee!!.name.contains("Pawn") ||
@@ -81,7 +83,10 @@ class Passant(
                             state1[coordinate!![0]][coordinate!![1]] = null
 
                             val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(state1)
-                            val state: List<List<String>> = this.activityTschess.validator.render(matrix = matrix00, white = this.activityTschess.white)
+                            val state: List<List<String>> = this.activityTschess.validator.render(
+                                matrix = matrix00,
+                                white = this.activityTschess.white
+                            )
 
                             val highlight: String = if (this.activityTschess.white) {
                                 "${coordinate[0]}${coordinate[1]}${proposed[0]}${proposed[1]}"
@@ -93,7 +98,7 @@ class Passant(
                             params["state"] = state
                             params["highlight"] = highlight
                             params["condition"] = "TBD"
-                            val jsonObject = JSONObject(params as Map<*,*>)
+                            val jsonObject = JSONObject(params as Map<*, *>)
                             this.activityTschess.networker.deliver(jsonObject)
                             this.renderDialog()
                             return true
