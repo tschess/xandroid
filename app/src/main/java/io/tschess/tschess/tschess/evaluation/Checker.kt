@@ -1,4 +1,4 @@
-package io.tschess.tschess.tschess
+package io.tschess.tschess.tschess.evaluation
 
 import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.piece.chess.pawn.Pawn
@@ -6,7 +6,7 @@ import io.tschess.tschess.piece.fairy.hunter.Hunter
 import io.tschess.tschess.piece.fairy.poison.Poison
 import java.util.*
 
-class Czecher {
+class Checker {
 
     private fun thwart(king: Array<Int>, state0: Array<Array<Piece?>>): Boolean {
         var state1: Array<Array<Piece?>> = state0

@@ -5,7 +5,7 @@ import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.piece.chess.king.logic.Attack
 import io.tschess.tschess.piece.chess.king.logic.MovementKing
 import io.tschess.tschess.piece.chess.king.logic.Threat
-import io.tschess.tschess.tschess.component.Castle
+import io.tschess.tschess.tschess.logic.Castle
 
 open class King(
     name: String = "King",

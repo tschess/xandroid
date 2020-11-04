@@ -1,4 +1,4 @@
-package io.tschess.tschess.tschess.component
+package io.tschess.tschess.tschess.logic
 
 import io.tschess.tschess.dialog.tschess.DialogToast
 import io.tschess.tschess.piece.Piece

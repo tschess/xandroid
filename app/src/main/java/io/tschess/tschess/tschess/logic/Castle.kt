@@ -1,4 +1,4 @@
-package io.tschess.tschess.tschess.component
+package io.tschess.tschess.tschess.logic
 
 import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.tschess.ActivityTschess

@@ -1,4 +1,4 @@
-package io.tschess.tschess.tschess
+package io.tschess.tschess.tschess.evaluation
 
 import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.piece.PieceAnte
@@ -11,7 +11,7 @@ class Validator(
 ) {
 
     private var coord: Array<Int>? = null
-    private val czecher: Czecher = Czecher()
+    private val checker: Checker = Checker()
 
     fun getCoord(): Array<Int>? {
         return coord
@@ -148,14 +148,14 @@ class Validator(
                 val piece: Piece = matrix[this.coord!![0]][this.coord!![1]]!!
                 if (piece.validate(present = coord, propose = arrayOf(i, j), matrix = matrix)) {
                     /* * */
-                    val king: Array<Int> = czecher.kingCoordinate(piece.affiliation, matrix)
+                    val king: Array<Int> = checker.kingCoordinate(piece.affiliation, matrix)
                     val hold: Piece? = matrix[i][j]
                     matrix[i][j] = piece
                     matrix[this.coord!![0]][this.coord!![1]] = null
                     val czech: Boolean = if (piece.name.contains("King")) {
-                        czecher.self(arrayOf(i, j), matrix)
+                        checker.self(arrayOf(i, j), matrix)
                     } else {
-                        czecher.self(king, matrix)
+                        checker.self(king, matrix)
                     }
                     matrix[i][j] = hold
                     matrix[this.coord!![0]][this.coord!![1]] = piece

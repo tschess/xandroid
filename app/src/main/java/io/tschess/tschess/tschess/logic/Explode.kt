@@ -1,9 +1,5 @@
-package io.tschess.tschess.tschess.component
+package io.tschess.tschess.tschess.logic
 
-import android.content.Context
-import android.os.Build
-import android.view.LayoutInflater
-import androidx.annotation.RequiresApi
 import io.tschess.tschess.dialog.tschess.DialogToast
 import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.piece.fairy.poison.RevealBlack
