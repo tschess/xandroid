@@ -60,7 +60,7 @@ class Passant(
                             params["highlight"] = highlight
                             params["condition"] = "TBD"
                             val jsonObject = JSONObject(params as Map<*,*>)
-                            this.activityTschess.deliver(jsonObject)
+                            this.activityTschess.networker.deliver(jsonObject)
                             this.renderDialog()
                             return true
                         }
@@ -94,7 +94,7 @@ class Passant(
                             params["highlight"] = highlight
                             params["condition"] = "TBD"
                             val jsonObject = JSONObject(params as Map<*,*>)
-                            this.activityTschess.deliver(jsonObject)
+                            this.activityTschess.networker.deliver(jsonObject)
                             this.renderDialog()
                             return true
                         }

@@ -83,6 +83,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
     }
 
+    lateinit var networker: Networker
     lateinit var dialogDraw: DialogDraw
     lateinit var progressBar: ProgressBar
     lateinit var notificationManager:  NotificationManager
@@ -91,13 +92,8 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         super.onResume()
         this.notificationManager.cancelAll()
 
-        Log.e("condition -->","setLabelNotification - C")
-
         this.polling.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-
-                Log.e("condition -->","setLabelNotification - B")
-
                 getUpdate()
             }
         }, 2000, TimeUnit.SECONDS.toMillis(1))
@@ -169,6 +165,8 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.setTurn()
         this.setCheckLabel()
 
+        this.networker = Networker(this.progressBar,  this.validator, applicationContext)
+
         this.dialogDraw = DialogDraw(this, this.playerSelf, this.game, this.progressBar)
         this.setLabelNotification()
     }
@@ -181,10 +179,6 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     }
 
     private fun setLabelNotification() {
-
-        Log.e("condition -->","setLabelNotification")
-        Log.e("condition -->","${this.game.condition}")
-
         if (this.game.status == "RESOLVED") {
             return
         }
@@ -203,18 +197,16 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
             return
         }
         this.textViewNotification.visibility = View.VISIBLE
-        runOnUiThread {
-            this.textViewNotification.text = "proposal pending"
-        }
         val username: String = this.game.getTurnUsername()
         runOnUiThread {
-            this.textViewTurnary.text = "${username} to respond"
+            this.textViewNotification.text = "proposal pending"
+            this.textViewTurnary.text = "$username to respond"
         }
-
         val turn: Boolean = this.game.getTurn(this.playerSelf.username)
-        if (turn) {
-            this.dialogDraw.render()
+        if (!turn) {
+            return
         }
+        this.dialogDraw.render()
     }
 
     private fun setCountdown(updated: String) {
@@ -233,14 +225,8 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
             val remainder: Long = it.base - SystemClock.elapsedRealtime()
             if (remainder <= 0) {
                 val playerTurn: EntityPlayer = this.game.getTurnPlayer()
-                val username: String = playerTurn.username!!
-                val params = HashMap<String, Any>()
-                params["id_game"] = this.game.id
-                params["id_self"] = playerTurn.id!!
-                params["id_oppo"] = this.game.getPlayerOther(username).id!!
-                params["white"] = this.game.getWhite(username)
-                val jsonObject = JSONObject(params as Map<*, *>)
-                this.deliver(jsonObject, "resign")
+                val username: String = playerTurn.username
+                this.networker.timeout(this.game.id, playerTurn.id, this.game.getPlayerOther(username).id, this.game.getWhite(username))
             }
         }
     }
@@ -308,23 +294,6 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         }
     }
 
-    fun deliver(jsonObject: JSONObject, route: String = "update") {
-        this.progressBar.visibility = View.VISIBLE
-        val url = "${ServerAddress().IP}:8080/game/${route}"
-        val request = JsonObjectRequest(
-            Request.Method.POST, url, jsonObject,
-            { response ->
-                Log.e("RESPONSE", "${response}")
-                this.validator.clear()
-            },
-            { Log.e("error in volley request", "${it.message}") })
-        request.retryPolicy = DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 2, 1f)
-        VolleySingleton.getInstance(this).addToRequestQueue(request)
-    }
-
-    lateinit var alertDialog: AlertDialog
-
-
     private fun updateable(updated: String): Boolean {
         val updated01: ZonedDateTime = LocalDateTime.parse(updated, this.formatter).atZone(this.brooklyn)
         val updatedXX: String = this.game.updated
@@ -371,13 +340,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 } else {
                     "${7 - coord00[0]}${7 - coord00[1]}${7 - coord01[0]}${7 - coord01[1]}"
                 }
-                val params = HashMap<String, Any>()
-                params["id_game"] = this.game.id
-                params["state"] = state
-                params["highlight"] = highlight
-                params["condition"] = "TBD"
-                val jsonObject = JSONObject(params as Map<*, *>)
-                this.deliver(jsonObject)
+                this.networker.update(this.game.id, state, highlight)
                 /* * */
                 if(this.playerSelf.promptPopup()){
                     DialogPush(applicationContext, progressBar).notifications(playerSelf)
@@ -417,8 +380,6 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 this.setEndgame()
                 this.setTurn()
                 this.setCountdown(game.updated)
-
-                Log.e("condition -->","setLabelNotification - A")
 
                 this.setLabelNotification()
                 this.setCheckLabel()
@@ -472,6 +433,3 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
 
 }
-
-
-

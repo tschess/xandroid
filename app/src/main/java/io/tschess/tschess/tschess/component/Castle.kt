@@ -67,7 +67,7 @@ class Castle(var activityTschess: ActivityTschess? = null) {
                 params["highlight"] = highlight
                 params["condition"] = "TBD"
                 val jsonObject = JSONObject(params as Map<*, *>)
-                this.activityTschess!!.deliver(jsonObject)
+                this.activityTschess!!.networker.deliver(jsonObject)
                 return true
             }
             if (proposed.contentEquals(arrayOf(7, 2))) {
@@ -101,7 +101,7 @@ class Castle(var activityTschess: ActivityTschess? = null) {
                 params["highlight"] = highlight
                 params["condition"] = "TBD"
                 val jsonObject = JSONObject(params as Map<*, *>)
-                this.activityTschess!!.deliver(jsonObject)
+                this.activityTschess!!.networker.deliver(jsonObject)
                 return true
             }
         }
@@ -137,7 +137,7 @@ class Castle(var activityTschess: ActivityTschess? = null) {
                 params["highlight"] = highlight
                 params["condition"] = "TBD"
                 val jsonObject = JSONObject(params as Map<*, *>)
-                this.activityTschess!!.deliver(jsonObject)
+                this.activityTschess!!.networker.deliver(jsonObject)
                 return true
             }
             if (proposed.contentEquals(arrayOf(7, 5))) {
@@ -171,7 +171,7 @@ class Castle(var activityTschess: ActivityTschess? = null) {
                 params["highlight"] = highlight
                 params["condition"] = "TBD"
                 val jsonObject = JSONObject(params as Map<*, *>)
-                this.activityTschess!!.deliver(jsonObject)
+                this.activityTschess!!.networker.deliver(jsonObject)
                 return true
             }
         }

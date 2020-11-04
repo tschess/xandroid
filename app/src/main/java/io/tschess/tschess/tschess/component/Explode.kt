@@ -42,7 +42,7 @@ class Explode(val activityTschess: ActivityTschess) {
             params["id_game"] = this.activityTschess.game.id
             params["state"] = state
             val jsonObject = JSONObject(params as Map<*,*>)
-            this.activityTschess.deliver(jsonObject, "mine")
+            this.activityTschess.networker.deliver(jsonObject, "mine")
             this.renderDialog()
             return true
         }
@@ -60,7 +60,7 @@ class Explode(val activityTschess: ActivityTschess) {
         params["highlight"] = highlight
         params["condition"] = "LANDMINE"
         val jsonObject = JSONObject(params as Map<*,*>)
-        this.activityTschess.deliver(jsonObject)
+        this.activityTschess.networker.deliver(jsonObject)
         this.renderDialog()
         return true
     }
