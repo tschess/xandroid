@@ -82,12 +82,15 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
     }
 
+    lateinit var dialogDraw: DialogDraw
     lateinit var progressBar: ProgressBar
     lateinit var notificationManager:  NotificationManager
 
     override fun onResume() {
         super.onResume()
         this.notificationManager.cancelAll()
+
+        this.dialogDraw = DialogDraw(this, this.playerSelf, this.game, this.progressBar)
 
         Log.e("condition -->","setLabelNotification - C")
 
@@ -170,21 +173,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
     }
 
-    fun showSpecialAlert(text: String) {
-        val context: Context = applicationContext
-        val inflater: LayoutInflater = layoutInflater
-        val toastView: View = inflater.inflate(R.layout.toast, null)
-        val message: TextView = toastView.findViewById(R.id.message)
-        message.text = text
-        val toast = Toast(context)
-        toast.view = toastView
-        toast.setGravity(
-            Gravity.CENTER_HORIZONTAL or Gravity.CENTER_VERTICAL,
-            0, 0
-        )
-        toast.duration = Toast.LENGTH_LONG
-        toast.show()
-    }
+
 
     override fun onBackPressed() {
         this.polling.cancel()
@@ -226,10 +215,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
         val turn: Boolean = this.game.getTurn(this.playerSelf.username)
         if (turn) {
-           //!! TODO: CAN MOVE>...
-            val dialogDraw: DialogDraw = DialogDraw(this, this.playerSelf, this.game, this.progressBar)
-            dialogDraw.render()
-
+            this.dialogDraw.render()
         }
     }
 

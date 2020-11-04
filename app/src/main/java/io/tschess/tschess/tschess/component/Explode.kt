@@ -1,7 +1,10 @@
 package io.tschess.tschess.tschess.component
 
+import android.content.Context
 import android.os.Build
+import android.view.LayoutInflater
 import androidx.annotation.RequiresApi
+import io.tschess.tschess.dialog.tschess.DialogToast
 import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.piece.fairy.poison.RevealBlack
 import io.tschess.tschess.piece.fairy.poison.RevealWhite
@@ -28,7 +31,7 @@ class Explode(val activityTschess: ActivityTschess) {
         }
         //they are attacking a poison pawn...
         val stateX: Array<Array<Piece?>> = this.activityTschess.validator.deselect(state0)
-        if(elementAttacker!!.name.contains("King")){
+        if(elementAttacker.name.contains("King")){
             if(!this.activityTschess.white){
                 stateX[proposed[0]][proposed[1]] = RevealWhite()
             } else {
@@ -40,7 +43,13 @@ class Explode(val activityTschess: ActivityTschess) {
             params["state"] = state
             val jsonObject = JSONObject(params as Map<*,*>)
             this.activityTschess.deliver(jsonObject, "mine")
-            this.activityTschess.showSpecialAlert("\uD83D\uDCA3 poison pawn!")
+
+            //this.activityTschess.showSpecialAlert("\uD83D\uDCA3 poison pawn!")
+            //DialogToast().showSpecialAlert(
+            //"\uD83D\uDCA3 poison pawn!",
+            //this.activityTschess.applicationContext,
+            //this.activityTschess.layoutInflater)
+            this.renderDialog()
             return true
         }
         stateX[proposed[0]][proposed[1]] = null
@@ -58,7 +67,12 @@ class Explode(val activityTschess: ActivityTschess) {
         params["condition"] = "LANDMINE"
         val jsonObject = JSONObject(params as Map<*,*>)
         this.activityTschess.deliver(jsonObject)
-        this.activityTschess.showSpecialAlert("\uD83D\uDCA3 poison pawn!")
+        //this.activityTschess.showSpecialAlert("\uD83D\uDCA3 poison pawn!")
+        this.renderDialog()
         return true
+    }
+
+    private fun renderDialog() {
+        DialogToast().poison(this.activityTschess.applicationContext, this.activityTschess.layoutInflater)
     }
 }
