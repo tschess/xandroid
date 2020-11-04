@@ -33,7 +33,6 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
             super.onCreate(savedInstanceState)
             setContentView(R.layout.dialog_promo)
 
-
             val imageViewBiship: ImageView = findViewById(R.id.bishop)
             imageViewBiship.setOnClickListener(View.OnClickListener {
                 val coord: Array<Int> = this.activityTschess.validator.getCoord()!!
