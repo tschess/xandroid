@@ -398,16 +398,8 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 return
             }
             if (promoLogic.evaluate(coord01)) {
-                //this.showDialogPromo(coord01)
-
-                    val dialogPromo =
-                        DialogPromo(
-                            coord01,
-                            this@ActivityTschess,
-                            this
-                        )
+                val dialogPromo = DialogPromo(coord01,this@ActivityTschess,this)
                 dialogPromo.show()
-
                 return
             }
             if (passant.evaluate(coord00, coord01, this.matrix)) {
