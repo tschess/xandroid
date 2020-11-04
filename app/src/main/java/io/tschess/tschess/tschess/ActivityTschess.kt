@@ -23,7 +23,9 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
+import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.dialog.DialogPush
+import io.tschess.tschess.dialog.tschess.DialogDraw
 import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.ParseGame
@@ -32,7 +34,7 @@ import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.tschess.component.Castle
 import io.tschess.tschess.tschess.component.Explode
 import io.tschess.tschess.tschess.component.Passant
-import io.tschess.tschess.dialog.DialogPromo
+import io.tschess.tschess.dialog.tschess.DialogPromo
 import io.tschess.tschess.tschess.component.PromoLogic
 import io.tschess.tschess.model.ExtendedDataHolder
 import io.tschess.tschess.server.ServerAddress
@@ -87,8 +89,13 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         super.onResume()
         this.notificationManager.cancelAll()
 
+        Log.e("condition -->","setLabelNotification - C")
+
         this.polling.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
+
+                Log.e("condition -->","setLabelNotification - B")
+
                 getUpdate()
             }
         }, 2000, TimeUnit.SECONDS.toMillis(1))
@@ -97,7 +104,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     private lateinit var chronometer: Chronometer
     private lateinit var textViewTitle: TextView
     private lateinit var textViewTurnary: TextView
-    lateinit var textViewNotification: TextView
+    private lateinit var textViewNotification: TextView
 
     lateinit var validator: Validator
     lateinit var game: EntityGame
@@ -187,6 +194,10 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     }
 
     private fun setLabelNotification() {
+
+        Log.e("condition -->","setLabelNotification")
+        Log.e("condition -->","${this.game.condition}")
+
         if (this.game.status == "RESOLVED") {
             return
         }
@@ -205,57 +216,20 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
             return
         }
         this.textViewNotification.visibility = View.VISIBLE
-        this.textViewNotification.text = "proposal pending"
+        runOnUiThread {
+            this.textViewNotification.text = "proposal pending"
+        }
         val username: String = this.game.getTurnUsername()
-        this.textViewTurnary.text = "${username} to respond"
+        runOnUiThread {
+            this.textViewTurnary.text = "${username} to respond"
+        }
 
-        val turn: Boolean = this.game.getTurn(this.playerSelf.username!!)
+        val turn: Boolean = this.game.getTurn(this.playerSelf.username)
         if (turn) {
-            val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
-            dialogBuilder.setTitle("tschess")
-            dialogBuilder.setMessage("$username has proposed a draw")
-            dialogBuilder.setPositiveButton("accept") { dialog, _ ->
-                val url = "${ServerAddress().IP}:8080/game/eval"
-                val params = HashMap<String, Any>()
-                params["id_game"] = this.game.id
-                params["id_self"] = this.playerSelf.id
-                params["id_other"] = this.game.getPlayerOther(this.playerSelf.username).id
-                params["accept"] = true
-                val jsonObject = JSONObject(params as Map<*, *>)
-                val request =
-                    JsonObjectRequest(
-                        Request.Method.POST, url, jsonObject,
-                        {
-                            this.progressBar.visibility = View.VISIBLE
-                        },
-                        { }
-                    )
-                VolleySingleton.getInstance(applicationContext).addToRequestQueue(request)
-                dialog.cancel()
-            }
-            dialogBuilder.setNegativeButton("reject") { dialog, _ ->
-                val url = "${ServerAddress().IP}:8080/game/eval"
-                val params = HashMap<String, Any>()
-                params["id_game"] = this.game.id
-                params["id_self"] = this.playerSelf.id
-                params["id_other"] = this.game.getPlayerOther(this.playerSelf.username).id
-                params["accept"] = false
-                val jsonObject = JSONObject(params as Map<*, *>)
-                val request =
-                    JsonObjectRequest(
-                        Request.Method.POST, url, jsonObject,
-                        {
-                            this.progressBar.visibility = View.VISIBLE
-                        },
-                        { }
-                    )
-                VolleySingleton.getInstance(applicationContext).addToRequestQueue(request)
-                dialog.cancel()
-            }
-            val alert: AlertDialog = dialogBuilder.create()
-            alert.show()
-            alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.WHITE)
-            alert.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.WHITE)
+           //!! TODO: CAN MOVE>...
+            val dialogDraw: DialogDraw = DialogDraw(this, this.playerSelf, this.game, this.progressBar)
+            dialogDraw.render()
+
         }
     }
 
@@ -498,6 +472,13 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     }
 
     private fun getUpdate() {
+
+        /* * */
+        //TODO: try it here...
+        this.setLabelNotification()
+        //TODO: ^^^
+        /* * */
+
         val url = "${ServerAddress().IP}:8080/game/request/${game.id}"
         val request = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -518,6 +499,9 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 this.setEndgame()
                 this.setTurn()
                 this.setCountdown(game.updated)
+
+                Log.e("condition -->","setLabelNotification - A")
+
                 this.setLabelNotification()
                 this.setCheckLabel()
 

@@ -1,4 +1,4 @@
-package io.tschess.tschess.dialog
+package io.tschess.tschess.dialog.tschess
 
 import android.content.Context
 import android.util.AttributeSet
