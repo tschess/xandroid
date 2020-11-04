@@ -43,12 +43,6 @@ class Explode(val activityTschess: ActivityTschess) {
             params["state"] = state
             val jsonObject = JSONObject(params as Map<*,*>)
             this.activityTschess.deliver(jsonObject, "mine")
-
-            //this.activityTschess.showSpecialAlert("\uD83D\uDCA3 poison pawn!")
-            //DialogToast().showSpecialAlert(
-            //"\uD83D\uDCA3 poison pawn!",
-            //this.activityTschess.applicationContext,
-            //this.activityTschess.layoutInflater)
             this.renderDialog()
             return true
         }
@@ -67,7 +61,6 @@ class Explode(val activityTschess: ActivityTschess) {
         params["condition"] = "LANDMINE"
         val jsonObject = JSONObject(params as Map<*,*>)
         this.activityTschess.deliver(jsonObject)
-        //this.activityTschess.showSpecialAlert("\uD83D\uDCA3 poison pawn!")
         this.renderDialog()
         return true
     }

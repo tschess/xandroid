@@ -61,11 +61,7 @@ class Passant(
                             params["condition"] = "TBD"
                             val jsonObject = JSONObject(params as Map<*,*>)
                             this.activityTschess.deliver(jsonObject)
-
-                            //this.activityTschess.showSpecialAlert("♟ ️en passant! \uD83D\uDC80")
-                            //DialogToast().passant(this.activityTschess.applicationContext, this.activityTschess.layoutInflater)
                             this.renderDialog()
-
                             return true
                         }
                     }
@@ -99,8 +95,6 @@ class Passant(
                             params["condition"] = "TBD"
                             val jsonObject = JSONObject(params as Map<*,*>)
                             this.activityTschess.deliver(jsonObject)
-
-                            //this.activityTschess.showSpecialAlert("en passant!")
                             this.renderDialog()
                             return true
                         }

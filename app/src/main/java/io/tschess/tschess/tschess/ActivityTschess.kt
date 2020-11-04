@@ -90,8 +90,6 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         super.onResume()
         this.notificationManager.cancelAll()
 
-        this.dialogDraw = DialogDraw(this, this.playerSelf, this.game, this.progressBar)
-
         Log.e("condition -->","setLabelNotification - C")
 
         this.polling.scheduleAtFixedRate(object : TimerTask() {
@@ -150,8 +148,8 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.chronometer = findViewById(R.id.chronometer)
         this.setCountdown(game.updated)
 
-        this.matrix = game.getMatrix(playerSelf.username!!)
-        this.white = game.getWhite(playerSelf.username!!)
+        this.matrix = game.getMatrix(playerSelf.username)
+        this.white = game.getWhite(playerSelf.username)
 
         val headerOther: HeaderSelf = findViewById(R.id.header)
         headerOther.initialize(playerOther)
@@ -170,10 +168,11 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.setTurn()
         this.setCheckLabel()
 
+        this.dialogDraw = DialogDraw(this, this.playerSelf, this.game, this.progressBar)
+
+        this.setLabelNotification()
 
     }
-
-
 
     override fun onBackPressed() {
         this.polling.cancel()
@@ -458,13 +457,6 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     }
 
     private fun getUpdate() {
-
-        /* * */
-        //TODO: try it here...
-        this.setLabelNotification()
-        //TODO: ^^^
-        /* * */
-
         val url = "${ServerAddress().IP}:8080/game/request/${game.id}"
         val request = JsonObjectRequest(
             Request.Method.GET, url, null,
