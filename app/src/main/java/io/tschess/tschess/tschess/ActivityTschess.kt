@@ -43,7 +43,6 @@ import kotlin.concurrent.schedule
 class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
     var white: Boolean
-
     private val checker: Checker
 
     private val polling: Timer
@@ -90,14 +89,11 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 getUpdate()
             }
         }, 2000, TimeUnit.SECONDS.toMillis(1))
-
-
     }
 
     lateinit var transitioner: Transitioner
     lateinit var game: EntityGame
     lateinit var matrix: Array<Array<Piece?>>
-
     private lateinit var boardView: BoardView
     private lateinit var playerSelf: EntityPlayer
 
@@ -132,7 +128,6 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 DialogOption(applicationContext, playerSelf, game, progressBar).renderOptionMenu()
             }
         })
-
         this.matrix = game.getMatrix(playerSelf.username)
         this.white = game.getWhite(playerSelf.username)
 
@@ -140,16 +135,11 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         headerOther.initialize(playerOther)
 
         this.dialogDraw = DialogDraw(this, this.playerSelf, this.game, this.progressBar)
-
         this.boardView = findViewById(R.id.board_view)
-
-
 
         this.transitioner = Transitioner(white, this)
 
-
         this.boardView.setListener(this)
-
         this.setHighlightCoords() //???
         this.boardView.populateBoard(this.matrix, this.highlight, game.turn)
 
@@ -293,19 +283,14 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     private fun setCheckMate() {
         val affiliation: String = this.game.getAffiliationOther(this.playerSelf.username)
         val king: Array<Int> = checker.coordinateKing(affiliation, this.game.getMatrix(this.playerSelf.username))
-        Log.e("king", "$king")
-        Log.e("affiliation", "$affiliation")
-
+        //Log.e("king", "$king")
+        //Log.e("affiliation", "$affiliation")
         val mate: Boolean = checker.mate(king, this.game.getMatrix(this.playerSelf.username))
-        Log.e("MATE", "$mate")
-
+        //Log.e("MATE", "$mate")
         val other: Boolean = checker.other(king, this.game.getMatrix(this.playerSelf.username))
-        Log.e("OTHER", "$other")
-
+        //Log.e("OTHER", "$other")
         val self: Boolean = checker.self(king, this.game.getMatrix(this.playerSelf.username))
-        Log.e("SELF", "$self")
-
-
+        //Log.e("SELF", "$self")
         if (mate) {
             this.networker.mate(this.game.id)
             return

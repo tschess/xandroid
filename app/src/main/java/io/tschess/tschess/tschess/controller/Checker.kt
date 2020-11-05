@@ -12,8 +12,7 @@ class Checker {
     fun other(coordinate: Array<Int>, state: Array<Array<Piece?>>): Boolean {
         val king: Piece = state[coordinate[0]][coordinate[1]]!!
         val affiliationKing: String = king.affiliation.toLowerCase(Locale.ENGLISH)
-        Log.e(">>>>>>> affiliationKing", "${affiliationKing}")
-
+        //Log.e(">>>>>>> affiliationKing", "${affiliationKing}")
         for (row: Int in 0..7) {
             for (column: Int in 0..7) {
                 val candidate: Piece = state[row][column] ?: continue
@@ -25,10 +24,8 @@ class Checker {
                 if (friendly) {
                     continue
                 }
-
-                Log.e("----- candidate", "${candidate.name}")
-                Log.e("----- validate ", "${candidate.validate(arrayOf(row,column), coordinate, state)}")
-
+                //Log.e("----- candidate", "${candidate.name}")
+                //Log.e("----- validate ", "${candidate.validate(arrayOf(row,column), coordinate, state)}")
                 if (candidate.validate(arrayOf(row,column), coordinate, state)) {
                     return true
                 }
