@@ -1,121 +1,129 @@
 package io.tschess.tschess.tschess
 
+import android.content.Context
 import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import android.widget.Chronometer
 import android.widget.TextView
+import io.tschess.tschess.R
 import io.tschess.tschess.dialog.tschess.DialogDraw
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.EntityPlayer
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class Labeler(
-    var game: EntityGame,
     val playerSelf: EntityPlayer,
-    val labelNotification: TextView,
     val activityTschess: ActivityTschess,
+    val networker: Networker,
+    val brooklyn: ZoneId,
+    val formatter: DateTimeFormatter,
+    val polling: Timer,
     val dialogDraw: DialogDraw
 ) {
 
+    private var labelTitle: TextView
+    private var labelTurnary: TextView
+    private var labelNotification: TextView
+    private var labelChronometer: Chronometer
+
     init {
-        this.labelNotification.text = ""
+        this.labelChronometer = this.activityTschess.findViewById(R.id.chronometer)
+        this.labelTitle = this.activityTschess.findViewById(R.id.title)
+        this.labelTurnary = this.activityTschess.findViewById(R.id.turnary)
+        this.labelNotification = this.activityTschess.findViewById(R.id.notification)
     }
 
-    fun setLabelNotification() {
-        if (this.game.status == "RESOLVED") {
-            return
-        }
-        if (this.game.condition == "TBD") {
-            this.labelNotification.visibility = View.INVISIBLE
-            return
-        }
-        if (this.game.condition == "PENDING") {
-            this.setDrawProposal()
-        }
+    fun setLabel(game: EntityGame) {
+
+        Log.e("setLabel","    0    ")
+
+        this.setCountdown(game)
+        this.setNotification(game)
+        this.setTurn(game)
+        this.setCheck(game)
+        this.setEndgame(game)
     }
 
-    private fun setDrawProposal() {
-        if (this.game.status == "RESOLVED") {
-            this.labelNotification.visibility = View.INVISIBLE
+    private fun setCheck(game: EntityGame) {
+        val check: Boolean = game.on_check
+        if(!check){
             return
         }
+        val textTurn: String = this.labelTurnary.text.toString()
+        this.labelTurnary.text = "$textTurn (✔️)"
+    }
+
+    private fun setTurn(game: EntityGame) {
+        if (game.turn.toLowerCase() == "white") {
+            this.labelTurnary.text = "${game.white.username} to move"
+            return
+        }
+        this.labelTurnary.text = "${game.black.username} to move"
+    }
+
+    private fun setEndgame(game: EntityGame) {
+        if (game.status != "RESOLVED") {
+            return
+        }
+        this.polling.cancel()
+        this.labelTitle.text = "game over"
+        this.labelTurnary.visibility = View.INVISIBLE
+        this.labelChronometer.stop()
+        this.labelChronometer.visibility = View.INVISIBLE
         this.labelNotification.visibility = View.VISIBLE
-        val username: String = this.game.getTurnUsername()
-        activityTschess.runOnUiThread {
-            this.labelNotification.text = "proposal pending"
-            this.labelNotification.text = "$username to respond"
-        }
-        val turn: Boolean = this.game.getTurn(this.playerSelf.username)
-        if (!turn) {
+        if (game.condition == "DRAW") {
+            this.labelNotification.text = "draw"
             return
         }
-        this.dialogDraw.render()
+        val username: String = this.playerSelf.username
+        if (game.getWinnerUsername() == username) {
+            this.labelNotification.text = "winner"
+            return
+        }
+        this.labelNotification.text = "you lose"
     }
 
-    private fun setCountdown(updated: String) {
-        if (this.game.status == "RESOLVED") {
-            return
-        }
+    private fun setCountdown(game: EntityGame) {
         val u01: ZonedDateTime = LocalDateTime.now().atZone(this.brooklyn)
-        val u02: ZonedDateTime = LocalDateTime.parse(updated, this.formatter).atZone(this.brooklyn)
+        val u02: ZonedDateTime = LocalDateTime.parse(game.updated, this.formatter).atZone(this.brooklyn)
         val durationE1: Duration = Duration.between(u02, u01)
         val period24: Long = 60 * 60 * 24 * 1000.toLong()
         val periodXX: Long = period24 - durationE1.toMillis()
-        this.chronometer.base = SystemClock.elapsedRealtime() + periodXX
-        this.chronometer.isCountDown = true
-        this.chronometer.start()
-        this.chronometer.onChronometerTickListener = Chronometer.OnChronometerTickListener {
+        this.labelChronometer.base = SystemClock.elapsedRealtime() + periodXX
+        this.labelChronometer.isCountDown = true
+        this.labelChronometer.start()
+        this.labelChronometer.onChronometerTickListener = Chronometer.OnChronometerTickListener {
             val remainder: Long = it.base - SystemClock.elapsedRealtime()
             if (remainder <= 0) {
-                val playerTurn: EntityPlayer = this.game.getTurnPlayer()
+                val playerTurn: EntityPlayer = game.getTurnPlayer()
                 val username: String = playerTurn.username
-                this.networker.timeout(this.game.id, playerTurn.id, this.game.getPlayerOther(username).id, this.game.getWhite(username))
+                this.networker.timeout(game.id, playerTurn.id, game.getPlayerOther(username).id, game.getWhite(username))
             }
         }
     }
 
-    private fun setEndgame() {
-        if (this.game.status != "RESOLVED") {
+    private fun setNotification(game: EntityGame) {
+        if (game.condition == "PENDING") {
+            this.labelNotification.visibility = View.VISIBLE
+            val username: String = game.getTurnUsername()
+            activityTschess.runOnUiThread {
+                this.labelNotification.text = "proposal pending"
+                this.labelNotification.text = "$username to respond"
+            }
+            val turn: Boolean = game.getTurn(this.playerSelf.username)
+            if (!turn) {
+                return
+            }
+            this.dialogDraw.render()
             return
-        }
-        this.polling.cancel()
-        this.textViewTitle.text = "game over"
-        this.textViewTurnary.visibility = View.INVISIBLE
-        this.chronometer.stop()
-        this.chronometer.visibility = View.INVISIBLE
-        this.textViewNotification.visibility = View.VISIBLE
-        if (this.game.condition == "DRAW") {
-            this.textViewNotification.text = "draw"
-            return
-        }
-        val username: String = this.playerSelf.username
-        if (this.game.getWinnerUsername() == username) {
-            this.textViewNotification.text = "winner"
-            return
-        }
-        this.textViewNotification.text = "you lose"
-    }
-
-    private fun setTurn() {
-        if (this.game.status == "RESOLVED") {
-            return
-        }
-        if (this.game.turn.toLowerCase() == "white") {
-            this.textViewTurnary.text = "${this.game.white.username} to move"
-            return
-        }
-        this.textViewTurnary.text = "${this.game.black.username} to move"
-    }
-
-    private fun setCheckLabel() {
-        val czech: Boolean = this.game.on_check
-        if(!czech){
-            return
-        }
-        val textTurn: String = this.textViewTurnary.text.toString()
-        this.textViewTurnary.text = "$textTurn (✔️)"
+        }//(game.condition == "TBD")
+        this.labelNotification.visibility = View.INVISIBLE
     }
 
 }

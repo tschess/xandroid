@@ -95,11 +95,6 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         }, 2000, TimeUnit.SECONDS.toMillis(1))
     }
 
-    private lateinit var chronometer: Chronometer
-    private lateinit var textViewTitle: TextView
-    private lateinit var textViewTurnary: TextView
-    private lateinit var textViewNotification: TextView
-
     lateinit var validator: Validator
     lateinit var game: EntityGame
     lateinit var matrix: Array<Array<Piece?>>
@@ -138,8 +133,6 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 DialogOption(applicationContext, playerSelf, game, progressBar).renderOptionMenu()
             }
         })
-        this.chronometer = findViewById(R.id.chronometer)
-        this.setCountdown(game.updated)
 
         this.matrix = game.getMatrix(playerSelf.username)
         this.white = game.getWhite(playerSelf.username)
@@ -147,28 +140,27 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         val headerOther: HeaderSelf = findViewById(R.id.header)
         headerOther.initialize(playerOther)
 
-        this.textViewTitle = findViewById(R.id.title)
-        this.textViewTurnary = findViewById(R.id.turnary)
-        this.textViewNotification = findViewById(R.id.notification)
-
         this.dialogDraw = DialogDraw(this, this.playerSelf, this.game, this.progressBar)
-
-
-        this.labeler = Labeler(game, playerSelf, textViewNotification,this@ActivityTschess, dialogDraw)
-
 
         this.boardView = findViewById(R.id.board_view)
         this.validator = Validator(white, this)
         this.boardView.setListener(this)
 
-        this.setHighlightCoords()
+        this.setHighlightCoords() //???
         this.boardView.populateBoard(this.matrix, this.highlight, game.turn)
-        this.setTurn()
-        this.setCheckLabel()
 
         this.networker = Networker(this.progressBar,  this.validator, applicationContext)
 
-        this.labeler.setLabelNotification()
+        this.labeler = Labeler(
+            this.playerSelf,
+            this@ActivityTschess,
+            this.networker,
+            this.brooklyn,
+            this.formatter,
+            this.polling,
+            this.dialogDraw
+        )
+        this.labeler.setLabel(this.game)
     }
 
     override fun onBackPressed() {
@@ -187,7 +179,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.game.highlight.forEach { char ->
             highlight00.add(char.toString().toInt())
         }
-        if (this.game.getWhite(this.playerSelf.username!!)) {
+        if (this.game.getWhite(this.playerSelf.username)) {
             this.highlight =
                 listOf(arrayOf(highlight00[0], highlight00[1]), arrayOf(highlight00[2], highlight00[3]))
         } else {
@@ -266,11 +258,57 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.boardView.populateBoard(this.matrix, this.highlight, game.turn)
     }
 
+    private fun getUpdate() {
+        val url = "${ServerAddress().IP}:8080/game/request/${game.id}"
+        val request = JsonObjectRequest(
+            Request.Method.GET, url, null,
+            Response.Listener { response: JSONObject ->
+                val game: EntityGame = parseGame.execute(response)
+                val updatable: Boolean = this.updateable(game.updated)
+                if (!updatable) {
+                    return@Listener
+                }
+                this.progressBar.visibility = View.INVISIBLE
+                this.game = game
+
+                this.setHighlightCoords()
+
+                this.matrix = this.game.getMatrix(this.playerSelf.username)
+                this.boardView.populateBoard(this.matrix, this.highlight, game.turn) //old turn??
+
+                this.setCheckMate()
+                this.labeler.setLabel(this.game)
 
 
+            }, {
+                Log.e("error in volley request", "${it.message}")
+            })
+        VolleySingleton.getInstance(this).addToRequestQueue(request)
+    }
 
+    private fun setCheckMate() {
+        val affiliation: String = this.game.getAffiliationOther(this.playerSelf.username)
+        val king: Array<Int> = checker.kingCoordinate(affiliation, this.matrix)
 
+        val mate: Boolean = checker.mate(king, this.matrix)
+        if (mate) {
+            this.networker.mate(this.game.id)
+            return
+        }
+        val check: Boolean = checker.other(king, this.matrix)
+        if (!check) {
+            return
+        }
+        this.progressBar.visibility = View.VISIBLE
+        this.networker.check(this.game.id)
+    }
 
+    private fun updateable(updated: String): Boolean {
+        val updated01: ZonedDateTime = LocalDateTime.parse(updated, this.formatter).atZone(this.brooklyn)
+        val updatedXX: String = this.game.updated
+        val updatedXY: ZonedDateTime = LocalDateTime.parse(updatedXX, this.formatter).atZone(this.brooklyn)
+        return updated01.isAfter(updatedXY)
+    }
 
 
 
