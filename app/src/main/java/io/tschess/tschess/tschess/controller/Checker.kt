@@ -111,7 +111,8 @@ class Checker {
     }
 
     private fun thwart(king: Array<Int>, state0: Array<Array<Piece?>>): Boolean {
-        val state1: Array<Array<Piece?>> = state0
+        //  val state1: Array<Array<Piece?>> = state0
+        val state1: Array<Array<Piece?>> = state0.clone()
 
         val listAttacker: Array<Array<Int>> = this.listAttacker(king, state1)
         if (listAttacker.isEmpty()) {
