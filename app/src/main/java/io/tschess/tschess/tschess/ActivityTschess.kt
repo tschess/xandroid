@@ -3,13 +3,10 @@ package io.tschess.tschess.tschess
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
-import android.os.SystemClock
 import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.View
-import android.widget.Chronometer
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.Response
@@ -19,23 +16,22 @@ import io.tschess.tschess.R
 import io.tschess.tschess.dialog.DialogPush
 import io.tschess.tschess.dialog.tschess.DialogDraw
 import io.tschess.tschess.dialog.tschess.DialogOption
+import io.tschess.tschess.dialog.tschess.DialogPromo
 import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.model.EntityGame
-import io.tschess.tschess.model.ParseGame
 import io.tschess.tschess.model.EntityPlayer
+import io.tschess.tschess.model.ExtendedDataHolder
+import io.tschess.tschess.model.ParseGame
 import io.tschess.tschess.piece.Piece
+import io.tschess.tschess.server.ServerAddress
+import io.tschess.tschess.server.VolleySingleton
+import io.tschess.tschess.tschess.controller.Checker
+import io.tschess.tschess.tschess.controller.Transitioner
 import io.tschess.tschess.tschess.logic.Castle
 import io.tschess.tschess.tschess.logic.Explode
 import io.tschess.tschess.tschess.logic.Passant
-import io.tschess.tschess.dialog.tschess.DialogPromo
 import io.tschess.tschess.tschess.logic.PromoLogic
-import io.tschess.tschess.model.ExtendedDataHolder
-import io.tschess.tschess.server.ServerAddress
-import io.tschess.tschess.server.VolleySingleton
-import io.tschess.tschess.tschess.evaluation.Checker
-import io.tschess.tschess.tschess.evaluation.Validator
 import org.json.JSONObject
-import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -48,11 +44,11 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
     var white: Boolean
 
+    private val checker: Checker
+
     private val polling: Timer
     private val parseGame: ParseGame
     private var highlight: List<Array<Int>>
-
-    private val checker: Checker
 
     private val castle: Castle
     private val passant: Passant
@@ -63,12 +59,13 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     private val formatter: DateTimeFormatter
 
     init {
+        this.checker = Checker()
+
         this.polling = Timer()
         this.parseGame = ParseGame()
         this.highlight = listOf(arrayOf(9, 9), arrayOf(9, 9))
         this.white = true
 
-        this.checker = Checker()
         this.castle = Castle(activityTschess = this@ActivityTschess)
         this.passant = Passant(activityTschess = this@ActivityTschess)
         this.explode = Explode(activityTschess = this@ActivityTschess)
@@ -82,7 +79,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     lateinit var networker: Networker
     lateinit var dialogDraw: DialogDraw
     lateinit var progressBar: ProgressBar
-    lateinit var notificationManager:  NotificationManager
+    lateinit var notificationManager: NotificationManager
 
     override fun onResume() {
         super.onResume()
@@ -93,9 +90,11 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 getUpdate()
             }
         }, 2000, TimeUnit.SECONDS.toMillis(1))
+
+
     }
 
-    lateinit var validator: Validator
+    lateinit var transitioner: Transitioner
     lateinit var game: EntityGame
     lateinit var matrix: Array<Array<Piece?>>
 
@@ -143,13 +142,18 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.dialogDraw = DialogDraw(this, this.playerSelf, this.game, this.progressBar)
 
         this.boardView = findViewById(R.id.board_view)
-        this.validator = Validator(white, this)
+
+
+
+        this.transitioner = Transitioner(white, this)
+
+
         this.boardView.setListener(this)
 
         this.setHighlightCoords() //???
         this.boardView.populateBoard(this.matrix, this.highlight, game.turn)
 
-        this.networker = Networker(this.progressBar,  this.validator, applicationContext)
+        this.networker = Networker(this.progressBar, this.transitioner, applicationContext)
 
         this.labeler = Labeler(
             this.playerSelf,
@@ -213,7 +217,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         //Log.e("column", col.toString())
         //Log.d("---", "---")
         val coord01: Array<Int> = arrayOf(row, col)
-        val coord00: Array<Int>? = this.validator.getCoord()
+        val coord00: Array<Int>? = this.transitioner.getCoord()
         if (coord00 != null) {
             if (explode.evaluate(coord00, coord01, this.matrix)) {
                 return
@@ -222,18 +226,18 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 return
             }
             if (promoLogic.evaluate(coord01)) {
-                val dialogPromo = DialogPromo(coord01,this@ActivityTschess,this)
+                val dialogPromo = DialogPromo(coord01, this@ActivityTschess, this)
                 dialogPromo.show()
                 return
             }
             if (passant.evaluate(coord00, coord01, this.matrix)) {
                 return
             }
-            if (this.validator.valid(coord01, this.matrix)) {
-                val matrix00: Array<Array<Piece?>> = this.validator.deselect(this.matrix)
+            if (this.transitioner.valid(coord01, this.matrix)) {
+                val matrix00: Array<Array<Piece?>> = this.transitioner.deselect(this.matrix)
                 this.matrix = matrix00
-                val matrixXX: Array<Array<Piece?>> = this.validator.execute(propose = coord01, matrix = this.matrix)
-                val state: List<List<String>> = this.validator.render(matrix = matrixXX, white = this.white)
+                val matrixXX: Array<Array<Piece?>> = this.transitioner.execute(propose = coord01, matrix = this.matrix)
+                val state: List<List<String>> = this.transitioner.render(matrix = matrixXX, white = this.white)
                 val highlight: String = if (this.white) {
                     "${coord00[0]}${coord00[1]}${coord01[0]}${coord01[1]}"
                 } else {
@@ -241,19 +245,19 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                 }
                 this.networker.update(this.game.id, state, highlight)
                 /* * */
-                if(this.playerSelf.promptPopup()){
+                if (this.playerSelf.promptPopup()) {
                     DialogPush(applicationContext, progressBar).notifications(playerSelf)
                 }
                 /* * */
                 return
             }
-            val matrix00: Array<Array<Piece?>> = this.validator.deselect(this.matrix)
+            val matrix00: Array<Array<Piece?>> = this.transitioner.deselect(this.matrix)
             this.matrix = matrix00
             this.boardView.populateBoard(this.matrix, this.highlight, game.turn)
-            this.validator.clear()
+            this.transitioner.clear()
             return
         }
-        val matrix00: Array<Array<Piece?>> = this.validator.highlight(coord01, this.matrix)
+        val matrix00: Array<Array<Piece?>> = this.transitioner.highlight(coord01, this.matrix)
         this.matrix = matrix00
         this.boardView.populateBoard(this.matrix, this.highlight, game.turn)
     }
@@ -288,14 +292,13 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
     private fun setCheckMate() {
         val affiliation: String = this.game.getAffiliationOther(this.playerSelf.username)
-        val king: Array<Int> = checker.kingCoordinate(affiliation, this.matrix)
-
+        val king: Array<Int> = checker.coordinateKing(affiliation, this.matrix)
         val mate: Boolean = checker.mate(king, this.matrix)
+        val check: Boolean = checker.other(king, this.matrix)
         if (mate) {
             this.networker.mate(this.game.id)
             return
         }
-        val check: Boolean = checker.other(king, this.matrix)
         if (!check) {
             return
         }
@@ -309,8 +312,5 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         val updatedXY: ZonedDateTime = LocalDateTime.parse(updatedXX, this.formatter).atZone(this.brooklyn)
         return updated01.isAfter(updatedXY)
     }
-
-
-
 
 }

@@ -35,8 +35,8 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
 
             val imageViewBiship: ImageView = findViewById(R.id.bishop)
             imageViewBiship.setOnClickListener(View.OnClickListener {
-                val coord: Array<Int> = this.activityTschess.validator.getCoord()!!
-                val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(this.activityTschess.matrix)
+                val coord: Array<Int> = this.activityTschess.transitioner.getCoord()!!
+                val matrix00: Array<Array<Piece?>> = this.activityTschess.transitioner.deselect(this.activityTschess.matrix)
                 if (this.activityTschess.white) {
                     matrix00[coord[0]][coord[1]] = BishopWhite()
                 } else {
@@ -47,8 +47,8 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
             })
             val imageViewQueen: ImageView = findViewById(R.id.queen)
             imageViewQueen.setOnClickListener(View.OnClickListener {
-                val coord: Array<Int> = this.activityTschess.validator.getCoord()!!
-                val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(this.activityTschess.matrix)
+                val coord: Array<Int> = this.activityTschess.transitioner.getCoord()!!
+                val matrix00: Array<Array<Piece?>> = this.activityTschess.transitioner.deselect(this.activityTschess.matrix)
                 if (this.activityTschess.white) {
                     matrix00[coord[0]][coord[1]] = QueenWhite()
                 } else {
@@ -59,8 +59,8 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
             })
             val imageViewRook: ImageView = findViewById(R.id.rook)
             imageViewRook.setOnClickListener(View.OnClickListener {
-                val coord: Array<Int> = this.activityTschess.validator.getCoord()!!
-                val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(this.activityTschess.matrix)
+                val coord: Array<Int> = this.activityTschess.transitioner.getCoord()!!
+                val matrix00: Array<Array<Piece?>> = this.activityTschess.transitioner.deselect(this.activityTschess.matrix)
                 if (this.activityTschess.white) {
                     matrix00[coord[0]][coord[1]] = RookWhite()
                 } else {
@@ -71,8 +71,8 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
             })
             val imageViewKnight: ImageView = findViewById(R.id.knight)
             imageViewKnight.setOnClickListener(View.OnClickListener {
-                val coord: Array<Int> = this.activityTschess.validator.getCoord()!!
-                val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(this.activityTschess.matrix)
+                val coord: Array<Int> = this.activityTschess.transitioner.getCoord()!!
+                val matrix00: Array<Array<Piece?>> = this.activityTschess.transitioner.deselect(this.activityTschess.matrix)
                 if (this.activityTschess.white) {
                     matrix00[coord[0]][coord[1]] = KnightWhite()
                 } else {
@@ -84,8 +84,8 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
         }
 
     private fun dispatch(coord: Array<Int>){
-        val matrixXX: Array<Array<Piece?>> = this.activityTschess.validator.execute(propose = this.coord, matrix = this.activityTschess.matrix)
-        val state: List<List<String>> = this.activityTschess.validator.render(matrix = matrixXX, white = this.activityTschess.white)
+        val matrixXX: Array<Array<Piece?>> = this.activityTschess.transitioner.execute(propose = this.coord, matrix = this.activityTschess.matrix)
+        val state: List<List<String>> = this.activityTschess.transitioner.render(matrix = matrixXX, white = this.activityTschess.white)
         val highlight: String = if (this.activityTschess.white) {
             "${coord[0]}${coord[1]}${this.coord[0]}${this.coord[1]}"
         } else {

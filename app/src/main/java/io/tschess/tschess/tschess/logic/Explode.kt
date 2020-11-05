@@ -26,14 +26,14 @@ class Explode(val activityTschess: ActivityTschess) {
             return false
         }
         //they are attacking a poison pawn...
-        val stateX: Array<Array<Piece?>> = this.activityTschess.validator.deselect(state0)
+        val stateX: Array<Array<Piece?>> = this.activityTschess.transitioner.deselect(state0)
         if(elementAttacker.name.contains("King")){
             if(!this.activityTschess.white){
                 stateX[proposed[0]][proposed[1]] = RevealWhite()
             } else {
                 stateX[proposed[0]][proposed[1]] = RevealBlack()
             }
-            val state: List<List<String>> = this.activityTschess.validator.render(matrix = stateX, white = this.activityTschess.white)
+            val state: List<List<String>> = this.activityTschess.transitioner.render(matrix = stateX, white = this.activityTschess.white)
             val params = HashMap<String, Any>()
             params["id_game"] = this.activityTschess.game.id
             params["state"] = state
@@ -44,7 +44,7 @@ class Explode(val activityTschess: ActivityTschess) {
         }
         stateX[proposed[0]][proposed[1]] = null
         stateX[coordinate!![0]][coordinate!![1]] = null
-        val stateUpdate: List<List<String>> = this.activityTschess.validator.render(matrix = stateX, white = this.activityTschess.white)
+        val stateUpdate: List<List<String>> = this.activityTschess.transitioner.render(matrix = stateX, white = this.activityTschess.white)
         val highlight: String = if (this.activityTschess.white) {
             "${coordinate[0]}${coordinate[1]}${proposed[0]}${proposed[1]}"
         } else {

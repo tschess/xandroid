@@ -46,8 +46,10 @@ class Labeler(
         this.setCountdown(game)
         this.setNotification(game)
         this.setTurn(game)
+
+        this.setMate(game)
         this.setCheck(game)
-        this.setEndgame(game)
+
     }
 
     private fun setCheck(game: EntityGame) {
@@ -67,7 +69,7 @@ class Labeler(
         this.labelTurnary.text = "${game.black.username} to move"
     }
 
-    private fun setEndgame(game: EntityGame) {
+    private fun setMate(game: EntityGame) {
         if (game.status != "RESOLVED") {
             return
         }
@@ -114,7 +116,7 @@ class Labeler(
             val username: String = game.getTurnUsername()
             activityTschess.runOnUiThread {
                 this.labelNotification.text = "proposal pending"
-                this.labelNotification.text = "$username to respond"
+                this.labelTurnary.text = "$username to respond"
             }
             val turn: Boolean = game.getTurn(this.playerSelf.username)
             if (!turn) {

@@ -10,7 +10,7 @@ class PromoLogic(var activityTschess: ActivityTschess) {
 
     fun evaluate(coord: Array<Int>): Boolean {
         this.coord = coord
-        val coordXX: Array<Int> = this.activityTschess.validator.getCoord()!!
+        val coordXX: Array<Int> = this.activityTschess.transitioner.getCoord()!!
         val piece: Piece = this.activityTschess.matrix[coordXX[0]][coordXX[1]] ?: return false
         if (!piece.name.contains("Pawn") && !piece.name.contains("Poison") ) {
             return false

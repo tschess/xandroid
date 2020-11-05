@@ -6,18 +6,14 @@ import android.view.View
 import android.widget.ProgressBar
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
-import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
-import io.tschess.tschess.tschess.evaluation.Validator
+import io.tschess.tschess.tschess.controller.Transitioner
 import org.json.JSONObject
-import java.time.LocalDateTime
-import java.time.ZonedDateTime
 import java.util.HashMap
 
-class Networker(val progressBar: ProgressBar, val validator: Validator, val context: Context) {
+class Networker(val progressBar: ProgressBar, val validator: Transitioner, val context: Context) {
 
     fun timeout(id_game: String, id_self: String, id_oppo: String, white: Boolean) {
         val params = HashMap<String, Any>()

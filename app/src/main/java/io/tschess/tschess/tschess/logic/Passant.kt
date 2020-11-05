@@ -45,8 +45,8 @@ class Passant(
                             state1[4][coordinate!![1] - 1] = null
                             state1[coordinate!![0]][coordinate!![1]] = null
 
-                            val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(state1)
-                            val state: List<List<String>> = this.activityTschess.validator.render(
+                            val matrix00: Array<Array<Piece?>> = this.activityTschess.transitioner.deselect(state1)
+                            val state: List<List<String>> = this.activityTschess.transitioner.render(
                                 matrix = matrix00,
                                 white = this.activityTschess.white
                             )
@@ -82,8 +82,8 @@ class Passant(
                             state1[4][coordinate!![1] + 1] = null
                             state1[coordinate!![0]][coordinate!![1]] = null
 
-                            val matrix00: Array<Array<Piece?>> = this.activityTschess.validator.deselect(state1)
-                            val state: List<List<String>> = this.activityTschess.validator.render(
+                            val matrix00: Array<Array<Piece?>> = this.activityTschess.transitioner.deselect(state1)
+                            val state: List<List<String>> = this.activityTschess.transitioner.render(
                                 matrix = matrix00,
                                 white = this.activityTschess.white
                             )

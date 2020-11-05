@@ -53,9 +53,9 @@ class Castle(var activityTschess: ActivityTschess? = null) {
                 state1[7][5]!!.touched = true
                 state1[7][7] = null
 
-                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.validator.deselect(state1)
+                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.transitioner.deselect(state1)
                 val state: List<List<String>> =
-                    this.activityTschess!!.validator.render(matrix00, this.activityTschess!!.white)
+                    this.activityTschess!!.transitioner.render(matrix00, this.activityTschess!!.white)
                 val highlight: String = if (this.activityTschess!!.white) {
                     "${coordinate[0]}${coordinate[1]}${proposed[0]}${proposed[1]}"
                 } else {
@@ -87,9 +87,9 @@ class Castle(var activityTschess: ActivityTschess? = null) {
                 state1[7][3]!!.touched = true
                 state1[7][0] = null
 
-                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.validator.deselect(state1)
+                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.transitioner.deselect(state1)
                 val state: List<List<String>> =
-                    this.activityTschess!!.validator.render(matrix00, this.activityTschess!!.white)
+                    this.activityTschess!!.transitioner.render(matrix00, this.activityTschess!!.white)
                 val highlight: String = if (this.activityTschess!!.white) {
                     "${coordinate[0]}${coordinate[1]}${proposed[0]}${proposed[1]}"
                 } else {
@@ -123,9 +123,9 @@ class Castle(var activityTschess: ActivityTschess? = null) {
                 state1[7][2]!!.touched = true
                 state1[7][0] = null
 
-                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.validator.deselect(state1)
+                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.transitioner.deselect(state1)
                 val state: List<List<String>> =
-                    this.activityTschess!!.validator.render(matrix00, this.activityTschess!!.white)
+                    this.activityTschess!!.transitioner.render(matrix00, this.activityTschess!!.white)
                 val highlight: String = if (this.activityTschess!!.white) {
                     "${coordinate[0]}${coordinate[1]}${proposed[0]}${proposed[1]}"
                 } else {
@@ -157,9 +157,9 @@ class Castle(var activityTschess: ActivityTschess? = null) {
                 state1[7][4]!!.touched = true
                 state1[7][7] = null
 
-                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.validator.deselect(state1)
+                val matrix00: Array<Array<Piece?>> = this.activityTschess!!.transitioner.deselect(state1)
                 val state: List<List<String>> =
-                    this.activityTschess!!.validator.render(matrix00, this.activityTschess!!.white)
+                    this.activityTschess!!.transitioner.render(matrix00, this.activityTschess!!.white)
                 val highlight: String = if (this.activityTschess!!.white) {
                     "${coordinate[0]}${coordinate[1]}${proposed[0]}${proposed[1]}"
                 } else {

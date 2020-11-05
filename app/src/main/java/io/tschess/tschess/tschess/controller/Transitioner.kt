@@ -1,41 +1,42 @@
-package io.tschess.tschess.tschess.evaluation
+package io.tschess.tschess.tschess.controller
 
 import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.piece.PieceAnte
 import io.tschess.tschess.tschess.Flasher
 import kotlin.math.abs
 
-class Validator(
-    private val white: Boolean,
-    private val flasher: Flasher? = null
+class Transitioner(
+private val white: Boolean,
+private val flasher: Flasher? = null
 ) {
 
-    private var coord: Array<Int>? = null
-    private val checker: Checker = Checker()
+    fun clear() {
+        this.coordinate = null
+    }
 
     fun getCoord(): Array<Int>? {
-        return coord
+        return coordinate
     }
 
-    fun clear() {
-        this.coord = null
-    }
+    private val checker: Checker = Checker()
+
+    private var coordinate: Array<Int>? = null
 
     fun execute(propose: Array<Int>, matrix: Array<Array<Piece?>>): Array<Array<Piece?>> {
-        if (matrix[this.coord!![0]][this.coord!![1]] == null) {
+        if (matrix[this.coordinate!![0]][this.coordinate!![1]] == null) {
             return matrix
         }
-        val select: Piece = matrix[this.coord!![0]][this.coord!![1]]!!
+        val select: Piece = matrix[this.coordinate!![0]][this.coordinate!![1]]!!
         matrix[propose[0]][propose[1]] = select
         matrix[propose[0]][propose[1]]!!.touched = true
-        matrix[this.coord!![0]][this.coord!![1]] = null
+        matrix[this.coordinate!![0]][this.coordinate!![1]] = null
         return matrix
     }
 
     fun valid(coord: Array<Int>, matrix: Array<Array<Piece?>>): Boolean {
         //TODO: check this here...
         //if(coord00 != null){}
-        if (this.coord!!.contentEquals(coord)) {
+        if (this.coordinate!!.contentEquals(coord)) {
             return false
         }
         val square: Piece? = matrix[coord[0]][coord[1]]
@@ -60,7 +61,7 @@ class Validator(
 
 
     private fun invalid(coord: Array<Int>, matrix: Array<Array<Piece?>>): Boolean {
-        if (this.coord == null) {
+        if (this.coordinate == null) {
             val tschessElement: Piece? = matrix[coord[0]][coord[1]]
             if (tschessElement == null) {
                 this.flasher!!.flash()
@@ -131,9 +132,9 @@ class Validator(
                 }
             }
         }
-        if (matrix[this.coord!![0]][this.coord!![1]] != null) {
-            val imageDefault: Int = matrix[this.coord!![0]][this.coord!![1]]!!.imageDefault
-            matrix[this.coord!![0]][this.coord!![1]]!!.imageVisible = imageDefault
+        if (matrix[this.coordinate!![0]][this.coordinate!![1]] != null) {
+            val imageDefault: Int = matrix[this.coordinate!![0]][this.coordinate!![1]]!!.imageDefault
+            matrix[this.coordinate!![0]][this.coordinate!![1]]!!.imageVisible = imageDefault
         }
         return matrix
     }
@@ -142,23 +143,23 @@ class Validator(
         if (this.invalid(coord = coord, matrix = matrix)) {
             return matrix
         }
-        this.coord = coord
+        this.coordinate = coord
         for ((i: Int, row: Array<Piece?>) in matrix.withIndex()) {
             for ((j: Int, item: Piece?) in row.withIndex()) {
-                val piece: Piece = matrix[this.coord!![0]][this.coord!![1]]!!
+                val piece: Piece = matrix[this.coordinate!![0]][this.coordinate!![1]]!!
                 if (piece.validate(present = coord, propose = arrayOf(i, j), matrix = matrix)) {
                     /* * */
-                    val king: Array<Int> = checker.kingCoordinate(piece.affiliation, matrix)
+                    val king: Array<Int> = checker.coordinateKing(piece.affiliation, matrix)
                     val hold: Piece? = matrix[i][j]
                     matrix[i][j] = piece
-                    matrix[this.coord!![0]][this.coord!![1]] = null
+                    matrix[this.coordinate!![0]][this.coordinate!![1]] = null
                     val czech: Boolean = if (piece.name.contains("King")) {
                         checker.self(arrayOf(i, j), matrix)
                     } else {
                         checker.self(king, matrix)
                     }
                     matrix[i][j] = hold
-                    matrix[this.coord!![0]][this.coord!![1]] = piece
+                    matrix[this.coordinate!![0]][this.coordinate!![1]] = piece
                     if (!czech) {
                         val dest: Piece? = matrix[i][j]
                         if (dest == null) {
@@ -174,10 +175,9 @@ class Validator(
                 }
             }
         }
-        val select: Piece = matrix[this.coord!![0]][this.coord!![1]]!!
+        val select: Piece = matrix[this.coordinate!![0]][this.coordinate!![1]]!!
         val imageSelect: Int = select.imageSelect!!
-        matrix[this.coord!![0]][this.coord!![1]]!!.imageVisible = imageSelect
+        matrix[this.coordinate!![0]][this.coordinate!![1]]!!.imageVisible = imageSelect
         return matrix
     }
-
 }
