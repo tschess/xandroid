@@ -292,14 +292,25 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
     private fun setCheckMate() {
         val affiliation: String = this.game.getAffiliationOther(this.playerSelf.username)
-        val king: Array<Int> = checker.coordinateKing(affiliation, this.matrix)
-        val mate: Boolean = checker.mate(king, this.matrix)
-        val check: Boolean = checker.other(king, this.matrix)
+        val king: Array<Int> = checker.coordinateKing(affiliation, this.game.getMatrix(this.playerSelf.username))
+        Log.e("king", "$king")
+        Log.e("affiliation", "$affiliation")
+
+        val mate: Boolean = checker.mate(king, this.game.getMatrix(this.playerSelf.username))
+        Log.e("MATE", "$mate")
+
+        val other: Boolean = checker.other(king, this.game.getMatrix(this.playerSelf.username))
+        Log.e("OTHER", "$other")
+
+        val self: Boolean = checker.self(king, this.game.getMatrix(this.playerSelf.username))
+        Log.e("SELF", "$self")
+
+
         if (mate) {
             this.networker.mate(this.game.id)
             return
         }
-        if (!check) {
+        if (!self) { //???
             return
         }
         this.progressBar.visibility = View.VISIBLE

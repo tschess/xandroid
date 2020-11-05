@@ -1,5 +1,6 @@
 package io.tschess.tschess.tschess.controller
 
+import android.util.Log
 import io.tschess.tschess.piece.Piece
 import io.tschess.tschess.piece.chess.pawn.Pawn
 import io.tschess.tschess.piece.fairy.hunter.Hunter
@@ -11,6 +12,8 @@ class Checker {
     fun other(coordinate: Array<Int>, state: Array<Array<Piece?>>): Boolean {
         val king: Piece = state[coordinate[0]][coordinate[1]]!!
         val affiliationKing: String = king.affiliation.toLowerCase(Locale.ENGLISH)
+        Log.e(">>>>>>> affiliationKing", "${affiliationKing}")
+
         for (row: Int in 0..7) {
             for (column: Int in 0..7) {
                 val candidate: Piece = state[row][column] ?: continue
@@ -22,6 +25,10 @@ class Checker {
                 if (friendly) {
                     continue
                 }
+
+                Log.e("----- candidate", "${candidate.name}")
+                Log.e("----- validate ", "${candidate.validate(arrayOf(row,column), coordinate, state)}")
+
                 if (candidate.validate(arrayOf(row,column), coordinate, state)) {
                     return true
                 }
@@ -37,7 +44,8 @@ class Checker {
                 if (!candidate.name.contains("King")) {
                     continue
                 }
-                val match: Boolean = candidate.affiliation == affiliationKing
+                val affiliationCandidate: String = candidate.affiliation.toLowerCase(Locale.ENGLISH)
+                val match: Boolean = affiliationCandidate == affiliationKing.toLowerCase(Locale.ENGLISH)
                 if (match) {
                     return arrayOf(row, column)
                 }
@@ -229,6 +237,8 @@ class Checker {
                 }
             }
         }
+        //listValidateKing.filter { it contentEquals coord00 }
+
         if (listValidateKing.isNotEmpty()) {
             return false
         }
