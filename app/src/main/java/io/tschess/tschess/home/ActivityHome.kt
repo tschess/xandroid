@@ -102,6 +102,7 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         headerSelf.initialize(this.playerSelf)
         headerSelf.setListenerProfile(this.playerSelf)
 
+        this.listMenu = arrayListOf()
         val listView: ListView = findViewById(R.id.list_view)
         this.arrayAdapter = AdapterHome(this.playerSelf, applicationContext, this.listMenu, this)
         this.arrayAdapter.refresher = this
