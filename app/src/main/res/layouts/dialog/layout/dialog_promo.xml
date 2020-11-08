@@ -11,18 +11,16 @@
     <TextView
             android:layout_marginTop="10dp"
             android:id="@+id/text_view"
-
+            android:textSize="16sp"
             android:textColor="@color/colorWhite"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="select promotion:"/>
+            android:text="Select Promotion:"/>
 
 
     <TableRow
-
-
             android:layout_marginTop="20dp"
             android:gravity="center"
 
@@ -31,28 +29,60 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-        <ImageButton
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
 
-
-                android:id="@+id/bishop"
-                android:src="@drawable/white_bishop"
-                android:background="@color/header"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:scaleType="fitXY" />
-
-        <ImageButton
+        <LinearLayout
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <ImageButton
+                    android:id="@+id/bishop_image"
+                    android:src="@drawable/red_bishop"
+                    android:background="@color/header"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:scaleType="fitXY" />
+            <TextView
+                    android:id="@+id/bishop_name"
+                    android:background="@color/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="Bishop"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"/>
+        </LinearLayout>
 
-                android:id="@+id/knight"
-                android:src="@drawable/white_knight"
-                android:background="@color/header"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:scaleType="fitXY" />
+
+
+
+
+
+        <LinearLayout
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <ImageButton
+                    android:id="@+id/knight_image"
+                    android:src="@drawable/red_knight"
+                    android:background="@color/header"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:scaleType="fitXY" />
+            <TextView
+                    android:id="@+id/knight_name"
+                    android:background="@color/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="Knight"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"/>
+        </LinearLayout>
+
 
     </TableRow>
 
@@ -67,27 +97,59 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-        <ImageButton
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
 
-                android:id="@+id/queen"
-                android:src="@drawable/white_queen"
-                android:background="@color/header"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:scaleType="fitXY"/>
 
-        <ImageButton
+        <LinearLayout
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <ImageButton
+                    android:id="@+id/queen_image"
+                    android:src="@drawable/red_queen"
+                    android:background="@color/header"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:scaleType="fitXY"/>
+            <TextView
+                    android:id="@+id/queen_name"
+                    android:background="@color/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="Queen"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"/>
+        </LinearLayout>
 
-                android:id="@+id/rook"
-                android:src="@drawable/white_rook"
-                android:background="@color/header"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:scaleType="fitXY"/>
+
+        <LinearLayout
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <ImageButton
+                    android:id="@+id/rook_image"
+                    android:src="@drawable/red_rook"
+                    android:background="@color/header"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:scaleType="fitXY"/>
+            <TextView
+                    android:id="@+id/rook_name"
+                    android:background="@color/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="Rook"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"/>
+        </LinearLayout>
+
+
+
 
 
     </TableRow>
