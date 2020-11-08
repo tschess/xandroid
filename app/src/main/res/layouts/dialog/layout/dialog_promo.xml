@@ -9,6 +9,8 @@
         android:background="@drawable/shape_toast">
 
     <TextView
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginTop="10dp"
             android:id="@+id/text_view"
             android:textSize="16sp"
@@ -21,7 +23,9 @@
 
 
     <TableRow
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
 
             android:id="@+id/TableRow00"
@@ -87,9 +91,11 @@
     </TableRow>
 
     <TableRow
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
 
 
             android:id="@+id/tableRow01"

@@ -33,7 +33,7 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
             super.onCreate(savedInstanceState)
             setContentView(R.layout.dialog_promo)
 
-            val imageViewBiship: ImageView = findViewById(R.id.bishop)
+            val imageViewBiship: ImageView = findViewById(R.id.bishop_image)
             imageViewBiship.setOnClickListener(View.OnClickListener {
                 val coord: Array<Int> = this.activityTschess.transitioner.getCoord()!!
                 val matrix00: Array<Array<Piece?>> = this.activityTschess.transitioner.deselect(this.activityTschess.matrix)
@@ -45,7 +45,7 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
                 this.activityTschess.matrix = matrix00
                 this.dispatch(coord)
             })
-            val imageViewQueen: ImageView = findViewById(R.id.queen)
+            val imageViewQueen: ImageView = findViewById(R.id.queen_image)
             imageViewQueen.setOnClickListener(View.OnClickListener {
                 val coord: Array<Int> = this.activityTschess.transitioner.getCoord()!!
                 val matrix00: Array<Array<Piece?>> = this.activityTschess.transitioner.deselect(this.activityTschess.matrix)
@@ -57,7 +57,7 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
                 this.activityTschess.matrix = matrix00
                 this.dispatch(coord)
             })
-            val imageViewRook: ImageView = findViewById(R.id.rook)
+            val imageViewRook: ImageView = findViewById(R.id.rook_image)
             imageViewRook.setOnClickListener(View.OnClickListener {
                 val coord: Array<Int> = this.activityTschess.transitioner.getCoord()!!
                 val matrix00: Array<Array<Piece?>> = this.activityTschess.transitioner.deselect(this.activityTschess.matrix)
@@ -69,7 +69,7 @@ class DialogPromo(var coord: Array<Int>, var activityTschess: ActivityTschess, c
                 this.activityTschess.matrix = matrix00
                 this.dispatch(coord)
             })
-            val imageViewKnight: ImageView = findViewById(R.id.knight)
+            val imageViewKnight: ImageView = findViewById(R.id.knight_image)
             imageViewKnight.setOnClickListener(View.OnClickListener {
                 val coord: Array<Int> = this.activityTschess.transitioner.getCoord()!!
                 val matrix00: Array<Array<Piece?>> = this.activityTschess.transitioner.deselect(this.activityTschess.matrix)
