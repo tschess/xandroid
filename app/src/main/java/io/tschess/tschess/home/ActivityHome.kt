@@ -126,10 +126,12 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     }
 
     override fun onRefresh() {
+        this.TRANSITION = false
         this.onResume()
     }
 
     override fun refresh() {
+        this.TRANSITION = false
         this.onResume()
     }
 
@@ -230,6 +232,7 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     }
 
     override fun onBackPressed() {
+        TRANSITION = true
         this.extendedDataHolder.putExtra("player_self", playerSelf)
         val intent = Intent(applicationContext, ActivityProfile::class.java)
         this.startIntent(intent)
