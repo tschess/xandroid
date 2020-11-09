@@ -187,18 +187,10 @@ class ViewHolderHome(
                 params["id_self"] = playerSelf.id
                 val jsonObject = JSONObject(params as Map<*, *>)
 
-                Log.e("FUCK ~~ FUCK", jsonObject.toString())
-                Log.e("FUCK XXX FUCK", url.toString())
-
-
                 val request =
                     JsonObjectRequest(
                         Request.Method.POST, url, jsonObject,
                         {
-
-
-                            Log.e("FUCK FUCK FUCK", it.toString())
-
                             refresher.refresh()
                         },
                         {
