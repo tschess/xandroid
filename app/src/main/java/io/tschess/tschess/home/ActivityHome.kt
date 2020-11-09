@@ -43,8 +43,6 @@ import kotlin.concurrent.schedule
 
 class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.OnRefreshListener {
 
-    var TRANSITION: Boolean
-
     private var size: Int
     private var index: Int
     private var fetched: Boolean
@@ -55,7 +53,6 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     private lateinit var extendedDataHolder: ExtendedDataHolder
 
     init {
-        this.TRANSITION = false
         this.size = 9
         this.index = 0
         this.fetched = false
@@ -100,11 +97,6 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         headerSelf.initialize(this.playerSelf)
         headerSelf.setListenerProfile(this.playerSelf)
 
-        if(this.TRANSITION){
-            this.TRANSITION = false
-            return
-        }
-
         /* * */
         val rival0: CardHome  = findViewById(R.id.rival_0)
         val rival1: CardHome = findViewById(R.id.rival_1)
@@ -126,12 +118,10 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     }
 
     override fun onRefresh() {
-        this.TRANSITION = false
         this.onResume()
     }
 
     override fun refresh() {
-        this.TRANSITION = false
         this.onResume()
     }
 
@@ -207,12 +197,10 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
                         DialogOk(applicationContext).render(title, message)
                     }
                     1 -> {
-                        TRANSITION = true
                         val intent = Intent(applicationContext, ActivityConfig::class.java)
                         startIntent(intent)
                     }
                     2 -> {
-                        TRANSITION = true
                         val intent = Intent(applicationContext, ActivityLeaderboard::class.java)
                         startIntent(intent)
                     }
@@ -232,7 +220,6 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     }
 
     override fun onBackPressed() {
-        TRANSITION = true
         this.extendedDataHolder.putExtra("player_self", playerSelf)
         val intent = Intent(applicationContext, ActivityProfile::class.java)
         this.startIntent(intent)
