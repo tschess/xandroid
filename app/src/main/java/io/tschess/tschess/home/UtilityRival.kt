@@ -2,6 +2,7 @@ package io.tschess.tschess.home
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -54,7 +55,7 @@ class UtilityRival(
             })
     }
 
-    fun getRivals(context: Context) {
+    private fun getRivals(context: Context) {
         val url = "${ServerAddress().IP}:8080/player/rivals/${this.playerSelf.id}"
         val request = JsonArrayRequest(
             Request.Method.POST, url, null,
