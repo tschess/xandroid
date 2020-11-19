@@ -5,12 +5,15 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
+import android.view.WindowManager
 import android.widget.AbsListView
 import android.widget.ListView
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.DefaultRetryPolicy
@@ -186,15 +189,19 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         })
     }
 
+    fun dialogSinglePlayer() {
+        val title: String = "⚡ hang tight ⚡"
+        val message: String = "single player mode coming soon! \uD83E\uDD16"
+        DialogOk(this).render(title, message)
+    }
+
     private fun setTabListener(tabLayout: TabLayout) {
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 extendedDataHolder.putExtra("player_self", playerSelf)
                 when (tab.position) {
                     0 -> {
-                        val title: String = "⚡ hang tight ⚡"
-                        val message: String = "single player mode coming soon! \uD83E\uDD16"
-                        DialogOk(applicationContext).render(title, message)
+                        dialogSinglePlayer()
                     }
                     1 -> {
                         val intent = Intent(applicationContext, ActivityConfig::class.java)
