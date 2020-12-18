@@ -211,6 +211,10 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
                         val intent = Intent(applicationContext, ActivityLeaderboard::class.java)
                         startIntent(intent)
                     }
+                    3 -> {
+                        val intent = Intent(applicationContext, ActivityProfile::class.java)
+                        startIntent(intent)
+                    }
                 }
             }
             override fun onTabReselected(tab: TabLayout.Tab) {
