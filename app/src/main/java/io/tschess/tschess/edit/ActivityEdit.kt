@@ -165,13 +165,13 @@ class ActivityEdit : AppCompatActivity(), View.OnLongClickListener, View.OnDragL
 
     fun renderMenuHelp() {
         val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
-        dialogBuilder.setTitle("\uD83E\uDDE9 edit config")
+        dialogBuilder.setTitle("\uD83E\uDDE9 Edit config")
         dialogBuilder.setMessage(
-            "long touch on piece to engage \uD83D\uDC47\n" +
-                    "\uD83D\uDC49 drag to destination\n" +
-                    "or off board to remove \uD83D\uDCA8"
+            "Long touch on piece to engage. \uD83D\uDC47\n" +
+                    "\uD83D\uDC49 Drag to destination,\n" +
+                    "or off board to remove. \uD83D\uDCA8"
         )
-            .setNeutralButton("ok", DialogInterface.OnClickListener { dialog, id ->
+            .setNeutralButton("Ok", DialogInterface.OnClickListener { dialog, id ->
                 dialog.cancel()
             })
         val alert: AlertDialog = dialogBuilder.create()
