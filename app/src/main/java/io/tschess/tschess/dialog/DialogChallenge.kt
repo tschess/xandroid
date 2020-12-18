@@ -38,7 +38,8 @@ class DialogChallenge(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_challenge)
+        //setContentView(R.layout.dialog_challenge)
+        setContentView(R.layout.dialog_purchase)
 
         this.progressBar = findViewById(R.id.progress_bar)
         this.progressBar.visibility = View.INVISIBLE
@@ -46,15 +47,19 @@ class DialogChallenge(
         val textSend: TextView = findViewById(R.id.text_send)
 
         val textTitle: TextView = findViewById(R.id.text_title)
-        textTitle.text = "\uD83E\uDD1C ${playerSelf.username} vs. ${playerOther.username} \uD83E\uDD1B"
+        //textTitle.text = "\uD83E\uDD1C ${playerSelf.username} vs. ${playerOther.username} \uD83E\uDD1B"
+        textTitle.text = "\uD83E\uDD1C vs. ${playerOther.username} \uD83E\uDD1B"
+
+        val textInfo: TextView = findViewById(R.id.text_info)
+        textInfo.text = "Select config & send invite."
 
         val textConfig: TextView = findViewById(R.id.config_text)
-        textConfig.text = "config:"
+        textConfig.text = "Selection:"
 
-        val listOption: MutableList<String> = mutableListOf("config. 0", "config. 1", "config. 2", "   traditional (chess)   ", "random")
+        val listOption: MutableList<String> = mutableListOf("Config. 0", "Config. 1", "Config. 2", "    Chess    ", "    I'm Feelin' Lucky    ")
         if (action == "ACCEPT") {
             //listOption.add("mirror opponent")
-            textSend.text = "let's play! \uD83C\uDF89"
+            textSend.text = "\uD83C\uDF89 Let's play! \uD83C\uDF89"
         }
         val picker: NumberPicker = findViewById<View>(R.id.number_picker) as NumberPicker
         picker.minValue = 0
@@ -90,13 +95,13 @@ class DialogChallenge(
         val listenerResponse: Response.Listener<JSONObject> = Response.Listener {
             this.progressBar.visibility = View.INVISIBLE
             //DialogOk(context).confirm(playerOther.username)
-            val title: String = "✅ success \uD83D\uDC4C"
-            val message: String = "challenge dispatched to ${playerOther.username} ♟️"
+            val title: String = "✅ Success \uD83D\uDC4C"
+            val message: String = "Challenge dispatched to ${playerOther.username} ♟️"
             //render(title, message)
             val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
             dialogBuilder.setTitle(title)
             dialogBuilder.setMessage(message)
-            dialogBuilder.setPositiveButton("ok") { dialog, _ ->
+            dialogBuilder.setPositiveButton("Ok") { dialog, _ ->
                 dialog.cancel()
             }
             val alert: AlertDialog = dialogBuilder.create()
@@ -105,7 +110,7 @@ class DialogChallenge(
             dismiss()
         }
 
-        execute(url, listenerResponse, this.getError("challenge wasn't delivered."), params)
+        execute(url, listenerResponse, this.getError("Challenge wasn't delivered."), params)
     }
 
     fun accept(config: Int, game_id: String) {
@@ -131,7 +136,7 @@ class DialogChallenge(
 
             dismiss()
         }
-        execute(url, listenerResponse, this.getError("please try again later."), params)
+        execute(url, listenerResponse, this.getError("Please try again later."), params)
     }
 
     fun invitation(config: Int) {
@@ -146,13 +151,13 @@ class DialogChallenge(
             this.progressBar.visibility = View.INVISIBLE
             //DialogOk(context).confirm(playerOther.username)
 
-            val title: String = "✅ success \uD83D\uDC4C"
-            val message: String = "challenge dispatched to ${playerOther.username} ♟️"
+            val title: String = "✅ Success \uD83D\uDC4C"
+            val message: String = "Challenge dispatched to ${playerOther.username} ♟️"
             //render(title, message)
             val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
             dialogBuilder.setTitle(title)
             dialogBuilder.setMessage(message)
-            dialogBuilder.setPositiveButton("ok") { dialog, _ ->
+            dialogBuilder.setPositiveButton("Ok") { dialog, _ ->
                 dialog.cancel()
             }
             val alert: AlertDialog = dialogBuilder.create()
@@ -161,7 +166,7 @@ class DialogChallenge(
             refresher!!.refresh()
             dismiss()
         }
-        execute(url, listenerResponse, this.getError("challenge wasn't delivered."), params)
+        execute(url, listenerResponse, this.getError("Challenge wasn't delivered."), params)
     }
 
     fun getError(message: String): Response.ErrorListener {
@@ -169,11 +174,11 @@ class DialogChallenge(
             progressBar.visibility = View.INVISIBLE
             //DialogOk(context).error("something went wrong! $message")
             val title: String = "❌ error ✋"
-            val message: String = "something went wrong! $message"
+            val message: String = "Something went wrong! $message"
             val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
             dialogBuilder.setTitle(title)
             dialogBuilder.setMessage(message)
-            dialogBuilder.setPositiveButton("ok") { dialog, _ ->
+            dialogBuilder.setPositiveButton("Ok") { dialog, _ ->
                 dialog.cancel()
             }
             val alert: AlertDialog = dialogBuilder.create()

@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
 
             android:textSize="16sp"
-            tools:text="Select config and send invite."
+            tools:text="Subscribe to unlock all selections."
 
             android:paddingTop="16dp"
             android:paddingLeft="8dp"
@@ -62,14 +62,15 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
 
-            android:padding="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
 
             android:background="@color/header"
 
             app:layout_constraintTop_toBottomOf="@+id/text_info"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/text_send">
+            app:layout_constraintBottom_toTopOf="@+id/div0">
 
         <TextView
                 android:id="@+id/config_text"
@@ -78,7 +79,7 @@
                 android:layout_height="wrap_content"
 
                 android:textSize="16sp"
-                tools:text="selection:"
+                tools:text="Selection:"
 
                 android:paddingLeft="8dp"
                 android:paddingRight="4dp"
@@ -115,13 +116,62 @@
         />
     </LinearLayout>
 
+    <View
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/picker_stack"
+
+            android:id="@+id/div0"
+
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_width="match_parent"/>
+
+
+
+    <TextView
+            android:layout_marginTop="16dp"
+            android:id="@+id/text_subscribe"
+
+            android:background="@android:color/transparent"
+
+            app:layout_constraintTop_toBottomOf="@+id/div0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:alpha="0.9"
+
+            android:textColor="@android:color/white"
+
+            android:paddingBottom="16dp"
+
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="⭐ Subscribe $0.99 ⭐"/>
+
+    <View
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_subscribe"
+
+            android:id="@+id/div1"
+
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_width="match_parent"/>
+
+
     <TextView
             android:layout_marginTop="16dp"
             android:id="@+id/text_send"
 
-            android:background="@color/header"
+            android:alpha="0.9"
 
-            app:layout_constraintTop_toBottomOf="@+id/picker_stack"
+            android:background="@android:color/transparent"
+
+            app:layout_constraintTop_toBottomOf="@+id/div1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -135,7 +185,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="⚡ Send invite ⚡"/>
-
 
 
     <ProgressBar
