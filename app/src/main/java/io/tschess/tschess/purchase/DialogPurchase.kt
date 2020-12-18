@@ -5,10 +5,12 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.NumberPicker
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.android.billingclient.api.*
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -35,9 +37,59 @@ class DialogPurchase(
     lateinit var progressBar: ProgressBar
     private val parseGame: ParseGame = ParseGame()
 
+
+    private val purchasesUpdateListener =
+        PurchasesUpdatedListener { billingResult, purchases ->
+            // To be implemented in a later section.
+        }
+
+    private var billingClient = BillingClient.newBuilder(getContext())
+        .setListener(purchasesUpdateListener)
+        .enablePendingPurchases()
+        .build()
+
+
+    fun querySkuDetails() {
+        val skuList = ArrayList<String>()
+        skuList.add("001")
+        skuList.add("002")
+        val params = SkuDetailsParams.newBuilder()
+        params.setSkusList(skuList).setType(BillingClient.SkuType.SUBS)
+        //withContext(Dispatchers.IO) {
+        billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
+        // Process the result.
+
+            Log.e("billingResult","${billingResult}")
+            Log.e("skuDetailsList","${skuDetailsList}")
+
+        }
+        //}
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_purchase)
+
+
+        billingClient.startConnection(object : BillingClientStateListener {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode ==  BillingClient.BillingResponseCode.OK) {
+                    // The BillingClient is ready. You can query purchases here.
+
+                    querySkuDetails()
+                }
+            }
+            override fun onBillingServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+            }
+        })
+
+
+
+
 
         this.progressBar = findViewById(R.id.progress_bar)
         this.progressBar.visibility = View.INVISIBLE
