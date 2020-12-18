@@ -1,6 +1,7 @@
 package io.tschess.tschess.home
 
 
+import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
@@ -179,7 +180,14 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     fun dialogSinglePlayer() {
         val title: String = "⚡ hang tight ⚡"
         val message: String = "single player mode coming soon! \uD83E\uDD16"
-        DialogOk(this).render(title, message)
+        val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
+        dialogBuilder.setTitle(title)
+        dialogBuilder.setMessage(message)
+        dialogBuilder.setPositiveButton("ok") { dialog, _ ->
+            dialog.cancel()
+        }
+        val alert: AlertDialog = dialogBuilder.create()
+        alert.show()
     }
 
     private fun setTabListener(tabLayout: TabLayout) {

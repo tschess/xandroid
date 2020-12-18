@@ -113,7 +113,6 @@ class ActivityStart : AppCompatActivity() {
                 val title: String = "⚡ server error ⚡"
                 val message: String =
                     "\uD83D\uDD0C unable to reach server.\ncheck connection and try again. \uD83D\uDCF1"
-                //DialogOk(context).render(title, message)
                 val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
                 dialogBuilder.setTitle(title)
                 dialogBuilder.setMessage(message)

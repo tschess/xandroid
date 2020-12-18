@@ -1,5 +1,6 @@
 package io.tschess.tschess.dialog
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -86,9 +87,20 @@ class DialogChallenge(
         params["config"] = config.toString()
         params["white"] = white.toString()
 
-        val listenerResponse: Response.Listener<JSONObject>? = Response.Listener {
+        val listenerResponse: Response.Listener<JSONObject> = Response.Listener {
             this.progressBar.visibility = View.INVISIBLE
-            DialogOk(context).confirm(playerOther.username)
+            //DialogOk(context).confirm(playerOther.username)
+            val title: String = "✅ success \uD83D\uDC4C"
+            val message: String = "challenge dispatched to ${playerOther.username} ♟️"
+            //render(title, message)
+            val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
+            dialogBuilder.setTitle(title)
+            dialogBuilder.setMessage(message)
+            dialogBuilder.setPositiveButton("ok") { dialog, _ ->
+                dialog.cancel()
+            }
+            val alert: AlertDialog = dialogBuilder.create()
+            alert.show()
             refresher!!.refresh()
             dismiss()
         }
@@ -130,19 +142,42 @@ class DialogChallenge(
         params["id_other"] = playerOther.id
         params["config"] = config.toString()
 
-        val listenerResponse: Response.Listener<JSONObject>? = Response.Listener {
+        val listenerResponse: Response.Listener<JSONObject> = Response.Listener {
             this.progressBar.visibility = View.INVISIBLE
-            DialogOk(context).confirm(playerOther.username)
+            //DialogOk(context).confirm(playerOther.username)
+
+            val title: String = "✅ success \uD83D\uDC4C"
+            val message: String = "challenge dispatched to ${playerOther.username} ♟️"
+            //render(title, message)
+            val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
+            dialogBuilder.setTitle(title)
+            dialogBuilder.setMessage(message)
+            dialogBuilder.setPositiveButton("ok") { dialog, _ ->
+                dialog.cancel()
+            }
+            val alert: AlertDialog = dialogBuilder.create()
+            alert.show()
+
             refresher!!.refresh()
             dismiss()
         }
         execute(url, listenerResponse, this.getError("challenge wasn't delivered."), params)
     }
 
-    fun getError(message: String): Response.ErrorListener? {
+    fun getError(message: String): Response.ErrorListener {
         return Response.ErrorListener {
             progressBar.visibility = View.INVISIBLE
-            DialogOk(context).error("something went wrong! $message")
+            //DialogOk(context).error("something went wrong! $message")
+            val title: String = "❌ error ✋"
+            val message: String = "something went wrong! $message"
+            val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
+            dialogBuilder.setTitle(title)
+            dialogBuilder.setMessage(message)
+            dialogBuilder.setPositiveButton("ok") { dialog, _ ->
+                dialog.cancel()
+            }
+            val alert: AlertDialog = dialogBuilder.create()
+            alert.show()
             dismiss()
         }
     }
