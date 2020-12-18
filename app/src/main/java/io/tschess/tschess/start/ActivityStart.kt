@@ -91,7 +91,6 @@ class ActivityStart : AppCompatActivity() {
         params["device"] = device
         val jsonObject = JSONObject(params as Map<*, *>)
 
-//uk_f402rtpyd05ucik2myl62m99e
         Log.e("-request->", "${jsonObject}")
 
         val request = JsonObjectRequest(
@@ -122,12 +121,12 @@ class ActivityStart : AppCompatActivity() {
                     dialog.cancel()
                 }
                 val alert: AlertDialog = dialogBuilder.create()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
-                }
-                else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-                }
+                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                //alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
+                //}
+                //else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                //alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
+                //}
                 alert.show()
 
             }

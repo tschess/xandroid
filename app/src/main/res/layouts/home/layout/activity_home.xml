@@ -33,9 +33,9 @@
             android:layout_marginLeft="8dp"
 
             android:textSize="16sp"
-            android:gravity="center_horizontal"
+            android:gravity="start"
 
-            android:text="suggested opponents"
+            android:text="rivals:"
             android:textColor="@android:color/darker_gray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -164,22 +164,29 @@
     >
 
         <com.google.android.material.tabs.TabItem
-                android:text="single player"
+                android:text="Single-player"
                 android:icon="@drawable/robot"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
         />
 
         <com.google.android.material.tabs.TabItem
-                android:text="my config(s)"
+                android:text="Config(s)"
                 android:icon="@drawable/tab_setup"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
 
         <com.google.android.material.tabs.TabItem
                 android:id="@+id/tab_item"
-                android:text="leaderboard"
+                android:text="Leaderboard"
                 android:icon="@drawable/trophy"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+        <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_profile"
+                android:text="Profile"
+                android:icon="@drawable/profile"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
 
