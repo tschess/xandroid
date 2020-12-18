@@ -170,7 +170,7 @@ class ActivityProfile : AppCompatActivity() {
     fun renderMenuLogout() {
         val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
         dialogBuilder.setTitle("\uD83D\uDEAA tschess \uD83C\uDFC3\u200D♂️")
-        dialogBuilder.setMessage("\uD83E\uDD14 sure you want to sign out?")
+        dialogBuilder.setMessage("\uD83E\uDD14 Sure you want to sign out?")
             .setPositiveButton("yes", DialogInterface.OnClickListener { dialog, id ->
                 this.progressBar.visibility = View.VISIBLE
                 val device: String = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
@@ -199,8 +199,8 @@ class ActivityProfile : AppCompatActivity() {
     private fun notifications() {
 
         val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
-        dialogBuilder.setTitle("\uD83D\uDDE3️ notification settings \uD83D\uDC42")
-        dialogBuilder.setMessage("☎️ receive new move notifications?")
+        dialogBuilder.setTitle("\uD83D\uDDE3️ Notification settings \uD83D\uDC42")
+        dialogBuilder.setMessage("☎️ Receive new move notifications?")
             .setPositiveButton("yes \uD83D\uDC4C", DialogInterface.OnClickListener { dialog, id ->
                 val url = "${ServerAddress().IP}:8080/player/push"
                 this.progressBar.visibility = View.VISIBLE

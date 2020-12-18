@@ -182,12 +182,12 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     }
 
     fun dialogSinglePlayer() {
-        val title: String = "⚡ hang tight ⚡"
-        val message: String = "single player mode coming soon! \uD83E\uDD16"
+        val title: String = "⚡ Hang tight ⚡"
+        val message: String = "Single-player mode coming soon! \uD83E\uDD16"
         val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
         dialogBuilder.setTitle(title)
         dialogBuilder.setMessage(message)
-        dialogBuilder.setPositiveButton("ok") { dialog, _ ->
+        dialogBuilder.setPositiveButton("Ok") { dialog, _ ->
             dialog.cancel()
         }
         val alert: AlertDialog = dialogBuilder.create()
