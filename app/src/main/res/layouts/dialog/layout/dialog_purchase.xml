@@ -95,7 +95,8 @@
         />
 
         <NumberPicker
-
+                android:alpha="0.9"
+                
                 android:layout_weight="1"
 
                 android:theme="@style/NumberPickerText"
