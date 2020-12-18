@@ -22,6 +22,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
@@ -141,7 +142,12 @@ class ActivityProfile : AppCompatActivity() {
                                 progressBar.visibility = View.INVISIBLE
                                 val player: EntityPlayer = parsePlayer.execute(response)
                                 playerSelf = player
-                                glide.load(player.avatar).into(object : CustomTarget<Drawable>() {
+
+                                // this.imageView = findViewById(R.id.image)
+                                //        glide.load(attributes.getDrawable(R.styleable.CardHome_home_image))
+                                //            .into(imageView)
+
+                                glide.load(player.avatar).apply(RequestOptions.circleCropTransform()).into(object : CustomTarget<Drawable>() {
                                     override fun onResourceReady(
                                         resource: Drawable,
                                         transition: Transition<in Drawable>?

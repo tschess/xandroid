@@ -80,7 +80,7 @@
                 android:textColor="#fff"
 
 
-                android:textSize="18dp"
+                android:textSize="16sp"
                 android:background="@null"
                 android:textCursorDrawable="@drawable/color_cursor"
 
@@ -92,11 +92,11 @@
                 android:layout_height="wrap_content"/>
         <EditText
                 android:id="@+id/et_password"
-                android:hint="password (six characters)"
+                android:hint="password (six characters minimum)"
                 android:textColor="#fff"
 
 
-                android:textSize="18dp"
+                android:textSize="16sp"
                 android:background="@null"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_marginTop="18dp"
@@ -123,7 +123,7 @@
                     android:background="#000"
                     android:textAllCaps="false"
 
-                    android:textSize="18dp"
+                    android:textSize="16sp"
 
 
                     android:layout_width="wrap_content"

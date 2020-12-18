@@ -1,13 +1,10 @@
 package io.tschess.tschess.start
 
-import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -18,7 +15,6 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import io.tschess.tschess.R
-import io.tschess.tschess.dialog.DialogOk
 import io.tschess.tschess.home.ActivityHome
 import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.model.ExtendedDataHolder
@@ -36,15 +32,7 @@ class ActivityCreate : AppCompatActivity() {
 
     private lateinit var buttonGo: Button
 
-    val parsePlayer: ParsePlayer
-    val context: Context
-    val dialog: DialogOk
-
-    init {
-        this.parsePlayer = ParsePlayer()
-        this.context = applicationContext
-        this.dialog = DialogOk(context)
-    }
+    val parsePlayer: ParsePlayer = ParsePlayer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,7 +108,7 @@ class ActivityCreate : AppCompatActivity() {
                 Log.e("-response->", "${response}")
 
                 this.progressBar.visibility = View.INVISIBLE
-                if (dialog.fail(response)) {
+                if (this.fail(response)) {
                     return@Listener
                 }
                 val playerSelf: EntityPlayer = parsePlayer.execute(response)
@@ -132,7 +120,8 @@ class ActivityCreate : AppCompatActivity() {
 
                 this.progressBar.visibility = View.INVISIBLE
                 val title: String = "⚡ server error ⚡"
-                val message: String = "\uD83D\uDD0C unable to reach server.\ncheck connection and try again. \uD83D\uDCF1"
+                val message: String =
+                    "\uD83D\uDD0C unable to reach server.\ncheck connection and try again. \uD83D\uDCF1"
                 val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
                 dialogBuilder.setTitle(title)
                 dialogBuilder.setMessage(message)
@@ -162,19 +151,22 @@ class ActivityCreate : AppCompatActivity() {
     fun fail(response: JSONObject): Boolean {
         if (response.has("unknown")) {
             val title: String = "⚡ unknown username ⚡"
-            val message: String = "\uD83E\uDD16 no such player in database.\nplease re-evaluate and try again. \uD83D\uDCF2"
+            val message: String =
+                "\uD83E\uDD16 no such player in database.\nplease re-evaluate and try again. \uD83D\uDCF2"
             this.render(title, message)
             return true
         }
         if (response.has("invalid")) {
             val title: String = "⚡ invalid password ⚡"
-            val message: String = "\uD83E\uDD16 input password is incorrect.\nplease re-evaluate and try again. \uD83D\uDCF2"
+            val message: String =
+                "\uD83E\uDD16 input password is incorrect.\nplease re-evaluate and try again. \uD83D\uDCF2"
             this.render(title, message)
             return true
         }
         if (response.has("reserved")) {
             val title: String = "⚡ reserved username ⚡"
-            val message: String = "\uD83E\uDD16 input username is reserved.\nplease re-evaluate and try again. \uD83D\uDCF2"
+            val message: String =
+                "\uD83E\uDD16 input username is reserved.\nplease re-evaluate and try again. \uD83D\uDCF2"
             this.render(title, message)
             return true
         }
