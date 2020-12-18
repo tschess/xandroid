@@ -1,13 +1,10 @@
 package io.tschess.tschess.start
 
-import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.Secure
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -19,7 +16,6 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.firebase.FirebaseApp
 import io.tschess.tschess.R
-import io.tschess.tschess.dialog.DialogOk
 import io.tschess.tschess.home.ActivityHome
 import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.model.ExtendedDataHolder
@@ -39,11 +35,7 @@ class ActivityStart : AppCompatActivity() {
     private lateinit var buttonCreate: Button
     private lateinit var buttonRecover: Button
 
-    val parsePlayer: ParsePlayer  = ParsePlayer()
-
-
-
-
+    val parsePlayer: ParsePlayer = ParsePlayer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +54,14 @@ class ActivityStart : AppCompatActivity() {
         this.buttonRecover.setOnClickListener {
             val title: String = "tschess \uD83D\uDD10"
             val message: String = "\u2709\uFE0F to recover account please email:\n\nhello@tschess.io"
-            DialogOk(applicationContext).render(title, message)
+            val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
+            dialogBuilder.setTitle(title)
+            dialogBuilder.setMessage(message)
+            dialogBuilder.setPositiveButton("ok") { dialog, _ ->
+                dialog.cancel()
+            }
+            val alert: AlertDialog = dialogBuilder.create()
+            alert.show()
         }
 
         this.buttonCreate.setOnClickListener {
@@ -112,7 +111,8 @@ class ActivityStart : AppCompatActivity() {
 
                 this.progressBar.visibility = View.INVISIBLE
                 val title: String = "⚡ server error ⚡"
-                val message: String = "\uD83D\uDD0C unable to reach server.\ncheck connection and try again. \uD83D\uDCF1"
+                val message: String =
+                    "\uD83D\uDD0C unable to reach server.\ncheck connection and try again. \uD83D\uDCF1"
                 //DialogOk(context).render(title, message)
                 val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
                 dialogBuilder.setTitle(title)
@@ -121,14 +121,7 @@ class ActivityStart : AppCompatActivity() {
                     dialog.cancel()
                 }
                 val alert: AlertDialog = dialogBuilder.create()
-                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                //alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
-                //}
-                //else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                //alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-                //}
                 alert.show()
-
             }
         )
         request.retryPolicy = DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 0, 1F)
@@ -144,19 +137,13 @@ class ActivityStart : AppCompatActivity() {
             val message: String =
                 "\uD83E\uDD16 username must be alphanumeric.\nplease re-evaluate and try again. \uD83D\uDCF2"
             //this.dialog.render(title, message)
-            val dialogBuilder = AlertDialog.Builder(applicationContext, R.style.AlertDialog)
+            val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
             dialogBuilder.setTitle(title)
             dialogBuilder.setMessage(message)
             dialogBuilder.setPositiveButton("ok") { dialog, _ ->
                 dialog.cancel()
             }
             val alert: AlertDialog = dialogBuilder.create()
-            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
-            //}
-            //else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-            //}
             alert.show()
             return
         }
@@ -177,7 +164,7 @@ class ActivityStart : AppCompatActivity() {
         if (username != "" || password != "") {
             return false
         }
-        val intent = Intent(applicationContext, ActivityCreate::class.java)
+        val intent = Intent(this, ActivityCreate::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -189,7 +176,7 @@ class ActivityStart : AppCompatActivity() {
     private fun startActivityHome(player: EntityPlayer) {
         val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
         extras.putExtra("player_self", player)
-        val intent = Intent(applicationContext, ActivityHome::class.java)
+        val intent = Intent(this, ActivityHome::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -200,19 +187,22 @@ class ActivityStart : AppCompatActivity() {
     fun fail(response: JSONObject): Boolean {
         if (response.has("unknown")) {
             val title: String = "⚡ unknown username ⚡"
-            val message: String = "\uD83E\uDD16 no such player in database.\nplease re-evaluate and try again. \uD83D\uDCF2"
+            val message: String =
+                "\uD83E\uDD16 no such player in database.\nplease re-evaluate and try again. \uD83D\uDCF2"
             this.render(title, message)
             return true
         }
         if (response.has("invalid")) {
             val title: String = "⚡ invalid password ⚡"
-            val message: String = "\uD83E\uDD16 input password is incorrect.\nplease re-evaluate and try again. \uD83D\uDCF2"
+            val message: String =
+                "\uD83E\uDD16 input password is incorrect.\nplease re-evaluate and try again. \uD83D\uDCF2"
             this.render(title, message)
             return true
         }
         if (response.has("reserved")) {
             val title: String = "⚡ reserved username ⚡"
-            val message: String = "\uD83E\uDD16 input username is reserved.\nplease re-evaluate and try again. \uD83D\uDCF2"
+            val message: String =
+                "\uD83E\uDD16 input username is reserved.\nplease re-evaluate and try again. \uD83D\uDCF2"
             this.render(title, message)
             return true
         }
@@ -222,19 +212,13 @@ class ActivityStart : AppCompatActivity() {
     }
 
     fun render(title: String, message: String) {
-        val dialogBuilder = AlertDialog.Builder(applicationContext, R.style.AlertDialog)
+        val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
         dialogBuilder.setTitle(title)
         dialogBuilder.setMessage(message)
         dialogBuilder.setPositiveButton("ok") { dialog, _ ->
             dialog.cancel()
         }
         val alert: AlertDialog = dialogBuilder.create()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
-        }
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-        }
         alert.show()
     }
 }

@@ -66,7 +66,7 @@ class ActivityCreate : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val intent = Intent(applicationContext, ActivityStart::class.java)
+        val intent = Intent(this, ActivityStart::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -90,20 +90,13 @@ class ActivityCreate : AppCompatActivity() {
             val title: String = "⚡ illegal input ⚡"
             val message: String =
                 "\uD83E\uDD16 username must be alphanumeric.\nplease re-evaluate and try again. \uD83D\uDCF2"
-            //this.dialog.render(title, message)
-            val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
+            val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
             dialogBuilder.setTitle(title)
             dialogBuilder.setMessage(message)
             dialogBuilder.setPositiveButton("ok") { dialog, _ ->
                 dialog.cancel()
             }
             val alert: AlertDialog = dialogBuilder.create()
-            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
-            //}
-            //else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-            //}
             alert.show()
             return
         }
@@ -140,20 +133,13 @@ class ActivityCreate : AppCompatActivity() {
                 this.progressBar.visibility = View.INVISIBLE
                 val title: String = "⚡ server error ⚡"
                 val message: String = "\uD83D\uDD0C unable to reach server.\ncheck connection and try again. \uD83D\uDCF1"
-                //DialogOk(context).render(title, message)
-                val dialogBuilder = AlertDialog.Builder(context, R.style.AlertDialog)
+                val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
                 dialogBuilder.setTitle(title)
                 dialogBuilder.setMessage(message)
                 dialogBuilder.setPositiveButton("ok") { dialog, _ ->
                     dialog.cancel()
                 }
                 val alert: AlertDialog = dialogBuilder.create()
-                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                //alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
-                //}
-                //else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                //alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-                //}
                 alert.show()
 
             }
@@ -165,7 +151,7 @@ class ActivityCreate : AppCompatActivity() {
     private fun startActivityHome(player: EntityPlayer) {
         val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
         extras.putExtra("player_self", player)
-        val intent = Intent(applicationContext, ActivityHome::class.java)
+        val intent = Intent(this, ActivityHome::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -198,19 +184,13 @@ class ActivityCreate : AppCompatActivity() {
     }
 
     fun render(title: String, message: String) {
-        val dialogBuilder = AlertDialog.Builder(applicationContext, R.style.AlertDialog)
+        val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
         dialogBuilder.setTitle(title)
         dialogBuilder.setMessage(message)
         dialogBuilder.setPositiveButton("ok") { dialog, _ ->
             dialog.cancel()
         }
         val alert: AlertDialog = dialogBuilder.create()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
-        }
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-        }
         alert.show()
     }
 }
