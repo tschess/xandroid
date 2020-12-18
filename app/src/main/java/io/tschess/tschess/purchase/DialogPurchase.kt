@@ -1,4 +1,4 @@
-package io.tschess.tschess.dialog
+package io.tschess.tschess.purchase
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -23,7 +23,7 @@ import io.tschess.tschess.server.VolleySingleton
 import io.tschess.tschess.tschess.ActivityTschess
 import org.json.JSONObject
 
-class DialogChallenge(
+class DialogPurchase(
     context: Context,
     val playerSelf: EntityPlayer,
     val playerOther: EntityPlayer,
@@ -37,7 +37,7 @@ class DialogChallenge(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_challenge)
+        setContentView(R.layout.dialog_purchase)
 
         this.progressBar = findViewById(R.id.progress_bar)
         this.progressBar.visibility = View.INVISIBLE
@@ -45,18 +45,20 @@ class DialogChallenge(
         val textSend: TextView = findViewById(R.id.text_send)
 
         val textTitle: TextView = findViewById(R.id.text_title)
+        //textTitle.text = "\uD83E\uDD1C ${playerSelf.username} vs. ${playerOther.username} \uD83E\uDD1B"
         textTitle.text = "\uD83E\uDD1C vs. ${playerOther.username} \uD83E\uDD1B"
 
         val textInfo: TextView = findViewById(R.id.text_info)
-        textInfo.text = "Select config & send invite."
+        //textInfo.text = "Select config & send invite."
+        textInfo.text = "Subscribe to unlock all selections."
 
         val textConfig: TextView = findViewById(R.id.config_text)
         textConfig.text = "Selection:"
 
         val listOption: MutableList<String> = mutableListOf(
-            "Config. 0",
-            "Config. 1",
-            "Config. 2",
+            "Config. 0 \uD83D\uDD12",
+            "Config. 1 \uD83D\uDD12",
+            "Config. 2 \uD83D\uDD12",
             "    Chess    ",
             "    I'm Feelin' Lucky    "
         )

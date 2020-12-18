@@ -22,6 +22,7 @@ import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.leaderboard.ActivityLeaderboard
 import io.tschess.tschess.model.*
 import io.tschess.tschess.profile.ActivityProfile
+import io.tschess.tschess.purchase.DialogPurchase
 import io.tschess.tschess.server.CustomJsonArrayRequest
 import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
@@ -155,8 +156,11 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         this.index += 1
     }
 
+    // TODO: Purchase vs. Challenge
     fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame?, action: String = "INVITATION") {
-        val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action, refresher = this)
+        //val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action, refresher = this)
+        //dialogRematch.show()
+        val dialogRematch: DialogPurchase = DialogPurchase(this, playerSelf, playerOther, game, action, refresher = this)
         dialogRematch.show()
     }
 
