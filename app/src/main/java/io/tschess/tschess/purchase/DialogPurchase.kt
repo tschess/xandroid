@@ -16,6 +16,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import io.tschess.tschess.R
+import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.home.Refresher
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.EntityPlayer
@@ -106,26 +107,42 @@ YAYAYAYYA
 
         */
 
+        val textTitle: TextView = findViewById(R.id.text_title)
+        val textInfo: TextView = findViewById(R.id.text_info)
+        val textConfig: TextView = findViewById(R.id.config_text)
+        val picker: NumberPicker = findViewById<View>(R.id.number_picker) as NumberPicker
+        val textSend: TextView = findViewById(R.id.text_send)
+        val textSubscribe: TextView = findViewById(R.id.text_subscribe)
+        textSubscribe.setOnClickListener {
+
+            textTitle.alpha = 0.5F
+
+            textConfig.alpha = 0.5F
+            picker.alpha = 0.5F
+            picker.isEnabled = false
+
+            textSubscribe.text = "$0.99 × Month 📅"
+            textSubscribe.alpha = 0.9F
+            textSend.text = "$5.99 × Year 🍂❄️🌷☀️"
+            textSend.alpha = 0.9F
+
+            }
 
 
-// //val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action, refresher = this)
-//        //dialogRematch.show()
 
 
         this.progressBar = findViewById(R.id.progress_bar)
         this.progressBar.visibility = View.INVISIBLE
 
-        val textSend: TextView = findViewById(R.id.text_send)
 
-        val textTitle: TextView = findViewById(R.id.text_title)
-        //textTitle.text = "\uD83E\uDD1C ${playerSelf.username} vs. ${playerOther.username} \uD83E\uDD1B"
+
+
         textTitle.text = "\uD83E\uDD1C vs. ${playerOther.username} \uD83E\uDD1B"
 
-        val textInfo: TextView = findViewById(R.id.text_info)
-        //textInfo.text = "Select config & send invite."
+
         textInfo.text = "Subscribe to unlock all selections."
 
-        val textConfig: TextView = findViewById(R.id.config_text)
+
         textConfig.text = "Selection:"
 
         val listOption: MutableList<String> = mutableListOf(
@@ -136,10 +153,9 @@ YAYAYAYYA
             "    I'm Feelin' Lucky    "
         )
         if (action == "ACCEPT") {
-            //listOption.add("mirror opponent")
             textSend.text = "\uD83C\uDF89 Let's play! \uD83C\uDF89"
         }
-        val picker: NumberPicker = findViewById<View>(R.id.number_picker) as NumberPicker
+
         picker.minValue = 0
         picker.maxValue = listOption.size - 1
         picker.wrapSelectorWheel = true
