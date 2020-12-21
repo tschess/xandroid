@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -59,7 +60,7 @@ class ActivityConfig : AppCompatActivity() {
             applicationContext.startActivity(intent)
             finish()
         })
-        val text00: TextView = findViewById(R.id.text_00)
+        val text00: LinearLayout = findViewById(R.id.label_00)
         text00.setOnClickListener(View.OnClickListener {
             // Do some work here
             extras.putExtra("player_self", playerSelf)
@@ -85,7 +86,7 @@ class ActivityConfig : AppCompatActivity() {
             applicationContext.startActivity(intent)
             finish()
         })
-        val text01: TextView = findViewById(R.id.text_01)
+        val text01: LinearLayout = findViewById(R.id.label_01)
         text01.setOnClickListener(View.OnClickListener {
             // Do some work here
             extras.putExtra("player_self", playerSelf)
@@ -111,7 +112,7 @@ class ActivityConfig : AppCompatActivity() {
             applicationContext.startActivity(intent)
             finish()
         })
-        val text02: TextView = findViewById(R.id.text_02)
+        val text02: LinearLayout = findViewById(R.id.label_02)
         text02.setOnClickListener(View.OnClickListener {
             // Do some work here
             extras.putExtra("player_self", playerSelf)

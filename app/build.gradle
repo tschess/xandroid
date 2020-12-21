@@ -11,8 +11,8 @@ android {
         applicationId "io.tschess.tschess"
         minSdkVersion 26
         targetSdkVersion 29
-        versionCode 20400
-        versionName "2.0.4"
+        versionCode 20500
+        versionName "2.0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

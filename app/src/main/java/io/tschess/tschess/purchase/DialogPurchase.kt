@@ -89,9 +89,6 @@ class DialogPurchase(
         }
     }
 
-
-
-
     fun querySkuDetails(index: Int) {
         val skuList = ArrayList<String>()
         skuList.add("001")
