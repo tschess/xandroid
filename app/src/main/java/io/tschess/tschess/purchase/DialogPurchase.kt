@@ -1,5 +1,6 @@
 package io.tschess.tschess.purchase
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
@@ -34,9 +35,10 @@ class DialogPurchase(
     val refresher: Refresher? = null
 ) : Dialog(context) {
 
+    lateinit var activity: Activity
+
     lateinit var progressBar: ProgressBar
     private val parseGame: ParseGame = ParseGame()
-
 
     private val purchasesUpdateListener =
         PurchasesUpdatedListener { billingResult, purchases ->
@@ -62,7 +64,19 @@ class DialogPurchase(
             Log.e("billingResult","${billingResult}")
             Log.e("skuDetailsList","${skuDetailsList}")
 
+            val skuDetails: SkuDetails = skuDetailsList!![0]
+
+            // Retrieve a value for "skuDetails" by calling querySkuDetailsAsync().
+            val flowParams = BillingFlowParams.newBuilder()
+                .setSkuDetails(skuDetails)
+                .build()
+            val responseCode = billingClient.launchBillingFlow(activity, flowParams).responseCode
+
+            Log.e("responseCode","\n\n\n${responseCode}\n\n\n")
+
         }
+
+
         //}
     }
 
@@ -72,7 +86,9 @@ class DialogPurchase(
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_purchase)
 
+/*
 
+YAYAYAYYA
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode ==  BillingClient.BillingResponseCode.OK) {
@@ -88,7 +104,12 @@ class DialogPurchase(
         })
 
 
+        */
 
+
+
+// //val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action, refresher = this)
+//        //dialogRematch.show()
 
 
         this.progressBar = findViewById(R.id.progress_bar)

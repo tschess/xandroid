@@ -160,8 +160,9 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame?, action: String = "INVITATION") {
         //val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action, refresher = this)
         //dialogRematch.show()
-        val dialogRematch: DialogPurchase = DialogPurchase(this, playerSelf, playerOther, game, action, refresher = this)
-        dialogRematch.show()
+        val dialogPurchase: DialogPurchase = DialogPurchase(this, playerSelf, playerOther, game, action, refresher = this)
+        dialogPurchase.activity = this
+        dialogPurchase.show()
     }
 
     private fun setScrollListener(listView: ListView) {
