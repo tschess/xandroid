@@ -107,6 +107,8 @@ class DialogPurchase(
                 .build()
             val responseCode = billingClient.launchBillingFlow(activity, flowParams).responseCode
             Log.e("responseCode", "\n\n\n${responseCode}\n\n\n")
+
+            //billingClient.acknowledgePurchase() method when you get purchase.purchaseState === Purchase.PurchaseState.PURCHASED
         }
     }
 

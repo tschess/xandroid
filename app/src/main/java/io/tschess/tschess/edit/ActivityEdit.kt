@@ -70,7 +70,7 @@ class ActivityEdit : AppCompatActivity(), View.OnLongClickListener, View.OnDragL
         extras.clear()
 
         val headerSelf: HeaderSelf = findViewById(R.id.header)
-        headerSelf.initialize(playerSelf, "config $config")
+        headerSelf.initialize(playerSelf, "config. $config")
 
         this.editView = findViewById(R.id.edit_view)
         this.editView.listenerDrop = this
