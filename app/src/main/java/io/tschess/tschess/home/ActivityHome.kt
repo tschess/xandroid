@@ -194,10 +194,12 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
                             //}
                         }
                     }
+                    return
                 }
+                dialogPurchase(playerOther, game, action)
             }
             override fun onBillingServiceDisconnected() {
-                dialogChallenge(playerOther, game, action)
+                dialogPurchase(playerOther, game, action)
             }
         })
     }

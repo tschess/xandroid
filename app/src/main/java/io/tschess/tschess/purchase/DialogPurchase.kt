@@ -83,6 +83,7 @@ class DialogPurchase(
                 override fun onBillingServiceDisconnected() {
                     // Try to restart the connection on the next request to
                     // Google Play by calling the startConnection() method.
+                    //TODO: ERROR UNABLE TO CONNECT TO PLAY STORE...
                 }
             })
         }
