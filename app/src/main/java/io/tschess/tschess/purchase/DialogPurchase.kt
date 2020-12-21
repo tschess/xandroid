@@ -52,18 +52,6 @@ class DialogPurchase(
         .enablePendingPurchases()
         .build()
 
-
-    fun setOriginal() {
-
-    }
-
-
-    // val textTitle: TextView = findViewById(R.id.text_title)
-    //        val textInfo: TextView = findViewById(R.id.text_info)
-    //        val textConfig: TextView = findViewById(R.id.config_text)
-    //        val picker: NumberPicker = findViewById<View>(R.id.number_picker) as NumberPicker
-    //        val textSend: TextView = findViewById(R.id.text_send)
-    //        val textSubscribe: TextView = findViewById(R.id.text_subscribe)
     fun setSubscribe(
         textTitle: TextView,
         textConfig: TextView,

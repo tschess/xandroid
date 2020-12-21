@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.widget.AbsListView
@@ -13,6 +14,10 @@ import android.widget.ListView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.SkuDetailsParams
 import com.android.volley.Request
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
@@ -20,7 +25,10 @@ import io.tschess.tschess.config.ActivityConfig
 import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.header.HeaderSelf
 import io.tschess.tschess.leaderboard.ActivityLeaderboard
-import io.tschess.tschess.model.*
+import io.tschess.tschess.model.EntityGame
+import io.tschess.tschess.model.EntityPlayer
+import io.tschess.tschess.model.ExtendedDataHolder
+import io.tschess.tschess.model.ParseGame
 import io.tschess.tschess.profile.ActivityProfile
 import io.tschess.tschess.purchase.DialogPurchase
 import io.tschess.tschess.server.CustomJsonArrayRequest
@@ -32,6 +40,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.concurrent.schedule
+
 
 class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.OnRefreshListener {
 
@@ -157,13 +166,67 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     }
 
     // TODO: Purchase vs. Challenge
-    fun dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, game: EntityGame?, action: String = "INVITATION") {
-        //val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action, refresher = this)
-        //dialogRematch.show()
-        val dialogPurchase: DialogPurchase = DialogPurchase(this, playerSelf, playerOther, game, action, refresher = this)
+    fun dialogRematch(
+        playerSelf: EntityPlayer,
+        playerOther: EntityPlayer,
+        game: EntityGame?,
+        action: String = "INVITATION"
+    ) {
+        val client = BillingClient.newBuilder(application)
+            .enablePendingPurchases()
+            .setListener { _, _ -> }
+            .build()
+        client.startConnection(object : BillingClientStateListener {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    client.queryPurchaseHistoryAsync(
+                        BillingClient.SkuType.SUBS
+                    ) { _, purchasesList ->
+                        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                            //Log.e("purchasesList", "${purchasesList}")
+                            //Log.e("BillingClient", String.format("List size is %d", purchasesList?.size ?: -1))
+                            if(purchasesList?.size == 0){
+                                dialogPurchase(playerOther, game, action)
+                                return@queryPurchaseHistoryAsync
+                            }
+                            //else {
+                            dialogChallenge(playerOther, game, action)
+                            //}
+                        }
+                    }
+                }
+            }
+            override fun onBillingServiceDisconnected() {
+                dialogChallenge(playerOther, game, action)
+            }
+        })
+    }
+
+    fun dialogPurchase(playerOther: EntityPlayer, game: EntityGame?, action: String) {
+        val dialogPurchase: DialogPurchase = DialogPurchase(
+            this,
+            playerSelf,
+            playerOther,
+            game,
+            action,
+            refresher = this
+        )
         dialogPurchase.activity = this
         dialogPurchase.show()
     }
+
+    fun dialogChallenge(playerOther: EntityPlayer, game: EntityGame?, action: String) {
+        val dialogRematch: DialogChallenge = DialogChallenge(
+            this,
+            playerSelf,
+            playerOther,
+            game,
+            action,
+            refresher = this
+        )
+        dialogRematch.show()
+    }
+
 
     private fun setScrollListener(listView: ListView) {
         listView.setOnScrollListener(object : AbsListView.OnScrollListener {
@@ -172,13 +235,20 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
                 val countHeader: Int = listView.headerViewsCount
                 val countFooter: Int = listView.footerViewsCount
                 val visible: Int = position - countHeader - countFooter
-                val bottom: Boolean =  visible >= arrayAdapter.count - 1
+                val bottom: Boolean = visible >= arrayAdapter.count - 1
                 val idle: Boolean = scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
                 if (bottom && idle) {
                     fetchGames()
                 }
             }
-            override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {}
+
+            override fun onScroll(
+                view: AbsListView,
+                firstVisibleItem: Int,
+                visibleItemCount: Int,
+                totalItemCount: Int
+            ) {
+            }
         })
     }
 
@@ -217,9 +287,11 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
                     }
                 }
             }
+
             override fun onTabReselected(tab: TabLayout.Tab) {
                 this.onTabSelected(tab)
             }
+
             override fun onTabUnselected(p0: TabLayout.Tab?) {}
         })
     }
