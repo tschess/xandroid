@@ -48,6 +48,7 @@
     </style>
 
     <style name="NumberPickerText">
+        <item name="android:textColor">@android:color/darker_gray</item>
         <item name="android:textSize">16sp</item>
     </style>
 

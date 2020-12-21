@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -52,33 +53,75 @@ class DialogPurchase(
         .build()
 
 
-    fun querySkuDetails() {
+    fun setOriginal() {
+
+    }
+
+
+    // val textTitle: TextView = findViewById(R.id.text_title)
+    //        val textInfo: TextView = findViewById(R.id.text_info)
+    //        val textConfig: TextView = findViewById(R.id.config_text)
+    //        val picker: NumberPicker = findViewById<View>(R.id.number_picker) as NumberPicker
+    //        val textSend: TextView = findViewById(R.id.text_send)
+    //        val textSubscribe: TextView = findViewById(R.id.text_subscribe)
+    fun setSubscribe(
+        textTitle: TextView,
+        textConfig: TextView,
+        picker: NumberPicker,
+        textSend: TextView,
+        textSubscribe: TextView
+    ) {
+        textTitle.alpha = 0.5F
+
+        textConfig.alpha = 0.5F
+        picker.alpha = 0.5F
+        picker.isEnabled = false
+
+        textSubscribe.text = "$0.99 × Month 📅"
+        textSubscribe.alpha = 0.9F
+        textSend.text = "$5.99 × Year 🍂❄️🌷\uD83C\uDF1E️"
+        textSend.alpha = 0.9F
+        textSend.setTextColor(Color.WHITE)
+
+        textSubscribe.setOnClickListener {
+            billingClient.startConnection(object : BillingClientStateListener {
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+                    if (billingResult.responseCode ==  BillingClient.BillingResponseCode.OK) {
+                        // The BillingClient is ready. You can query purchases here.
+                        //querySkuDetailsMonth()
+                        querySkuDetails(0) // × Month
+                    }
+                }
+                override fun onBillingServiceDisconnected() {
+                    // Try to restart the connection on the next request to
+                    // Google Play by calling the startConnection() method.
+                }
+            })
+        }
+    }
+
+
+
+
+    fun querySkuDetails(index: Int) {
         val skuList = ArrayList<String>()
         skuList.add("001")
         skuList.add("002")
         val params = SkuDetailsParams.newBuilder()
         params.setSkusList(skuList).setType(BillingClient.SkuType.SUBS)
-        //withContext(Dispatchers.IO) {
         billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
-        // Process the result.
+            // Process the result.
+            Log.e("billingResult", "${billingResult}")
+            Log.e("skuDetailsList", "${skuDetailsList}")
 
-            Log.e("billingResult","${billingResult}")
-            Log.e("skuDetailsList","${skuDetailsList}")
-
-            val skuDetails: SkuDetails = skuDetailsList!![0]
-
+            val skuDetails: SkuDetails = skuDetailsList!![index]
             // Retrieve a value for "skuDetails" by calling querySkuDetailsAsync().
             val flowParams = BillingFlowParams.newBuilder()
                 .setSkuDetails(skuDetails)
                 .build()
             val responseCode = billingClient.launchBillingFlow(activity, flowParams).responseCode
-
-            Log.e("responseCode","\n\n\n${responseCode}\n\n\n")
-
+            Log.e("responseCode", "\n\n\n${responseCode}\n\n\n")
         }
-
-
-        //}
     }
 
 
@@ -86,26 +129,6 @@ class DialogPurchase(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_purchase)
-
-/*
-
-YAYAYAYYA
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode ==  BillingClient.BillingResponseCode.OK) {
-                    // The BillingClient is ready. You can query purchases here.
-
-                    querySkuDetails()
-                }
-            }
-            override fun onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-            }
-        })
-
-
-        */
 
         val textTitle: TextView = findViewById(R.id.text_title)
         val textInfo: TextView = findViewById(R.id.text_info)
@@ -115,18 +138,16 @@ YAYAYAYYA
         val textSubscribe: TextView = findViewById(R.id.text_subscribe)
         textSubscribe.setOnClickListener {
 
-            textTitle.alpha = 0.5F
-
-            textConfig.alpha = 0.5F
-            picker.alpha = 0.5F
-            picker.isEnabled = false
-
-            textSubscribe.text = "$0.99 × Month 📅"
-            textSubscribe.alpha = 0.9F
-            textSend.text = "$5.99 × Year 🍂❄️🌷☀️"
-            textSend.alpha = 0.9F
-
+            setSubscribe(
+                textTitle,
+                textConfig,
+                picker,
+                textSend,
+                textSubscribe)
             }
+
+
+
 
 
 
@@ -160,22 +181,38 @@ YAYAYAYYA
         picker.maxValue = listOption.size - 1
         picker.wrapSelectorWheel = true
         picker.displayedValues = listOption.toTypedArray()
-        picker.value = 4
+        picker.value = 0
 
 
         textSend.setOnClickListener {
-            this.progressBar.visibility = View.VISIBLE
-            if (action == "ACCEPT") {
-                accept(picker.value, game!!.id)
+            if(textSend.text == "⚡ Send invite ⚡"){
+                this.progressBar.visibility = View.VISIBLE
+                if (action == "ACCEPT") {
+                    accept(picker.value, game!!.id)
+                    return@setOnClickListener
+                }
+                if (action == "REMATCH") {
+                    val white: Boolean = game!!.getWhite(playerSelf.username)
+                    rematch(picker.value, white)
+                    return@setOnClickListener
+                }
+                //"INVITATION"
+                invitation(picker.value)
                 return@setOnClickListener
             }
-            if (action == "REMATCH") {
-                val white: Boolean = game!!.getWhite(playerSelf.username)
-                rematch(picker.value, white)
-                return@setOnClickListener
-            }
-            //"INVITATION"
-            invitation(picker.value)
+            billingClient.startConnection(object : BillingClientStateListener {
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+                    if (billingResult.responseCode ==  BillingClient.BillingResponseCode.OK) {
+                        // The BillingClient is ready. You can query purchases here.
+                        querySkuDetails(1)  // × Year
+                    }
+                }
+                override fun onBillingServiceDisconnected() {
+                    // Try to restart the connection on the next request to
+                    // Google Play by calling the startConnection() method.
+                }
+            })
+
         }
     }
 

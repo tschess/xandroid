@@ -37,9 +37,10 @@
             tools:text="Subscribe to unlock all selections."
 
             android:paddingTop="16dp"
-            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
 
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@android:color/white"
+            android:alpha="0.9"
 
             app:layout_constraintTop_toBottomOf="@+id/text_title"
             app:layout_constraintBottom_toTopOf="@+id/picker_stack"
@@ -60,6 +61,8 @@
             android:layout_marginBottom="8dp"
 
             android:background="@color/header"
+
+
 
             app:layout_constraintTop_toBottomOf="@+id/text_info"
             app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +165,7 @@
             android:layout_marginTop="16dp"
             android:id="@+id/text_send"
 
-            android:alpha="0.9"
+
 
             android:background="@android:color/transparent"
 
@@ -171,7 +174,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
 
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/darker_gray"
 
             android:paddingBottom="16dp"
 
