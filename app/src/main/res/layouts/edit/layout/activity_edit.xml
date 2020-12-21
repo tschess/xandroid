@@ -45,7 +45,7 @@
                 app:layout_constraintRight_toRightOf="parent">
             <TextView
                     android:paddingStart="8dp"
-                    
+
                     android:layout_marginBottom="16dp"
                     android:textSize="16sp"
                     android:id="@+id/indicator"
