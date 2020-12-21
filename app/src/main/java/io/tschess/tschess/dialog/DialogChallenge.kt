@@ -48,7 +48,7 @@ class DialogChallenge(
         textTitle.text = "\uD83E\uDD1C vs. ${playerOther.username} \uD83E\uDD1B"
 
         val textInfo: TextView = findViewById(R.id.text_info)
-        textInfo.text = "Select config & send invite."
+        textInfo.text = "Select configuration and send invite."
 
         val textConfig: TextView = findViewById(R.id.config_text)
         textConfig.text = "Selection:"

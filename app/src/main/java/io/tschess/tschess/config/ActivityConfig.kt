@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
@@ -43,8 +44,23 @@ class ActivityConfig : AppCompatActivity() {
         val configView00: BoardConfig = findViewById(R.id.config_00)
         val config00: Array<Array<Piece?>> = this.playerSelf.getConfig(0)
 
+
+        //val text01: TextView = findViewById(R.id.text_01)
+        //val text02: TextView = findViewById(R.id.text_02)
+
         configView00.populateBoard(config00)
         configView00.setOnClickListener(View.OnClickListener {
+            // Do some work here
+            extras.putExtra("player_self", playerSelf)
+            extras.putExtra("config", 0)
+            val intent = Intent(applicationContext, ActivityEdit::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            applicationContext.startActivity(intent)
+            finish()
+        })
+        val text00: TextView = findViewById(R.id.text_00)
+        text00.setOnClickListener(View.OnClickListener {
             // Do some work here
             extras.putExtra("player_self", playerSelf)
             extras.putExtra("config", 0)
@@ -69,6 +85,17 @@ class ActivityConfig : AppCompatActivity() {
             applicationContext.startActivity(intent)
             finish()
         })
+        val text01: TextView = findViewById(R.id.text_01)
+        text01.setOnClickListener(View.OnClickListener {
+            // Do some work here
+            extras.putExtra("player_self", playerSelf)
+            extras.putExtra("config", 1)
+            val intent = Intent(applicationContext, ActivityEdit::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            applicationContext.startActivity(intent)
+            finish()
+        })
 
         val configView02: BoardConfig = findViewById(R.id.config_02)
         val config02: Array<Array<Piece?>> = this.playerSelf.getConfig(2)
@@ -84,15 +111,23 @@ class ActivityConfig : AppCompatActivity() {
             applicationContext.startActivity(intent)
             finish()
         })
+        val text02: TextView = findViewById(R.id.text_02)
+        text02.setOnClickListener(View.OnClickListener {
+            // Do some work here
+            extras.putExtra("player_self", playerSelf)
+            extras.putExtra("config", 2)
+            val intent = Intent(applicationContext, ActivityEdit::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            applicationContext.startActivity(intent)
+            finish()
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_config)
         this.progressBar = findViewById<ProgressBar>(R.id.progress_bar)
-        //this.progressBar.visibility = View.INVISIBLE
-
-
 
         val tabLayout: TabLayout = findViewById<View>(R.id.tab_layout) as TabLayout
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
