@@ -7,6 +7,10 @@ import android.widget.AbsListView
 import android.widget.ListView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.PurchaseHistoryRecord
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.google.android.material.tabs.TabLayout
@@ -18,10 +22,14 @@ import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.EntityPlayer
 import io.tschess.tschess.model.ExtendedDataHolder
 import io.tschess.tschess.model.ParseGame
+import io.tschess.tschess.purchase.DialogPurchase
 import io.tschess.tschess.server.CustomJsonArrayRequest
 import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class ActivityOther : AppCompatActivity(), Refresher {
 
@@ -43,6 +51,7 @@ class ActivityOther : AppCompatActivity(), Refresher {
 
     override fun onBackPressed() {
         val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+
         extras.putExtra("player_self", playerSelf)
         finish()
     }
@@ -55,6 +64,7 @@ class ActivityOther : AppCompatActivity(), Refresher {
         this.progressBar.visibility = View.INVISIBLE
 
         val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+        this.billingClient = extras.getExtra("billing_client") as BillingClient
         this.playerSelf = extras.getExtra("player_self") as EntityPlayer
         this.playerOther = extras.getExtra("player_other") as EntityPlayer
         extras.clear()
@@ -115,11 +125,14 @@ class ActivityOther : AppCompatActivity(), Refresher {
     }
 
     fun challenge(playerSelf: EntityPlayer, playerOther: EntityPlayer) {
-        val dialogChallenge: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, refresher = this)
-        dialogChallenge.show()
+        //val dialogChallenge: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, refresher = this)
+        //dialogChallenge.show()
 
         //  val dialogRematch: DialogChallenge = DialogChallenge(this, playerSelf, playerOther, game, action, refresher = this)
         //        dialogRematch.show()
+
+        isUserHasSubscription(playerOther, null)
+
     }
 
     private fun fetchGames() {
@@ -158,5 +171,74 @@ class ActivityOther : AppCompatActivity(), Refresher {
 
     override fun refresh() {
         this.onResume()
+    }
+
+    lateinit var billingClient: BillingClient
+
+    private fun isUserHasSubscription(
+        playerOther: EntityPlayer,
+        game: EntityGame?,
+        action: String = "INVITATION"
+    ) {
+        //billingClient = BillingClient.newBuilder(context).enablePendingPurchases().setListener(this).build()
+        billingClient.startConnection(object : BillingClientStateListener {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                val purchasesResult = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
+                billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.SUBS) { billingResult1: BillingResult, list: List<PurchaseHistoryRecord?>? ->
+                    Log.e(
+                        "billingprocess",
+                        "purchasesResult.getPurchasesList():" + purchasesResult.purchasesList
+                    )
+                    if (billingResult1.responseCode == BillingClient.BillingResponseCode.OK &&
+                        !Objects.requireNonNull(purchasesResult.purchasesList).isEmpty()
+                    ) {
+
+                        //here you can pass the user to use the app because he has an active subscription!!!
+                        Log.e("sub",  "HAS HAS HAS")
+
+                        dialogChallenge(playerOther, game, action)
+
+                        return@queryPurchaseHistoryAsync
+
+                    }
+
+                    dialogPurchase(playerOther, game, action)
+
+                    Log.e("sub",  "No No No!")
+                }
+            }
+
+            override fun onBillingServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+                Log.d("billingprocess", "onBillingServiceDisconnected")
+            }
+        })
+    }
+
+    fun dialogPurchase(playerOther: EntityPlayer, game: EntityGame?, action: String) {
+        val dialogPurchase: DialogPurchase = DialogPurchase(
+            this,
+            playerSelf,
+            playerOther,
+            game,
+            action,
+            refresher = this
+        )
+        dialogPurchase.activity = this
+        dialogPurchase.billingClient = billingClient
+        dialogPurchase.show()
+    }
+
+    fun dialogChallenge(playerOther: EntityPlayer, game: EntityGame?, action: String) {
+        val dialogRematch: DialogChallenge = DialogChallenge(
+            this,
+            playerSelf,
+            playerOther,
+            game,
+            action,
+            refresher = this
+        )
+        dialogRematch.show()
     }
 }

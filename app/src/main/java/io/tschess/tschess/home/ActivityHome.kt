@@ -254,12 +254,7 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         game: EntityGame?,
         action: String = "INVITATION"
     ) {
-
         isUserHasSubscription(playerOther, game, action)
-
-
-
-
     }
 
     fun dialogPurchase(playerOther: EntityPlayer, game: EntityGame?, action: String) {
@@ -330,6 +325,7 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 extendedDataHolder.putExtra("player_self", playerSelf)
+
                 when (tab.position) {
                     0 -> {
                         dialogSinglePlayer()
@@ -339,6 +335,7 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
                         startIntent(intent)
                     }
                     2 -> {
+                        extendedDataHolder.putExtra("billing_client", billingClient)
                         val intent = Intent(applicationContext, ActivityLeaderboard::class.java)
                         startIntent(intent)
                     }
@@ -389,9 +386,11 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         rival.imageView.alpha = 1F
         rival.name.alpha = 1F
         rival.setOnClickListener {
-            val dialogChallenge: DialogChallenge =
-                DialogChallenge(this, playerSelf, rival.playerRival, null, "INVITATION", refresher = this)
-            dialogChallenge.show()
+
+            isUserHasSubscription(rival.playerRival, null, "INVITATION")
+            //val dialogChallenge: DialogChallenge =
+                //DialogChallenge(this, playerSelf, rival.playerRival, null, "INVITATION", refresher = this)
+            //dialogChallenge.show()
         }
     }
 }

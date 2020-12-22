@@ -111,6 +111,7 @@ class ViewHolderLeaderboard(
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
+            extras.putExtra("billing_client", activityLeaderboard.billingClient)
             extras.putExtra("player_self", playerSelf)
             extras.putExtra("player_other", playerOther)
             context.startActivity(intent)
