@@ -14,10 +14,7 @@ import android.widget.ListView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.SkuDetailsParams
+import com.android.billingclient.api.*
 import com.android.volley.Request
 import com.google.android.material.tabs.TabLayout
 import io.tschess.tschess.R
@@ -37,12 +34,12 @@ import io.tschess.tschess.server.VolleySingleton
 import kotlinx.android.synthetic.main.card_home.view.*
 import org.json.JSONObject
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.concurrent.schedule
 
 
-class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.OnRefreshListener {
+class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.OnRefreshListener,
+    PurchasesUpdatedListener {
 
     private var size: Int
     private var index: Int
@@ -70,6 +67,11 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        this.billingClient = BillingClient.newBuilder(this)
+            .setListener(this)
+            .enablePendingPurchases()
+            .build()
 
         this.notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         this.notificationManager.cancelAll()
@@ -165,43 +167,99 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         this.index += 1
     }
 
-    // TODO: Purchase vs. Challenge
-    fun dialogRematch(
-        playerSelf: EntityPlayer,
+
+
+    var acknowledgePurchaseResponseListener =
+        AcknowledgePurchaseResponseListener {
+
+            Log.e("Purchase acknowledged", "!!!!!!")
+
+        }
+
+    fun handlePurchase(purchase: Purchase) {
+
+        Log.e("\n\n\npurchase", "\n\n${purchase}\n\n")
+
+        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            if (!purchase.isAcknowledged) {
+                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                    .setPurchaseToken(purchase.purchaseToken)
+                    .build()
+                billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseResponseListener)
+            }
+        }
+    }
+
+    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
+
+        Log.e("\n\n\npurchases", "\n\n${purchases}\n\n")
+
+        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
+            for (purchase in purchases) {
+                handlePurchase(purchase)
+            }
+        } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
+            // Handle an error caused by a user cancelling the purchase flow.
+        } else {
+            // Handle any other error codes.
+        }
+    }
+
+    lateinit var billingClient: BillingClient
+
+    private fun isUserHasSubscription(
         playerOther: EntityPlayer,
         game: EntityGame?,
         action: String = "INVITATION"
     ) {
-        val client = BillingClient.newBuilder(application)
-            .enablePendingPurchases()
-            .setListener { _, _ -> }
-            .build()
-        client.startConnection(object : BillingClientStateListener {
+        //billingClient = BillingClient.newBuilder(context).enablePendingPurchases().setListener(this).build()
+        billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    client.queryPurchaseHistoryAsync(
-                        BillingClient.SkuType.SUBS
-                    ) { _, purchasesList ->
-                        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                            //Log.e("purchasesList", "${purchasesList}")
-                            //Log.e("BillingClient", String.format("List size is %d", purchasesList?.size ?: -1))
-                            if(purchasesList?.size == 0){
-                                dialogPurchase(playerOther, game, action)
-                                return@queryPurchaseHistoryAsync
-                            }
-                            //else {
-                            dialogChallenge(playerOther, game, action)
-                            //}
-                        }
+                val purchasesResult = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
+                billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.SUBS) { billingResult1: BillingResult, list: List<PurchaseHistoryRecord?>? ->
+                    Log.e(
+                        "billingprocess",
+                        "purchasesResult.getPurchasesList():" + purchasesResult.purchasesList
+                    )
+                    if (billingResult1.responseCode == BillingClient.BillingResponseCode.OK &&
+                        !Objects.requireNonNull(purchasesResult.purchasesList).isEmpty()
+                    ) {
+
+                        //here you can pass the user to use the app because he has an active subscription!!!
+                        Log.e("sub",  "HAS HAS HAS")
+
+                        dialogChallenge(playerOther, game, action)
+
+                        return@queryPurchaseHistoryAsync
+
                     }
-                    return
+
+                    dialogPurchase(playerOther, game, action)
+
+                    Log.e("sub",  "No No No!")
                 }
-                dialogPurchase(playerOther, game, action)
             }
+
             override fun onBillingServiceDisconnected() {
-                dialogPurchase(playerOther, game, action)
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+                Log.d("billingprocess", "onBillingServiceDisconnected")
             }
         })
+    }
+
+    // TODO: Purchase vs. Challenge
+    fun dialogRematch(
+        playerOther: EntityPlayer,
+        game: EntityGame?,
+        action: String = "INVITATION"
+    ) {
+
+        isUserHasSubscription(playerOther, game, action)
+
+
+
+
     }
 
     fun dialogPurchase(playerOther: EntityPlayer, game: EntityGame?, action: String) {
@@ -214,6 +272,7 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
             refresher = this
         )
         dialogPurchase.activity = this
+        dialogPurchase.billingClient = billingClient
         dialogPurchase.show()
     }
 

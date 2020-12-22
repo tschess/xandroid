@@ -13,11 +13,11 @@ import android.widget.NumberPicker
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.android.billingclient.api.*
+import com.android.billingclient.api.Purchase.PurchaseState
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import io.tschess.tschess.R
-import io.tschess.tschess.dialog.DialogChallenge
 import io.tschess.tschess.home.Refresher
 import io.tschess.tschess.model.EntityGame
 import io.tschess.tschess.model.EntityPlayer
@@ -27,6 +27,7 @@ import io.tschess.tschess.server.ServerAddress
 import io.tschess.tschess.server.VolleySingleton
 import io.tschess.tschess.tschess.ActivityTschess
 import org.json.JSONObject
+
 
 class DialogPurchase(
     context: Context,
@@ -38,19 +39,10 @@ class DialogPurchase(
 ) : Dialog(context) {
 
     lateinit var activity: Activity
+    lateinit var billingClient: BillingClient
 
     lateinit var progressBar: ProgressBar
     private val parseGame: ParseGame = ParseGame()
-
-    private val purchasesUpdateListener =
-        PurchasesUpdatedListener { billingResult, purchases ->
-            // To be implemented in a later section.
-        }
-
-    private var billingClient = BillingClient.newBuilder(getContext())
-        .setListener(purchasesUpdateListener)
-        .enablePendingPurchases()
-        .build()
 
     fun setSubscribe(
         textTitle: TextView,
@@ -74,12 +66,13 @@ class DialogPurchase(
         textSubscribe.setOnClickListener {
             billingClient.startConnection(object : BillingClientStateListener {
                 override fun onBillingSetupFinished(billingResult: BillingResult) {
-                    if (billingResult.responseCode ==  BillingClient.BillingResponseCode.OK) {
+                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                         // The BillingClient is ready. You can query purchases here.
                         //querySkuDetailsMonth()
                         querySkuDetails(0) // × Month
                     }
                 }
+
                 override fun onBillingServiceDisconnected() {
                     // Try to restart the connection on the next request to
                     // Google Play by calling the startConnection() method.
@@ -108,6 +101,7 @@ class DialogPurchase(
             val responseCode = billingClient.launchBillingFlow(activity, flowParams).responseCode
             Log.e("responseCode", "\n\n\n${responseCode}\n\n\n")
 
+            dismiss()
             //billingClient.acknowledgePurchase() method when you get purchase.purchaseState === Purchase.PurchaseState.PURCHASED
         }
     }
@@ -131,7 +125,8 @@ class DialogPurchase(
                 textConfig,
                 picker,
                 textSend,
-                textSubscribe)
+                textSubscribe
+            )
             }
 
 
@@ -190,11 +185,12 @@ class DialogPurchase(
             }
             billingClient.startConnection(object : BillingClientStateListener {
                 override fun onBillingSetupFinished(billingResult: BillingResult) {
-                    if (billingResult.responseCode ==  BillingClient.BillingResponseCode.OK) {
+                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                         // The BillingClient is ready. You can query purchases here.
                         querySkuDetails(1)  // × Year
                     }
                 }
+
                 override fun onBillingServiceDisconnected() {
                     // Try to restart the connection on the next request to
                     // Google Play by calling the startConnection() method.

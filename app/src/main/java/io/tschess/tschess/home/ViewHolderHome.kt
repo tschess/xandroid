@@ -152,7 +152,8 @@ class ViewHolderHome(
             this.layout_swipe!!.close(true)
             //activityHome.dialogRematch(playerSelf, playerOther, true)
 
-            activityHome.dialogRematch(playerSelf, playerOther, game, "ACCEPT")
+            //activityHome.dialogRematch(playerSelf, playerOther, game, "ACCEPT")
+            activityHome.dialogRematch(playerOther, game, "ACCEPT")
 
             //dialogRematch(playerSelf: EntityPlayer, playerOther: EntityPlayer, accept: Boolean = false)
 
@@ -248,7 +249,8 @@ class ViewHolderHome(
                 return@setOnClickListener
             }
             this.layout_swipe!!.close(true)
-            activityHome.dialogRematch(playerSelf, playerOther, game, "REMATCH")
+            //activityHome.dialogRematch(playerSelf, playerOther, game, "REMATCH")
+            activityHome.dialogRematch(playerOther, game, "REMATCH")
         }
     }
 
