@@ -13,7 +13,6 @@ import android.widget.NumberPicker
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.android.billingclient.api.*
-import com.android.billingclient.api.Purchase.PurchaseState
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -107,7 +106,6 @@ class DialogPurchase(
     }
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_purchase)
@@ -127,7 +125,7 @@ class DialogPurchase(
                 textSend,
                 textSubscribe
             )
-            }
+        }
 
 
 
@@ -164,11 +162,11 @@ class DialogPurchase(
         picker.maxValue = listOption.size - 1
         picker.wrapSelectorWheel = true
         picker.displayedValues = listOption.toTypedArray()
-        picker.value = 0
+        picker.value = 4
 
 
         textSend.setOnClickListener {
-            if(textSend.text == "⚡ Send invite ⚡"){
+            if (textSend.text == "⚡ Send invite ⚡" || textSend.text.contains("Let's play!")) {
                 this.progressBar.visibility = View.VISIBLE
                 if (action == "ACCEPT") {
                     accept(picker.value, game!!.id)
@@ -183,6 +181,7 @@ class DialogPurchase(
                 invitation(picker.value)
                 return@setOnClickListener
             }
+            //else {
             billingClient.startConnection(object : BillingClientStateListener {
                 override fun onBillingSetupFinished(billingResult: BillingResult) {
                     if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
@@ -196,7 +195,7 @@ class DialogPurchase(
                     // Google Play by calling the startConnection() method.
                 }
             })
-
+            //}
         }
     }
 
