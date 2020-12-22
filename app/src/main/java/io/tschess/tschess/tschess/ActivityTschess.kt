@@ -3,10 +3,13 @@ package io.tschess.tschess.tschess
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.Response
@@ -98,6 +101,52 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
     private lateinit var boardView: BoardView
     private lateinit var playerSelf: EntityPlayer
 
+    fun renderOptionMenu() {
+        val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
+        dialogBuilder.setTitle("⚡ tschess ⚡")
+        dialogBuilder.setMessage("select game menu option below:")
+        dialogBuilder.setPositiveButton("resign position \uD83E\uDD26") { dialog, _ ->
+            this.progressBar.visibility = View.VISIBLE
+            val url = "${ServerAddress().IP}:8080/game/resign"
+            val params = HashMap<String, Any>()
+            params["id_game"] = this.game.id
+            params["id_self"] = this.playerSelf.id
+            params["id_oppo"] = this.game.getPlayerOther(this.playerSelf.username).id
+            params["white"] = this.game.getWhite(this.playerSelf.username)
+            val jsonObject = JSONObject(params as Map<*, *>)
+            val jsonObjectRequest = JsonObjectRequest(
+                Request.Method.POST, url, jsonObject,
+                { },
+                { }
+            )
+            VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
+            dialog.cancel()
+        }
+        if (this.game.getTurn(this.playerSelf.username)) {
+            dialogBuilder.setNegativeButton("propose draw \uD83E\uDD1D") { dialog, _ ->
+                this.progressBar.visibility = View.VISIBLE
+                val url = "${ServerAddress().IP}:8080/game/prop/${this.game.id}"
+                val jsonObjectRequest = JsonObjectRequest(
+                    Request.Method.GET, url, null,
+                    { },
+                    { }
+                )
+                VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
+                dialog.cancel()
+            }
+        }
+        Handler(Looper.getMainLooper()).post {
+            val alert: AlertDialog = dialogBuilder.create()
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //alert.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1)
+            //} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //alert.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
+            //}
+            alert.show()
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tschess)
@@ -126,7 +175,8 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
                     flash()
                     return
                 }
-                DialogOption(applicationContext, playerSelf, game, progressBar).renderOptionMenu()
+                //DialogOption(this, playerSelf, game, progressBar).renderOptionMenu()
+                renderOptionMenu()
             }
         })
         this.matrix = game.getMatrix(playerSelf.username)
