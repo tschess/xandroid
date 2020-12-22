@@ -40,6 +40,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
 
+
 class ActivityTschess : AppCompatActivity(), Listener, Flasher {
 
     var white: Boolean
@@ -161,6 +162,7 @@ class ActivityTschess : AppCompatActivity(), Listener, Flasher {
         this.polling.cancel()
         val extras: ExtendedDataHolder = ExtendedDataHolder().getInstance()
         extras.putExtra("player_self", playerSelf)
+        extras.putExtra("game", game)
         finish()
     }
 

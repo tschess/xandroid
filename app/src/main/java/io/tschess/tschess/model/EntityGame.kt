@@ -30,6 +30,12 @@ class EntityGame(
     var updated: String
 ) : Parcelable {
 
+
+
+
+
+
+
     @SuppressLint("NewApi")
     constructor(parcel: Parcel) : this(
         parcel.readString()!!, //id

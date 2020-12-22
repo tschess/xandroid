@@ -83,18 +83,16 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
 
         this.swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
         swipeRefreshLayout.setOnRefreshListener(this)
-    }
 
-    override fun onResume() {
-        super.onResume()
-
-        this.notificationManager.cancelAll()
 
         this.extendedDataHolder = ExtendedDataHolder().getInstance()
         if(extendedDataHolder.hasExtra("player_self")){
             this.playerSelf = extendedDataHolder.getExtra("player_self") as EntityPlayer
             this.extendedDataHolder.clear()
         }
+
+
+
 
         val headerSelf: HeaderSelf = findViewById(R.id.header)
         headerSelf.initialize(this.playerSelf)
@@ -120,12 +118,46 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         this.fetchGames()
     }
 
+    override fun onResume() {
+        super.onResume()
+        this.notificationManager.cancelAll()
+
+        this.extendedDataHolder = ExtendedDataHolder().getInstance()
+        if(extendedDataHolder.hasExtra("game")){
+            val game = extendedDataHolder.getExtra("game") as EntityGame
+            for (instance in this.listMenu.withIndex()) {
+                if(instance.value.id == game.id){
+                    this.listMenu[instance.index] = game
+                    this.arrayAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
     override fun onRefresh() {
-        this.onResume()
+        this.refresh()
     }
 
     override fun refresh() {
-        this.onResume()
+
+        /* * */
+        val rival0: CardHome  = findViewById(R.id.rival_0)
+        val rival1: CardHome = findViewById(R.id.rival_1)
+        val rival2: CardHome = findViewById(R.id.rival_2)
+        this.utilityRival = UtilityRival(rival0, rival1, rival2, this.playerSelf, this, this)
+        /* * */
+
+        this.listMenu = arrayListOf()
+        val listView: ListView = findViewById(R.id.list_view)
+        this.arrayAdapter = AdapterHome(this.playerSelf, applicationContext, this.listMenu, this)
+        this.arrayAdapter.refresher = this
+        listView.adapter = arrayAdapter
+        this.setScrollListener(listView)
+
+        this.index = 0
+        this.fetched = false
+        this.arrayAdapter.clear()
+        this.fetchGames()
     }
 
     private fun fetchGames() {
