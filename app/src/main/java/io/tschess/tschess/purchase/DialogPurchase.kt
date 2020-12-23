@@ -45,12 +45,21 @@ class DialogPurchase(
 
     fun setSubscribe(
         textTitle: TextView,
+        textInfo: TextView,
         textConfig: TextView,
         picker: NumberPicker,
         textSend: TextView,
         textSubscribe: TextView
     ) {
-        textTitle.alpha = 0.5F
+        //textTitle.alpha = 0.5F
+
+        textTitle.alpha = 0.9F
+        textTitle.text = "🔑 Subscription plan 🔑"
+        //self.labelTitle.text = "🔑 Subscription plan 🔑"
+
+        textInfo.alpha = 0.9F
+        textInfo.text = "Select an option below to proceed."
+        //self.labelDirection.text = "Select an option below to proceed."
 
         textConfig.alpha = 0.5F
         picker.alpha = 0.5F
@@ -120,6 +129,7 @@ class DialogPurchase(
 
             setSubscribe(
                 textTitle,
+                textInfo,
                 textConfig,
                 picker,
                 textSend,
