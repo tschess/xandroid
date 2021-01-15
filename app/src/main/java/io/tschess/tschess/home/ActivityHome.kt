@@ -37,7 +37,9 @@ import java.util.*
 import kotlin.collections.HashMap
 import kotlin.concurrent.schedule
 
-
+/**
+ * TODO: When you successfully login you land at this home screen.
+ */
 class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.OnRefreshListener,
     PurchasesUpdatedListener {
 
@@ -340,9 +342,13 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
         })
     }
 
+
+    /**
+     * TODO: This needs to be replaced.
+     */
     fun dialogSinglePlayer() {
-        val title: String = "⚡ Hang tight ⚡"
-        val message: String = "Single-player mode coming soon! \uD83E\uDD16"
+        val title: String = "⚡ Hang tight! ⚡"
+        val message: String = "Single-player mode coming soon... \uD83E\uDD16"
         val dialogBuilder = AlertDialog.Builder(this, R.style.AlertDialog)
         dialogBuilder.setTitle(title)
         dialogBuilder.setMessage(message)
@@ -360,6 +366,21 @@ class ActivityHome : AppCompatActivity(), Refresher, Rival, SwipeRefreshLayout.O
 
                 when (tab.position) {
                     0 -> {
+                        /**
+                         * TODO: Instead of calling dialogSinglePlayer() you need to use dialogChallenge()
+                         *          with some parameters... (
+                         *                                     1. player=yourself after you login,
+                         *                                     2. player component,
+                         *                                     3. action=accept,
+                         *                                     4. game, optional,
+                         *                                     )
+                         *          minimum viable properties to satisfy a user: configs, id, picture
+                         *
+                         * TODO: Inbound invitation accept flow: after clicking on single player tap:
+                         *       -- the same flow as clicking accept on an inbound invitation
+                         *          1. Dialog Challenge / config selection
+                         *          2.
+                         */
                         dialogSinglePlayer()
                     }
                     1 -> {
